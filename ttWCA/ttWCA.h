@@ -1,14 +1,15 @@
 #ifndef ttWCA_H
 #define ttWCA_H
 
+#include "AsgTools/AnaToolHandle.h"
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
 #include "TopParticleLevel/ParticleLevelEvent.h"
-
 #include "xAODTruth/TruthParticleContainer.h"
 #include "xAODJet/JetContainer.h"
 #include "xAODMissingET/MissingETContainer.h"
+#include "xAODBTagging/BTagging.h"
 
 #include "TFile.h"
 #include "TH1D.h"
@@ -35,10 +36,21 @@ namespace top{
 
     private:
       bool m_debug;
+      bool m_jetCharge;
+      bool m_IFFClass;
+
+      std::shared_ptr<top::TopConfig> m_config;
 
       void MSG_INFO(TString msg){ std::cout << Form("ttWCA() \t INFO \t %s",msg.Data()) << std::endl; }
       void MSG_DEBUG(TString msg){ if(m_debug) std::cout << Form("ttWCA() \t DEBUG \t %s",msg.Data()) << std::endl; }
-      
+
+      void processJets(const top::Event& event);
+      void processMuons(const top::Event& event);
+      void processElectrons(const top::Event& event); 
+
+      std::vector<float> m_jc;
+      std::vector<float> m_IFF;
+
       ClassDefOverride(top::ttWCA, 0);
       
   };

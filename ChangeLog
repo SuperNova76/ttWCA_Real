@@ -1,3 +1,4 @@
-28-08-20 Fabio Cardillo <fabio.cardillo@cern.ch>
+31-08-20 Fabio Cardillo <fabio.cardillo@cern.ch>
 	* Initial commit
 	* Added all classes, headers
+	* Added jet-charge to output
