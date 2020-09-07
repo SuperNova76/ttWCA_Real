@@ -1,5 +1,3 @@
-# Auto-generated on: 2017-11-24 15:14:15.262411
-
 # Declare the name of this package:
 atlas_subdir( ttWCA None )
 
@@ -39,3 +37,6 @@ atlas_add_library( ttWCA Root/*.cxx Root/*.h Root/*.icc
 # Install data files from the package:
 atlas_install_data( DIRECTORY share/* )
 
+atlas_add_executable( runTTWCA
+		      utils/runTTWCA.cxx
+		      LINK_LIBRARIES ${ROOT_LIBRARIES} ttWCA )

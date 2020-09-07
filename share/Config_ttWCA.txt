@@ -2,11 +2,11 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
 DynamicKeys Debug,JetCharge,IFFClassification
 
-Debug False
+Debug True
 JetCharge True
 IFFClassification False
 
-#NEvents 1000
+NEvents 100
 
 ### Good Run List
 GRLDir  GoodRunsLists
@@ -45,8 +45,8 @@ PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_3
 ### Object container names
 ElectronCollectionName Electrons
 MuonCollectionName Muons
-#JetCollectionName AntiKt4EMPFlowJets_BTagging201903
 JetCollectionName AntiKt4EMTopoJets_BTagging201810
+#JetCollectionName AntiKt4EMPFlowJets_BTagging201903
 LargeJetCollectionName None
 TauCollectionName None
 PhotonCollectionName None
@@ -136,6 +136,8 @@ BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN
 
 ### B-tagging configuration
 BTaggingCaloJetWP MV2c10:FixedCutBEff_77
+#BTaggingCaloJetWP DL1r:FixedCutBEff_77
+
 # Example of how to remove systematics from b-tag EV
 #BTaggingSystExcludedFromEV FT_EFF_JET_BJES_Response;FT_EFF_JET_EffectiveNP_1;FT_EFF_EG_RESOLUTION_ALL
 
