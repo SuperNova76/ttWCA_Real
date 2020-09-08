@@ -40,6 +40,8 @@ namespace top{
     processMuons(event);
     processElectrons(event);
     processJets(event);
+
+    printTrigger(event);
   }
   
   void ttWCA::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent){ 
@@ -69,4 +71,13 @@ namespace top{
       MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1));
     }
   }
+
+  void ttWCA::printTrigger(const top::Event& event){
+    for(auto selection : *m_config->allSelectionNames()){
+      for(auto trigger : m_config->allTriggers_Tight(selection)){
+	MSG_DEBUG(Form("Selection %s \t pass trigger %s : %i", selection.c_str(), trigger.c_str(), (int)event.m_info->auxdataConst<char>("TRIGDEC_"+trigger)));
+      }
+    }
+  }
+  
 }

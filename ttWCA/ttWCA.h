@@ -48,6 +48,8 @@ namespace top{
       void processMuons(const top::Event& event);
       void processElectrons(const top::Event& event); 
 
+      void printTrigger(const top::Event& event);
+
       std::vector<float> m_jc;
       std::vector<float> m_IFF;
 
