@@ -1,0 +1,66 @@
+stages:
+  - build
+  - run
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SSL_NO_VERIFY: "true"
+  PACKAGE_NAME: ttWCA
+  ROOT_VERSION: 6.18.04-x86_64-centos7-gcc8-opt
+  BUILD_DIR: build
+  RUN_DIR: run
+  ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+  ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
+  SAMPLE_NAME: /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/ContinuousIntegration/MC/p4174/mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_TOPQ1.e6337_s3126_r9364_p4174/test.pool.root
+  
+.analysis_image: &image
+  image: atlas/analysisbase:21.2.138
+  tags:
+    - cvmfs
+  before_script:
+    - pwd
+    - ls
+    - echo "Project Directory ${CI_PROJECT_DIR}"
+    - echo "Build Directory   ${BUILD_DIR}"
+    - echo "Run Directory     ${RUN_DIR}"
+    - source /home/atlas/release_setup.sh
+    - echo $SERVICE_PASS | kinit $CERN_USER
+
+build:
+  <<: *image
+  stage: build
+  script:
+    - ls
+    - cd ../
+    - set +e
+    - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
+    - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+    - lsetup acm
+    - mkdir $BUILD_DIR
+    - cd $BUILD_DIR
+    - acmSetup "--sourcedir=../ AnalysisBase,21.2.138"
+    - acm compile
+    - cd ../
+    - mv $BUILD_DIR $PACKAGE_NAME
+    - ls
+  artifacts:
+    paths:
+      - $BUILD_DIR
+    name: "${BUILD_DIR}_${CI_JOB_NAME}"
+    expire_in: 1d
+
+run:
+  <<: *image
+  stage: run
+  dependencies: [build]
+  script:
+  - mv $BUILD_DIR ../
+  - cd ../
+  - ls
+  - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
+  - mkdir $RUN_DIR
+  - cd $RUN_DIR
+  - echo $SAMPLE_NAME
+  - echo $SAMPLE_NAME > files.txt
+  - sed -i '12iNEvents 500' ../${PACKAGE_NAME}/share/Config_ttWCA.txt
+  - top-xaod ../${PACKAGE_NAME}/share/Config_ttWCA.txt files.txt
