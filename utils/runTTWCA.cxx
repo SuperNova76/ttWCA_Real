@@ -43,7 +43,7 @@ static bool debug(0);
 static char* name(0);
 
 static unsigned int MMType(0);
-static std::string effFile(""), selection(""), process("");
+static std::string effFile(""), selection(""), process(""), tightKey("tight");
 
 void INFO(std::string msg){ std::cout << name << "\t INFO \t" << msg << std::endl; }
 void DEBUG(std::string msg){ if(debug) std::cout << name << "\t DEBUG \t" << msg << std::endl; }
@@ -78,9 +78,10 @@ void setConfigValues(TString conf){
 
 void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> tool){
   
-  top::check(tool.setProperty("InputFiles", tokenize(effFile)), "Cannot declare property: InputFiles");
-  top::check(tool.setProperty("Selection", selection),          "Cannot declare property: Selection");
-  top::check(tool.setProperty("Process",   process),            "Cannot declare property: Process");
+  top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot declare property: InputFiles");
+  top::check(tool.setProperty("Selection",       selection),          "Cannot declare property: Selection");
+  top::check(tool.setProperty("Process",         process),            "Cannot declare property: Process");
+  top::check(tool.setProperty("TightDecoration", tightKey),           "Cannot declare property: TightDecoration"); 
 
   top::check(tool.initialize(), "MMTool cannot be initialized");
   INFO(Form("Initialized tool %s", tool.name().c_str()));

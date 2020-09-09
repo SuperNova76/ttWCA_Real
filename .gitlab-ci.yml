@@ -12,7 +12,7 @@ variables:
   RUN_DIR: run
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
-  SAMPLE_NAME: /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/ContinuousIntegration/MC/p4097/mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.DAOD_TOPQ1.e6337_e5984_s3126_r10724_r10726_p4097/test.pool.root
+  SAMPLE_NAME: root://eosuser.cern.ch///eos/home-f/fcardill/CI_Top/mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_TOPQ1.e6337_s3126_r10724_p4174/DAOD_TOPQ1.21644694._000800.pool.root.1
   
 .analysis_image: &image
   image: atlas/analysisbase:21.2.138
@@ -31,7 +31,6 @@ build:
   <<: *image
   stage: build
   script:
-    - ls
     - cd ../
     - set +e
     - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
@@ -43,7 +42,6 @@ build:
     - acm compile
     - cd ../
     - mv $BUILD_DIR $PACKAGE_NAME
-    - ls
   artifacts:
     paths:
       - $BUILD_DIR
@@ -57,14 +55,13 @@ run:
   script:
   - mv $BUILD_DIR ../
   - cd ../
-  - ls
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - mkdir $RUN_DIR
   - cd $RUN_DIR
   - echo $SAMPLE_NAME
-  - echo $SAMPLE_NAME > files.txt
-  - sed -i '12iNEvents 500' ../${PACKAGE_NAME}/share/Config_ttWCA.txt
-  - top-xaod ../${PACKAGE_NAME}/share/Config_ttWCA.txt files.txt
+  - echo $SAMPLE_NAME > input.txt
+  - sed -i '10iNEvents 500' ../${PACKAGE_NAME}/share/Config_ttWCA.txt
+  - top-xaod ../${PACKAGE_NAME}/share/Config_ttWCA.txt input.txt
 
 check_utils:
   stage: test
