@@ -48,7 +48,7 @@ build:
     name: "${BUILD_DIR}_${CI_JOB_NAME}"
     expire_in: 1d
 
-run:
+run_xaod:
   <<: *image
   stage: run
   dependencies: [build]
@@ -63,7 +63,8 @@ run:
   - sed -i '10iNEvents 500' ../${PACKAGE_NAME}/share/Config_ttWCA.txt
   - top-xaod ../${PACKAGE_NAME}/share/Config_ttWCA.txt input.txt
 
-check_utils:
+run_utils:
+  <<: *image
   stage: test
   dependencies: [build]
   script:
