@@ -1,6 +1,7 @@
 stages:
   - build
   - run
+  - test
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
@@ -11,7 +12,7 @@ variables:
   RUN_DIR: run
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
-  SAMPLE_NAME: /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/ContinuousIntegration/MC/p4174/mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_TOPQ1.e6337_s3126_r9364_p4174/test.pool.root
+  SAMPLE_NAME: /cvmfs/atlas.cern.ch/repo/sw/database/GroupData/dev/AnalysisTop/ContinuousIntegration/MC/p4097/mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.DAOD_TOPQ1.e6337_e5984_s3126_r10724_r10726_p4097/test.pool.root
   
 .analysis_image: &image
   image: atlas/analysisbase:21.2.138
@@ -64,3 +65,13 @@ run:
   - echo $SAMPLE_NAME > files.txt
   - sed -i '12iNEvents 500' ../${PACKAGE_NAME}/share/Config_ttWCA.txt
   - top-xaod ../${PACKAGE_NAME}/share/Config_ttWCA.txt files.txt
+
+check_utils:
+  stage: test
+  dependencies: [build]
+  script:
+  - mv $BUILD_DIR ../
+  - cd ../
+  - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
+  - cd ${PACKAGE_NAME}/utils
+  - runTTWCA Config.conf " "
