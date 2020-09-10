@@ -43,7 +43,13 @@ static bool debug(0);
 static char* name(0);
 
 static unsigned int MMType(0);
-static std::string effFile(""), selection(""), process(""), tightKey("tight");
+static std::string effFile(""), selection(""), process("");
+
+static const std::string tightKey("tight");
+
+static const double M_Z(91.1876);
+static const double M_W(80.3850);
+static const double M_EL(5.10998946E-4);
 
 void INFO(std::string msg){ std::cout << name << "\t INFO \t" << msg << std::endl; }
 void DEBUG(std::string msg){ if(debug) std::cout << name << "\t DEBUG \t" << msg << std::endl; }
@@ -74,6 +80,37 @@ void setConfigValues(TString conf){
   process   = env.GetValue("Process",   "");
   env.PrintEnv();
   return;
+}
+
+xAOD::IParticleContainer makeIParticleContainer(std::vector<float> pt, std::vector<float> eta, std::vector<float> phi, std::vector<int> charge, std::vector<int> PDG, std::vector<bool> isTight){
+  unsigned int nLep(pt.size());
+  xAOD::IParticleContainer leptons(SG::VIEW_ELEMENTS);
+
+  for(unsigned int i(0); i<nLep; i++){
+    switch( (int)abs(PDG.at(i)) ){
+    case 11:{
+      xAOD::Electron *el = new xAOD::Electron();
+      el->makePrivateStore();
+      el->setP4(pt.at(i)*1000, eta.at(i), phi.at(i), M_EL*1000);
+      el->setCharge((float)charge.at(i));
+      el->auxdata<char>(tightKey) = isTight.at(i);
+
+      leptons.push_back( static_cast<xAOD::IParticle*>(el) );}
+      break;
+    case 13:{
+      xAOD::Muon *mu = new xAOD::Muon();
+      mu->makePrivateStore();
+      mu->setP4(pt.at(i)*1000, eta.at(i), phi.at(i));
+      mu->setCharge((float)charge.at(i));
+      mu->auxdata<char>(tightKey) = isTight.at(i);
+
+      leptons.push_back( static_cast<xAOD::IParticle*>(mu) );}
+      break;
+    default: break;
+    }
+  }
+  DEBUG(Form("Create xAOD::IParticle container with %i entries", (int)leptons.size()));
+  return leptons;
 }
 
 void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> tool){
