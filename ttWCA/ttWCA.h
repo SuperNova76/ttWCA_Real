@@ -50,6 +50,8 @@ namespace top{
 
       void printTrigger(const top::Event& event);
 
+      void clearOutputVars();
+
       std::vector<float> m_jc;
       std::vector<float> m_IFF;
 

@@ -30,23 +30,29 @@ namespace top{
       if(m_IFFClass)   sysTree->makeOutputVariable(m_IFF, "IFFClassification");
     }
     MSG_INFO("Initialized");
+    return;
   }
 
   void ttWCA::saveEvent(const top::Event& event){
-    
-    top::EventSaverFlatNtuple::saveEvent(event);
-    MSG_DEBUG(Form("EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f", (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met()));
+    clearOutputVars();
+    if(!event.m_saveEvent) return;
+
+    MSG_DEBUG(Form("EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f", 
+		   (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met()));
 
     processMuons(event);
     processElectrons(event);
     processJets(event);
 
     printTrigger(event);
+
+    top::EventSaverFlatNtuple::saveEvent(event);
+    return;
   }
   
-  void ttWCA::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent){ 
-    
+  void ttWCA::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent){     
     top::EventSaverFlatNtuple::saveParticleLevelEvent(plEvent); 
+    return;
   }
   
   void ttWCA::processJets(const top::Event& event){
@@ -80,4 +86,9 @@ namespace top{
     }
   }
   
+  void ttWCA::clearOutputVars(){
+    m_jc.clear();
+    m_IFF.clear();
+    return;
+  }
 }

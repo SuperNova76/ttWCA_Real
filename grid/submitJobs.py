@@ -38,7 +38,7 @@ def makeJob(DS,config,version,submit):
     DS = DS.split()[0].split(':')[-1]
     info("Sample: {0}".format(DS))
  
-    cmd = "prun --excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git --osMatching --useAthenaPackages --cmtConfig={1} --rootVer={2} --writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {3} in.txt\" --nFilesPerJob={4} --nGBPerJob=MAX --inDS={5} --extFile={3},{0}/ttWCA/share/*.root --mergeOutput --outDS=user.{6}.{7}.{8}/".format(ACM_SOURCE.split("/")[-1], CMT_CONFIG, ROOT_VERSION, findFile(ACM_SOURCE.split("/")[-1],config), FILESPERJOB, DS, USERNAME, makeOutputName(DS), version)
+    cmd = "prun --excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git --osMatching --useAthenaPackages --cmtConfig={1} --rootVer={2} --writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {3} in.txt\" --nFilesPerJob={4} --nGBPerJob=MAX --inDS={5} --extFile={0}/ttWCA/share/* --mergeOutput --outDS=user.{6}.{7}.{8}/".format(ACM_SOURCE.split("/")[-1], CMT_CONFIG, ROOT_VERSION, findFile(ACM_SOURCE.split("/")[-1],config), FILESPERJOB, DS, USERNAME, makeOutputName(DS), version)
 
     print(cmd)
     if submit: os.system(cmd)

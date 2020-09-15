@@ -39,8 +39,9 @@ PRWActualMu_FS GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33pr
 PRWActualMu_AF GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root
 PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_348885-364292_OflLumi-13TeV-010.root
 
-#setup of TDP file, comment the following line to use the default one instead
-#TDPPath dev/AnalysisTop/TopDataPreparation/CI-XSection-MC16-13TeV.data
+#setup of TDP file
+TDPPath $WorkDir_DIR/data/ttWCA/XSection-MC16-13TeV.data
+#TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
 
 #BTag DF (uncomment this for Sherpa 228 samples only)
 #BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2020-03-11_Sh228_v3.root

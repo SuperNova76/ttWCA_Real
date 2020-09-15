@@ -16,7 +16,7 @@ if [ ! $ACMSOURCEDIR ]; then
     echo "--> acm Setup"
     if [ ! -d build ]; then mkdir build; fi
     cd build
-    acmSetup "--sourcearea=../source/ AnalysisBase,${REL}"
+    acmSetup "--sourcearea=../uctanalysistop/ AnalysisBase,${REL}"
     cd ..
 fi
 
