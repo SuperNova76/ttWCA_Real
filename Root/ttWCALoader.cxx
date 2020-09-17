@@ -1,4 +1,5 @@
 #include "ttWCA/ttWCALoader.h"
+#include "ttWCA/NLeptonSelector.h"
 #include "TopConfiguration/TopConfig.h"
 
 #include <iostream>
@@ -14,6 +15,8 @@ namespace top{
     std::string param;
     if (line.size() > toolname.size())
       param = line.substr(toolname.size() + 1);
+    if(toolname == "LEP_N") 
+      return new top::NLeptonSelector(param);
     return nullptr;
   }
 }

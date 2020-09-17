@@ -1,14 +1,9 @@
-import os,sys,time
-import ROOT
+import os,sys,time,ROOT
 from glob import glob
 from argparse import ArgumentParser
 
-USERNAME   = os.getenv('RUCIO_ACCOUNT')
-ACM_SOURCE = os.getenv('ACMSOURCEDIR')
-
-ROOT_VERSION = "6.18/04"
-CMT_CONFIG   = "x86_64-centos7-gcc8-opt"
-FILESPERJOB  = 5
+ACM_SOURCE   = os.getenv('ACMSOURCEDIR')
+NFILESPERJOB = 5
 
 def main():
     parser = ArgumentParser(description="Script for submitting grid jobs from sample list")
@@ -37,12 +32,18 @@ def makeJob(DS,config,version,submit):
     if not len(DS) or DS.isspace() or  DS[0]=='#': return 0
     DS = DS.split()[0].split(':')[-1]
     info("Sample: {0}".format(DS))
- 
-    cmd = "prun --excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git --osMatching --useAthenaPackages --cmtConfig={1} --rootVer={2} --writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {3} in.txt\" --nFilesPerJob={4} --nGBPerJob=MAX --inDS={5} --extFile={0}/ttWCA/share/* --mergeOutput --outDS=user.{6}.{7}.{8}/".format(ACM_SOURCE.split("/")[-1], CMT_CONFIG, ROOT_VERSION, findFile(ACM_SOURCE.split("/")[-1],config), FILESPERJOB, DS, USERNAME, makeOutputName(DS), version)
+
+    cmd  = "prun \\\n"
+    cmd += "--inDS={0} \\\n"                                                                                               .format(DS)
+    cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                .format(os.getenv('RUCIO_ACCOUNT'), makeOutputName(DS), version)
+    cmd += "--excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git \\\n".format(ACM_SOURCE.split("/")[-1])
+    cmd += "--cmtConfig={0} --rootVer={1} --osMatching --useAthenaPackages \\\n"                                           .format(os.getenv('CMTCONFIG'), ROOT.gROOT.GetVersion())
+    cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                         .format(findFile(ACM_SOURCE.split("/")[-1],config))
+    cmd += "--extFile={0}/ttWCA/share/* \\\n"                                                                              .format(ACM_SOURCE.split("/")[-1])
+    cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                         .format(NFILESPERJOB)
 
     print(cmd)
     if submit: os.system(cmd)
-    print("")
     time.sleep(1)
     return 1
 

@@ -12,22 +12,14 @@ IFFClassification False
 GRLDir  GoodRunsLists
 GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml
 
-### Pile-up reweighting tool - Metadata determines which to use
 # MC16a configuration
-
-### This setup is for the CI tests
-#PRWConfigFiles_FS dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.FS.v2/CI.prw.merged.root
-#PRWConfigFiles_AF dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.AF.v2/CI.prw.merged.root
-
-### Use following lines (uncomment) for your config file
 #PRWConfigFiles_FS dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.FS.v2/prw.merged.root
 #PRWConfigFiles_AF dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.AF.v2/prw.merged.root
-
 #PRWLumiCalcFiles GoodRunsLists/data15_13TeV/20170619/PHYS_StandardGRL_All_Good_25ns_276262-284484_OflLumi-13TeV-008.root GoodRunsLists/data16_13TeV/20180129/PHYS_StandardGRL_All_Good_25ns_297730-311481_OflLumi-13TeV-009.root
 
 # MC16d configuration
-#PRWConfigFiles_FS dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v2/CI.prw.merged.root
-#PRWConfigFiles_AF dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.AF.v2/CI.prw.merged.root
+#PRWConfigFiles_FS dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.FS.v2/prw.merged.root
+#PRWConfigFiles_AF dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16d.AF.v2/prw.merged.root
 #PRWActualMu_FS GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root
 #PRWActualMu_AF GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.actualMu.OflLumi-13TeV-010.root
 #PRWLumiCalcFiles GoodRunsLists/data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.lumicalc.OflLumi-13TeV-010.root
@@ -145,8 +137,10 @@ UseAodMetaData True
 BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
 
 ### B-tagging configuration
-BTaggingCaloJetWP MV2c10:FixedCutBEff_77
-#BTaggingCaloJetWP DL1r:FixedCutBEff_77
+BTaggingCaloJetWP MV2c10:FixedCutBEff_77 MV2c10:Continuous
+BTagVariableSaveList MV2c10_discriminant
+#BTaggingCaloJetWP DL1r:FixedCutBEff_77 DL1r:Continuous
+
 
 # Example of how to remove systematics from b-tag EV
 #BTaggingSystExcludedFromEV FT_EFF_JET_BJES_Response;FT_EFF_JET_EffectiveNP_1;FT_EFF_EG_RESOLUTION_ALL
@@ -232,6 +226,7 @@ EL_N_OR_MU_N 10000 >= 1
 ########################
 
 SUB eemu_basic
+LEP_N 10000 >= 3
 EL_N 10000 >= 2
 MU_N 10000 >= 1
 GTRIGMATCH
@@ -272,6 +267,7 @@ SAVE
 ### mumue selections
 ########################
 SUB mumue_basic
+LEP_N 10000 >= 3
 EL_N 10000 >= 1
 MU_N 10000 >= 2
 GTRIGMATCH
@@ -313,6 +309,7 @@ SAVE
 ### eee selections
 ########################
 SUB eee_basic
+LEP_N 10000 >= 3
 EL_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
@@ -353,6 +350,7 @@ SAVE
 ########################
 
 SUB mumumu_basic
+LEP_N 10000 >= 3
 MU_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad

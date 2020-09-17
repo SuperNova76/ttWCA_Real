@@ -11,5 +11,6 @@
 //for loading the object selection at run time
 #pragma link C++ class top::ttWCA+;
 #pragma link C++ class top::ttWCALoader+;
+#pragma link C++ class top::NLeptonSelector+;
 
 #endif
