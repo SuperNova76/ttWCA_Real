@@ -9,7 +9,7 @@ def main():
     parser = ArgumentParser(description="Script for submitting grid jobs from sample list")
     parser.add_argument("Samples",   help="List of input MC or data samples (.txt)")
     parser.add_argument("--Config",  help="Name of top-config file (path is resovled automatically)", default="Config_ttWCA.txt")
-    parser.add_argument("--Version", help="Version of the production",                                default="uctatlas_v7")
+    parser.add_argument("--Version", help="Version of the production",                                default="uctatlas_v8")
     parser.add_argument("--Submit",  type=int, help="Submit jobs (or only print the prun-command)",   default=0)
     options = parser.parse_args()
 

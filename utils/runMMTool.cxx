@@ -18,6 +18,10 @@
 #include "TChain.h"
 #include "TString.h"
 #include "TSystem.h"
+#include "TLorentzVector.h"
+#include "TTreeReader.h"
+#include "TTreeReaderValue.h"
+#include "TTreeReaderArray.h"
 
 #include "xAODRootAccess/TEvent.h"
 #include "xAODRootAccess/TStore.h"
@@ -43,9 +47,11 @@ static bool debug(0);
 static char* name(0);
 
 static unsigned int MMType(0);
-static std::string effFile(""), selection(""), process("");
+static std::string effFile(""), selection(""), process(""), SRNames("");
 
 static const std::string tightKey("tight");
+static const std::string treeName("nominal");
+static const std::string branchDict("BranchMap.conf");
 
 static const double M_Z(91.1876);
 static const double M_W(80.3850);
@@ -71,15 +77,27 @@ void setConfigValues(TString conf){
   if(env.ReadFile(conf, kEnvAll) != 0) 
     ERROR(Form("Cannot read config file %s", conf.Data()));
   else
-    INFO(Form("Reading config file %s", conf.Data()));
+    INFO(Form("Reading config file: %s", conf.Data()));
 
-  debug     = env.GetValue("Debug",      0);
-  MMType    = env.GetValue("MMType",     1);
-  effFile   = env.GetValue("EffFile",   "");
-  selection = env.GetValue("Selection", "");
-  process   = env.GetValue("Process",   "");
+  debug     = env.GetValue("Debug",         0);
+  MMType    = env.GetValue("MMType",        1);
+  effFile   = env.GetValue("EffFilePath",   "");
+  selection = env.GetValue("Selection",     "");
+  process   = env.GetValue("Process",       "");
+  SRNames   = env.GetValue("SignalRegion",  "");
   env.PrintEnv();
   return;
+}
+
+const char *getBranch(const char* name){
+  TEnv env;
+  if(env.ReadFile(branchDict.c_str(), kEnvAll) != 0)
+    ERROR(Form("Cannot read file %s", branchDict.c_str()));
+  
+  std::string out = env.GetValue(name, "");
+  if(out.empty()) ERROR(Form("Cannot find branch %s in %s",name,branchDict.c_str()));
+  DEBUG(Form("--> Found branch %s",out.c_str()));
+  return out.c_str();
 }
 
 xAOD::IParticleContainer makeIParticleContainer(std::vector<float> pt, std::vector<float> eta, std::vector<float> phi, std::vector<int> charge, std::vector<int> PDG, std::vector<bool> isTight){
@@ -114,39 +132,75 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<float> pt, std::vect
 }
 
 void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> tool){
+
+  if(selection.empty() || process.empty() || effFile.empty())
+    ERROR("MM Tool needs [Selection] [Process] arguments and efficiency file");
   
-  top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot declare property: InputFiles");
-  top::check(tool.setProperty("Selection",       selection),          "Cannot declare property: Selection");
-  top::check(tool.setProperty("Process",         process),            "Cannot declare property: Process");
-  top::check(tool.setProperty("TightDecoration", tightKey),           "Cannot declare property: TightDecoration"); 
+  MSG::Level msgLevel = debug ? MSG::DEBUG : MSG::FATAL;
+  
+  top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot set property: InputFiles");
+  top::check(tool.setProperty("Selection",       selection),          "Cannot set property: Selection");
+  top::check(tool.setProperty("Process",         process),            "Cannot set property: Process");
+  top::check(tool.setProperty("EnergyUnit",      "GeV"),              "Cannot set property: EnergyUnit");
+  top::check(tool.setProperty("OutputLevel",     msgLevel),           "Cannot set property: OutputLevel");
+  top::check(tool.setProperty("TightDecoration", tightKey),           "Cannot set property: TightDecoration"); 
 
   top::check(tool.initialize(), "MMTool cannot be initialized");
-  INFO(Form("Initialized tool %s", tool.name().c_str()));
+  INFO(Form("Initialized tool: %s", tool.name().c_str()));
 }
 
 int main(int argc, char* argv[]){
   if(argc < 2) throw std::invalid_argument("Too few arguments");
   name = argv[0];
 
-  TString config(argv[1]), input(argv[2]);
+  TString input(argv[1]), config(argv[2]);
 
-  if(!config.Length()) ERROR("No config file found");
-  if(!input.Length())  ERROR("No input file found");
+  if(!input.Length()) ERROR("No config file found");
+  if(!config.Length())  ERROR("No input file found");
 
   INFO("Initializing");
   auto start = std::time(nullptr);
   INFO(std::ctime(&start));
 
-  setConfigValues(config);
+  TFile *inFile = TFile::Open(input, "READ");
+  if(!inFile || inFile->IsZombie()) ERROR("Invalid root file! Exiting");
+
+  TTree* inTree = (TTree*)inFile->Get(treeName.c_str());
+  if(!inTree) ERROR("Input tree not found! Exiting");
  
+  setConfigValues(config);
+  if(SRNames.empty()) ERROR("No SR specified");
+
+  if(!MMType) ERROR("No MM type selected");
   asg::AnaToolHandle<CP::IFakeBkgTool> ASMTool("CP::AsymptMatrixTool/ASMTool");
   asg::AnaToolHandle<CP::IFakeBkgTool> LHMTool("CP::LhoodMM_tools/LHMTool");
-  if(!MMType) ERROR("No MM type selected");
-
+  
   asg::AnaToolHandle<CP::IFakeBkgTool> MMTool = MMType==1 ? LHMTool : ASMTool; 
   initializeMMTool(MMTool);
 
+  TTreeReader reader(inTree);  
+  ULong64_t treeEntries = inTree->GetEntries();
+  INFO( Form("Reading TTree %s :: Entries = %ld", inTree->GetName(), (long)treeEntries) );
 
+  TTreeReaderValue<Double_t> lep0_pt = {reader, getBranch("lep0_pt")};
+  TTreeReaderValue<Double_t> lep1_pt = {reader, getBranch("lep1_pt")};
+  TTreeReaderValue<Double_t> lep2_pt = {reader, getBranch("lep2_pt")};
+
+  TTreeReaderValue<Double_t> lep0_eta = {reader, getBranch("lep0_eta")};
+  TTreeReaderValue<Double_t> lep1_eta = {reader, getBranch("lep1_eta")};
+  TTreeReaderValue<Double_t> lep2_eta = {reader, getBranch("lep2_eta")};
+
+  TTreeReaderValue<Double_t> lep0_phi = {reader, getBranch("lep0_phi")};
+  TTreeReaderValue<Double_t> lep1_phi = {reader, getBranch("lep1_phi")};
+  TTreeReaderValue<Double_t> lep2_phi = {reader, getBranch("lep2_phi")};
+
+  TTreeReaderValue<Double_t> lep0_charge = {reader, getBranch("lep0_charge")};
+  TTreeReaderValue<Double_t> lep1_charge = {reader, getBranch("lep1_charge")};
+  TTreeReaderValue<Double_t> lep2_charge = {reader, getBranch("lep2_charge")};
+
+  TTreeReaderValue<Double_t> lep0_isTight = {reader, getBranch("lep0_isTight")};
+  TTreeReaderValue<Double_t> lep1_isTight = {reader, getBranch("lep1_isTight")};
+  TTreeReaderValue<Double_t> lep2_isTight = {reader, getBranch("lep2_isTight")};
 
   INFO("Finalizing");
   auto end = std::time(nullptr);

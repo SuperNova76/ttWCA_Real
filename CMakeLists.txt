@@ -37,6 +37,6 @@ atlas_add_library( ttWCA Root/*.cxx Root/*.h Root/*.icc
 # Install data files from the package:
 atlas_install_data( DIRECTORY share/* )
 
-atlas_add_executable( runTTWCA
-		      utils/runTTWCA.cxx
+atlas_add_executable( runMMTool
+		      utils/runMMTool.cxx
 		      LINK_LIBRARIES ${ROOT_LIBRARIES} ttWCA )
