@@ -113,7 +113,8 @@ do2StationsHighPt False
 
 ### Jet configuration
 JetPt 25000
-JVTWP Default
+JVTWP Medium
+ForwardJVTWP Medium
 
 ### Tau configuration
 TauPt 25000
