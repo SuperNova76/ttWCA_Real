@@ -72,4 +72,4 @@ run_utils:
   - cd ../
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - cd ${PACKAGE_NAME}/utils
-  - runTTWCA Config.conf " "
+  - runMMTool "" Config.conf
