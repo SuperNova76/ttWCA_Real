@@ -61,6 +61,12 @@ void INFO(std::string msg){ std::cout << name << "\t INFO \t" << msg << std::end
 void DEBUG(std::string msg){ if(debug) std::cout << name << "\t DEBUG \t" << msg << std::endl; }
 void ERROR(std::string msg){ std::cout << name << "\t ERROR \t" << msg << std::endl; exit(1); }
 
+void printLeptons(xAOD::IParticleContainer& leptons){
+  for(auto l : leptons) DEBUG(Form("Lepton[type=%i]: pt=%.1f, eta=%.3f, phi=%.3f, tight=%i", l->type(), l->pt(), l->eta(), l->phi(), (int)l->auxdata<char>(tightKey)));
+}
+
+bool ptMatch(double pt1, double pt2){ return TMath::Abs(pt1-pt2)/pt1 < 0.001; }
+
 std::vector<std::string> tokenize(TString in){ 
   std::vector<std::string> out(0);
   TObjArray *arr = in.Tokenize(",");
@@ -89,29 +95,56 @@ void setConfigValues(TString conf){
   return;
 }
 
-const char *getBranch(const char* name){
+TString getBranch(const char* name){
   TEnv env;
   if(env.ReadFile(branchDict.c_str(), kEnvAll) != 0)
     ERROR(Form("Cannot read file %s", branchDict.c_str()));
   
-  std::string out = env.GetValue(name, "");
-  if(out.empty()) ERROR(Form("Cannot find branch %s in %s",name,branchDict.c_str()));
-  DEBUG(Form("--> Found branch %s",out.c_str()));
-  return out.c_str();
+  TString out = env.GetValue(name, ""); out.ReplaceAll("'","");
+  if(!out.Length()) ERROR(Form("Cannot find branch %s in %s",name,branchDict.c_str()));
+  DEBUG(Form("--> Found branch %s",out.Data()));
+  return out;
 }
 
-xAOD::IParticleContainer makeIParticleContainer(std::vector<float> pt, std::vector<float> eta, std::vector<float> phi, std::vector<int> charge, std::vector<int> PDG, std::vector<bool> isTight){
+void sortLeptons(std::vector<double> &pt, std::vector<double> &eta, std::vector<double> &phi, std::vector<double> &charge, std::vector<double> &type, std::vector<double> &tight){
+
+  std::vector<double> pt_sorted(0), eta_sorted(0), phi_sorted(0), charge_sorted(0), type_sorted(0), tight_sorted(0);
+  pt_sorted = pt;
+  std::sort(pt_sorted.begin(), pt_sorted.end()); std::reverse(pt_sorted.begin(), pt_sorted.end());
+
+  for(unsigned int i(0); i<pt_sorted.size() && i<pt.size(); i++){ 
+    for(unsigned int j(0); j<pt.size(); j++){ 
+      if( !ptMatch(pt_sorted.at(i),pt.at(j)) ) continue;
+      eta_sorted.push_back(eta.at(j));
+      phi_sorted.push_back(phi.at(j));
+      charge_sorted.push_back(charge.at(j));
+      type_sorted.push_back(type.at(j));
+      tight_sorted.push_back(tight.at(j));
+    } 
+  }
+  pt     = pt_sorted;
+  eta    = eta_sorted;
+  phi    = phi_sorted;
+  charge = charge_sorted;
+  type   = type_sorted;
+  tight  = tight_sorted;
+  return;
+}
+
+xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vector<double> eta, std::vector<double> phi, std::vector<double> charge, std::vector<double> type, std::vector<double> isTight){
   unsigned int nLep(pt.size());
   xAOD::IParticleContainer leptons(SG::VIEW_ELEMENTS);
 
   for(unsigned int i(0); i<nLep; i++){
-    switch( (int)abs(PDG.at(i)) ){
+   
+    int lepPDG = type.at(i) == 0 ? 13 : 11; //this has to be adapted according to the way lepton flavors are stored in custom Ntuples
+    switch( lepPDG ){
     case 11:{
       xAOD::Electron *el = new xAOD::Electron();
       el->makePrivateStore();
       el->setP4(pt.at(i)*1000, eta.at(i), phi.at(i), M_EL*1000);
-      el->setCharge((float)charge.at(i));
-      el->auxdata<char>(tightKey) = isTight.at(i);
+      el->setCharge(charge.at(i));
+      el->auxdata<char>(tightKey) = isTight.at(i)!=0;
 
       leptons.push_back( static_cast<xAOD::IParticle*>(el) );}
       break;
@@ -119,31 +152,30 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<float> pt, std::vect
       xAOD::Muon *mu = new xAOD::Muon();
       mu->makePrivateStore();
       mu->setP4(pt.at(i)*1000, eta.at(i), phi.at(i));
-      mu->setCharge((float)charge.at(i));
-      mu->auxdata<char>(tightKey) = isTight.at(i);
+      mu->setCharge(charge.at(i));
+      mu->auxdata<char>(tightKey) = isTight.at(i)!=0;
 
       leptons.push_back( static_cast<xAOD::IParticle*>(mu) );}
       break;
     default: break;
     }
   }
-  DEBUG(Form("Create xAOD::IParticle container with %i entries", (int)leptons.size()));
+  DEBUG(Form("Create xAOD::IParticleContainer with %i entries", (int)leptons.size()));
   return leptons;
 }
 
 void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> tool){
-
   if(selection.empty() || process.empty() || effFile.empty())
     ERROR("MM Tool needs [Selection] [Process] arguments and efficiency file");
   
-  MSG::Level msgLevel = debug ? MSG::DEBUG : MSG::FATAL;
+  MSG::Level msgLevel = debug ? MSG::VERBOSE : MSG::FATAL;
   
   top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot set property: InputFiles");
   top::check(tool.setProperty("Selection",       selection),          "Cannot set property: Selection");
   top::check(tool.setProperty("Process",         process),            "Cannot set property: Process");
   top::check(tool.setProperty("EnergyUnit",      "GeV"),              "Cannot set property: EnergyUnit");
   top::check(tool.setProperty("OutputLevel",     msgLevel),           "Cannot set property: OutputLevel");
-  top::check(tool.setProperty("TightDecoration", tightKey),           "Cannot set property: TightDecoration"); 
+  top::check(tool.setProperty("TightDecoration", tightKey+",as_char"),"Cannot set property: TightDecoration"); 
 
   top::check(tool.initialize(), "MMTool cannot be initialized");
   INFO(Form("Initialized tool: %s", tool.name().c_str()));
@@ -172,15 +204,13 @@ int main(int argc, char* argv[]){
   if(SRNames.empty()) ERROR("No SR specified");
 
   if(!MMType) ERROR("No MM type selected");
-  asg::AnaToolHandle<CP::IFakeBkgTool> ASMTool("CP::AsymptMatrixTool/ASMTool");
-  asg::AnaToolHandle<CP::IFakeBkgTool> LHMTool("CP::LhoodMM_tools/LHMTool");
+  std::string toolName =  MMType==1 ? "CP::LhoodMM_tools/LHMTool" : "CP::AsymptMatrixTool/ASMTool";
   
-  asg::AnaToolHandle<CP::IFakeBkgTool> MMTool = MMType==1 ? LHMTool : ASMTool; 
+  asg::AnaToolHandle<CP::IFakeBkgTool> MMTool(toolName);
   initializeMMTool(MMTool);
 
-  TTreeReader reader(inTree);  
-  ULong64_t treeEntries = inTree->GetEntries();
-  INFO( Form("Reading TTree %s :: Entries = %ld", inTree->GetName(), (long)treeEntries) );
+  INFO(Form("Reading branches for TTree %s", inTree->GetName()));
+  TTreeReader reader(inTree);
 
   TTreeReaderValue<Double_t> lep0_pt = {reader, getBranch("lep0_pt")};
   TTreeReaderValue<Double_t> lep1_pt = {reader, getBranch("lep1_pt")};
@@ -198,9 +228,43 @@ int main(int argc, char* argv[]){
   TTreeReaderValue<Double_t> lep1_charge = {reader, getBranch("lep1_charge")};
   TTreeReaderValue<Double_t> lep2_charge = {reader, getBranch("lep2_charge")};
 
+  TTreeReaderValue<Double_t> lep0_type = {reader, getBranch("lep0_type")};
+  TTreeReaderValue<Double_t> lep1_type = {reader, getBranch("lep1_type")};
+  TTreeReaderValue<Double_t> lep2_type = {reader, getBranch("lep2_type")};
+
   TTreeReaderValue<Double_t> lep0_isTight = {reader, getBranch("lep0_isTight")};
   TTreeReaderValue<Double_t> lep1_isTight = {reader, getBranch("lep1_isTight")};
   TTreeReaderValue<Double_t> lep2_isTight = {reader, getBranch("lep2_isTight")};
+
+  ULong64_t treeEntries = inTree->GetEntries();
+  INFO(Form("Reading TTree %s :: Entries = %ld", inTree->GetName(), (long)treeEntries));
+  
+  unsigned int NEvents(0);
+  for(unsigned int entry(0); entry<treeEntries; entry++){
+    
+    reader.SetEntry(entry);
+    DEBUG(Form("Processing entry %i", entry));
+   
+    std::vector<double> lepPt  = {*lep0_pt,  *lep1_pt,  *lep2_pt};
+    std::vector<double> lepEta = {*lep0_eta, *lep1_eta, *lep2_eta};
+    std::vector<double> lepPhi = {*lep0_phi, *lep1_phi, *lep2_phi};
+
+    std::vector<double> lepCharge = {*lep0_charge,  *lep1_charge,  *lep2_charge};
+    std::vector<double> lepType   = {*lep0_type,    *lep1_type,    *lep2_type};
+    std::vector<double> lepTight  = {*lep0_isTight, *lep1_isTight, *lep2_isTight};
+
+    std::shared_ptr<xAOD::TStore> store = std::make_shared<xAOD::TStore>();
+    std::shared_ptr<xAOD::TEvent> event = std::make_shared<xAOD::TEvent>();
+
+    sortLeptons(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
+    xAOD::IParticleContainer leptons = makeIParticleContainer(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
+    printLeptons(leptons);
+
+    top::check( MMTool->addEvent(leptons), "Cannot execute addEvent()");
+    NEvents++;
+  }
+  INFO(Form("Processed %i events", NEvents));
+
 
   INFO("Finalizing");
   auto end = std::time(nullptr);
