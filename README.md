@@ -13,7 +13,7 @@ Proper documentation needs to be added
 
 Please perform the compilation and cleaning from the parent directory of your acm source directory.
 
-+ To compile:
++ To setup [ATLAS environment](https://atlassoftwaredocs.web.cern.ch/ABtutorial/release_setup) and compile:
 ```
 source/ttWCA/scripts/setup.sh
 ```

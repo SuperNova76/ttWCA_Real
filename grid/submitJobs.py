@@ -9,7 +9,7 @@ def main():
     parser = ArgumentParser(description="Script for submitting grid jobs from sample list")
     parser.add_argument("Samples",   help="List of input MC or data samples (.txt)")
     parser.add_argument("--Config",  help="Name of top-config file (path is resovled automatically)", default="Config_ttWCA.txt")
-    parser.add_argument("--Version", help="Version of the production",                                default="uctatlas_v8")
+    parser.add_argument("--Version", help="Version of the production",                                default="uctatlas_v9")
     parser.add_argument("--Submit",  type=int, help="Submit jobs (or only print the prun-command)",   default=0)
     options = parser.parse_args()
 
@@ -37,7 +37,7 @@ def makeJob(DS,config,version,submit):
     cmd += "--inDS={0} \\\n"                                                                                               .format(DS)
     cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                .format(os.getenv('RUCIO_ACCOUNT'), makeOutputName(DS), version)
     cmd += "--excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git \\\n".format(ACM_SOURCE.split("/")[-1])
-    cmd += "--cmtConfig={0} --rootVer={1} --osMatching --useAthenaPackages \\\n"                                           .format(os.getenv('CMTCONFIG'), ROOT.gROOT.GetVersion())
+    cmd += "--cmtConfig={0} --rootVer={1} --osMatching  \\\n"                                                              .format(os.getenv('CMTCONFIG'), ROOT.gROOT.GetVersion())
     cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                         .format(findFile(ACM_SOURCE.split("/")[-1],config))
     cmd += "--extFile={0}/ttWCA/share/* \\\n"                                                                              .format(ACM_SOURCE.split("/")[-1])
     cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                         .format(NFILESPERJOB)
@@ -48,16 +48,23 @@ def makeJob(DS,config,version,submit):
     return 1
 
 def makeOutputName(name):
-    dsid     = name.split('.')[1]
-    physname = name.split('.')[2]
-    ptag     = name.split('_p')[-1]
-    MCcamp    = getMCcamp(name)
-    return "{0}.{1}_{2}_p{3}".format(dsid,physname,MCcamp,ptag)
+    if name.find('data')>-1:
+        year     = name.split('.')[0]
+        physname = name.split('.')[1] + "." + name.split('.')[2]
+        ptag     = name.split('_p')[-1]
+        return "{0}.{1}_p{2}".format(year,physname,ptag)
+    else:
+        dsid     = name.split('.')[1]
+        physname = name.split('.')[2]
+        ptag     = name.split('_p')[-1]
+        MCcamp    = getMCcamp(name)
+        return "{0}.{1}_{2}_p{3}".format(dsid,physname,MCcamp,ptag)
+    return
 
 def getMCcamp(n):
-    if n.find('r9364')>1:  return "mc16a"
-    if n.find('r10201')>1: return "mc16d"
-    if n.find('r10724')>1: return "mc16e"
+    if n.find('r9364')>-1:  return "mc16a"
+    if n.find('r10201')>-1: return "mc16d"
+    if n.find('r10724')>-1: return "mc16e"
     info("MC campaign not found for sample {0}".format(n))
     return ""
 
