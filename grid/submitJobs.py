@@ -37,7 +37,7 @@ def makeJob(DS,config,version,submit):
     cmd += "--inDS={0} \\\n"                                                                                               .format(DS)
     cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                .format(os.getenv('RUCIO_ACCOUNT'), makeOutputName(DS), version)
     cmd += "--excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git \\\n".format(ACM_SOURCE.split("/")[-1])
-    cmd += "--cmtConfig={0} --osMatching --useAthenaPackages \\\n"                                                         .format(os.getenv('CMTCONFIG'))
+    cmd += "--cmtConfig={0} --rootVer={1} --osMatching  \\\n"                                                              .format(os.getenv('CMTCONFIG'), ROOT.gROOT.GetVersion())
     cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                         .format(findFile(ACM_SOURCE.split("/")[-1],config))
     cmd += "--extFile={0}/ttWCA/share/* \\\n"                                                                              .format(ACM_SOURCE.split("/")[-1])
     cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                         .format(NFILESPERJOB)

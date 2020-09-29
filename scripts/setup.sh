@@ -7,10 +7,9 @@ if [ ! $ATLAS_LOCAL_ACM_VERSION ]; then
     echo "--> setup ATLAS"
     export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
     source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
-    lsetup "rucio"
-    lsetup "git"
-    lsetup "panda"
-    lsetup "pyami"
+    
+    echo "--> setup extra modules"
+    lsetup "rucio" "git" "panda" "pyami" "cmake"
 fi
 
 if [ ! $ACMSOURCEDIR ]; then
