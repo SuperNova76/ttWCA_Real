@@ -1,14 +1,19 @@
 import os,sys
+from argparse import ArgumentParser
 
-if len(sys.argv) < 2: 
-    print("No search expression found"); sys.exit(1)
+parser = ArgumentParser(description="Script for rucio download commands")
+parser.add_argument("expr",   help="rucio search expression", default="")
+parser.add_argument("--dstype", help="dataset type to search",  default="CONTAINER")
+opt = parser.parse_args()
 
-expr = sys.argv[1]
-if not len(expr) or expr.isspace(): 
+if not len(opt.expr) or opt.expr.isspace(): 
     print ("No search expression found"); sys.exit(1)
 
-expr = "rucio list-dids --short --filter type=CONTAINER {0} | sort  &> list.txt".format(expr) 
-os.system(expr)
+if not "RUCIO_ACCOUNT" in os.environ: 
+    print("rucio account not set... please run these commands before: setupATLAS && lsetup rucio"); sys.exit(1)
+
+rucioCmd = "rucio list-dids --short --filter type={0} {1} | sort  &> list.txt".format(opt.dstype,opt.expr) 
+os.system(rucioCmd)
 
 txtFile = open("list.txt","rw")
 cmdFile = open("list.sh", "wr")
