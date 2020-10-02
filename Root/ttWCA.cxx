@@ -29,6 +29,8 @@ namespace top{
       if(m_jetCharge)  sysTree->makeOutputVariable(m_jc,  "JetCharge");
       if(m_IFFClass)   sysTree->makeOutputVariable(m_IFF, "IFFClassification");
     }
+    if(m_IFFClass) initializeIFFTool("TruthClassificationTool");
+
     MSG_INFO("Initialized");
     return;
   }
@@ -52,6 +54,19 @@ namespace top{
   
   void ttWCA::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent){     
     top::EventSaverFlatNtuple::saveParticleLevelEvent(plEvent); 
+    return;
+  }
+
+  void ttWCA::initializeIFFTool(const std::string& toolName){
+    MSG_INFO(Form("Initializing %s",toolName.c_str()));
+    /*
+    m_IFFTool.setTypeAndName("TruthClassificationTool/"+toolName);
+
+    top::check(m_IFFTool.setProperty("separateChargeFlipElectrons", true),               "Unable to set property: separateChargeFlipElectrons");  
+    top::check(m_IFFTool.setProperty("OutputLevel",  m_debug ? MSG::DEBUG : MSG::FATAL), "Unable to set property: OutputLevel");
+    top::check(m_IFFTool.initialize(),                                                   "Unable to initialize TruthClassificationTool"));
+    MSG_INFO(Form("Intialized %s", m_IFFTool.name().c_str()));
+    */
     return;
   }
   

@@ -164,11 +164,11 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vec
   return leptons;
 }
 
-void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> tool){
+void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> &tool){
   if(selection.empty() || process.empty() || effFile.empty())
     ERROR("MM Tool needs [Selection] [Process] arguments and efficiency file");
   
-  MSG::Level msgLevel = debug ? MSG::VERBOSE : MSG::FATAL;
+  MSG::Level msgLevel = debug ? MSG::DEBUG : MSG::FATAL;
   
   top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot set property: InputFiles");
   top::check(tool.setProperty("Selection",       selection),          "Cannot set property: Selection");
@@ -265,6 +265,10 @@ int main(int argc, char* argv[]){
   }
   INFO(Form("Processed %i events", NEvents));
 
+  float yields(0), yieldsUP(0), yieldsDOWN(0);
+  top::check( MMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute getTotalYield()");
+
+  INFO(Form("%s::totalYields()\t %.3f (nom) %.3f (up) %.3f (down)",MMTool.name().c_str(), yields, yieldsUP, yieldsDOWN));
 
   INFO("Finalizing");
   auto end = std::time(nullptr);

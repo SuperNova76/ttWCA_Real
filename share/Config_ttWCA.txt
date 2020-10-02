@@ -91,7 +91,7 @@ ElectronPt 10000
 ElectronID TightLH
 ElectronIDLoose LooseAndBLayerLH
 ElectronIsolation PLVTight
-ElectronIsolationLoose None
+ElectronIsolationLoose PLVLoose
 
 ### Photon configuration
 PhotonPt 25000
@@ -107,7 +107,7 @@ MuonPt 10000
 MuonQuality Medium
 MuonQualityLoose Medium
 MuonIsolation PflowTight_FixedRad
-MuonIsolationLoose None
+MuonIsolationLoose PflowLoose_FixedRad
 doExtraSmearing False
 do2StationsHighPt False
 
