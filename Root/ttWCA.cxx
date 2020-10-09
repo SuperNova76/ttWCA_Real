@@ -26,8 +26,9 @@ namespace top{
     m_IFFClass = (key=="True");
 
     for(auto sysTree : treeManagers()) {
-      if(m_jetCharge)  sysTree->makeOutputVariable(m_jc,  "JetCharge");
-      if(m_IFFClass)   sysTree->makeOutputVariable(m_IFF, "IFFClassification");
+      if(m_jetCharge) sysTree->makeOutputVariable(m_jetcharge,  "JetCharge");   
+      if(m_IFFClass)  sysTree->makeOutputVariable(m_mu_IFFtype, "mu_IFFclass");
+      if(m_IFFClass)  sysTree->makeOutputVariable(m_el_IFFtype, "el_IFFclass");
     }
     if(m_IFFClass) initializeIFFTool("TruthClassificationTool");
 
@@ -59,14 +60,12 @@ namespace top{
 
   void ttWCA::initializeIFFTool(const std::string& toolName){
     MSG_INFO(Form("Initializing %s",toolName.c_str()));
-    /*
     m_IFFTool.setTypeAndName("TruthClassificationTool/"+toolName);
 
     top::check(m_IFFTool.setProperty("separateChargeFlipElectrons", true),               "Unable to set property: separateChargeFlipElectrons");  
     top::check(m_IFFTool.setProperty("OutputLevel",  m_debug ? MSG::DEBUG : MSG::FATAL), "Unable to set property: OutputLevel");
-    top::check(m_IFFTool.initialize(),                                                   "Unable to initialize TruthClassificationTool"));
+    top::check(m_IFFTool.initialize(),                                                   "Unable to initialize TruthClassificationTool");
     MSG_INFO(Form("Intialized %s", m_IFFTool.name().c_str()));
-    */
     return;
   }
   
@@ -77,19 +76,29 @@ namespace top{
       double jet_ch = (m_jetCharge && jet->btagging()->isAvailable<double>("JetVertexCharge_discriminant")) ? jet->btagging()->auxdataConst<double>("JetVertexCharge_discriminant") : -99;
 
       MSG_DEBUG(Form("  Jet: [pt=%.1f | eta=%.3f | phi=%.3f] \t isB(%s)=%i, JC=%.3f", jet->pt(), jet->eta(), jet->phi(), btagWP.c_str(), (int)jet->auxdataConst<char>(btagWP)==1, (float)jet_ch));
-      m_jc.push_back(jet_ch);
+      m_jetcharge.push_back(jet_ch);
     }
   }
 
   void ttWCA::processMuons(const top::Event& event){
     for(const auto mu : event.m_muons){
-      MSG_DEBUG(Form("  Mu: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i", mu->pt(), mu->eta(), mu->phi(), (int)mu->auxdataConst<char>("passPreORSelection")==1));
+
+      unsigned int IFFType(0);
+      if(m_IFFClass) top::check(m_IFFTool->classify(*mu, IFFType), "Unable the classifiy muon");
+
+      MSG_DEBUG(Form("  Mu: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, IFFType=%i", mu->pt(), mu->eta(), mu->phi(), (int)mu->auxdataConst<char>("passPreORSelection")==1, (int)IFFType));
+      m_mu_IFFtype.push_back(IFFType);
     }
   }
 
   void ttWCA::processElectrons(const top::Event& event){
     for(const auto el : event.m_electrons){
-      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1));
+
+      unsigned int IFFType(0);
+      if(m_IFFClass) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
+
+      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, IFFType=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, (int)IFFType));
+      m_el_IFFtype.push_back(IFFType);
     }
   }
 
@@ -102,8 +111,9 @@ namespace top{
   }
   
   void ttWCA::clearOutputVars(){
-    m_jc.clear();
-    m_IFF.clear();
+    m_jetcharge.clear();
+    m_mu_IFFtype.clear();
+    m_el_IFFtype.clear();
     return;
   }
 }

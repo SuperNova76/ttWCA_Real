@@ -10,7 +10,7 @@
 #include "xAODJet/JetContainer.h"
 #include "xAODMissingET/MissingETContainer.h"
 #include "xAODBTagging/BTagging.h"
-//#include "TruthClassification/TruthClassificationTool.h"
+#include "TruthClassification/TruthClassificationTool.h"
 
 #include "TFile.h"
 #include "TH1D.h"
@@ -54,10 +54,11 @@ namespace top{
       void initializeIFFTool(const std::string& toolName);
       void clearOutputVars();
 
-      std::vector<float> m_jc;
-      std::vector<float> m_IFF;
+      std::vector<float> m_jetcharge;
+      std::vector<float> m_mu_IFFtype;
+      std::vector<float> m_el_IFFtype;
 
-      // asg::AnaToolHandle<CP::IClassificationTool> m_IFFTool;
+      asg::AnaToolHandle<CP::IClassificationTool> m_IFFTool;
       
       ClassDefOverride(top::ttWCA, 0);
   };

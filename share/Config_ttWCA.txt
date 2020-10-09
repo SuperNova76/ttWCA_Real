@@ -4,13 +4,13 @@ DynamicKeys Debug,JetCharge,IFFClassification
 
 Debug False
 JetCharge True
-IFFClassification False
+IFFClassification True
 
 #NEvents 1000
 
 ### Good Run List
 GRLDir  GoodRunsLists
-GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml
+GRLFile data15_13TeV/20170619/physics_25ns_21.0.19.xml data16_13TeV/20180129/physics_25ns_21.0.19.xml data17_13TeV/20180619/physics_25ns_Triggerno17e33prim.xml data18_13TeV/20190219/physics_25ns_Triggerno17e33prim.xml
 
 # MC16a configuration
 #PRWConfigFiles_FS dev/AnalysisTop/PileupReweighting/user.iconnell.Top.PRW.MC16a.FS.v2/prw.merged.root

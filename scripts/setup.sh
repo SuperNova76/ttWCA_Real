@@ -1,4 +1,4 @@
-export REL="21.2.138"
+export REL="21.2.143"
 
 if [ ! $ATLAS_LOCAL_ACM_VERSION ]; then 
     echo "--> get voms-proxy"
