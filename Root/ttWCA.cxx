@@ -83,8 +83,8 @@ namespace top{
   void ttWCA::processMuons(const top::Event& event){
     for(const auto mu : event.m_muons){
 
-      unsigned int IFFType(0);
-      if(m_IFFClass) top::check(m_IFFTool->classify(*mu, IFFType), "Unable the classifiy muon");
+      unsigned int IFFType(99);
+      if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*mu, IFFType), "Unable the classifiy muon");
 
       MSG_DEBUG(Form("  Mu: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, IFFType=%i", mu->pt(), mu->eta(), mu->phi(), (int)mu->auxdataConst<char>("passPreORSelection")==1, (int)IFFType));
       m_mu_IFFtype.push_back(IFFType);
@@ -94,8 +94,8 @@ namespace top{
   void ttWCA::processElectrons(const top::Event& event){
     for(const auto el : event.m_electrons){
 
-      unsigned int IFFType(0);
-      if(m_IFFClass) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
+      unsigned int IFFType(99);
+      if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
 
       MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, IFFType=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, (int)IFFType));
       m_el_IFFtype.push_back(IFFType);
