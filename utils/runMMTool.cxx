@@ -78,12 +78,13 @@ std::vector<std::string> tokenize(TString in){
   return out;
 }
 
-void setConfigValues(TString conf){
+StatusCode setConfigValues(TString conf){
   TEnv env;
-  if(env.ReadFile(conf, kEnvAll) != 0) 
-    ERROR(Form("Cannot read config file %s", conf.Data()));
-  else
-    INFO(Form("Reading config file: %s", conf.Data()));
+  if(env.ReadFile(conf, kEnvAll) != 0){ 
+    INFO(Form("Cannot read config file %s", conf.Data()));
+    return StatusCode::FAILURE;
+  }
+  INFO(Form("Reading config file: %s", conf.Data()));
 
   debug     = env.GetValue("Debug",         0);
   MMType    = env.GetValue("MMType",        1);
@@ -92,7 +93,7 @@ void setConfigValues(TString conf){
   process   = env.GetValue("Process",       "");
   SRNames   = env.GetValue("SignalRegion",  "");
   env.PrintEnv();
-  return;
+  return StatusCode::SUCCESS;
 }
 
 TString getBranch(const char* name){
@@ -164,10 +165,11 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vec
   return leptons;
 }
 
-void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> &tool){
-  if(selection.empty() || process.empty() || effFile.empty())
-    ERROR("MM Tool needs [Selection] [Process] arguments and efficiency file");
-  
+StatusCode initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> &tool){
+  if(selection.empty() || process.empty() || effFile.empty()){
+    INFO("MM Tool needs [Selection] [Process] arguments and efficiency file");
+    return StatusCode::FAILURE;
+  }
   MSG::Level msgLevel = debug ? MSG::DEBUG : MSG::FATAL;
   
   top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot set property: InputFiles");
@@ -179,10 +181,11 @@ void initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> &tool){
 
   top::check(tool.initialize(), "MMTool cannot be initialized");
   INFO(Form("Initialized tool: %s", tool.name().c_str()));
+  return StatusCode::SUCCESS;
 }
 
 int main(int argc, char* argv[]){
-  if(argc < 2) throw std::invalid_argument("Too few arguments");
+  if(argc < 2) throw std::invalid_argument("Too few arguments. Run runMMTool [input.root] [Config.txt]");
   name = argv[0];
 
   TString input(argv[1]), config(argv[2]);
@@ -200,14 +203,14 @@ int main(int argc, char* argv[]){
   TTree* inTree = (TTree*)inFile->Get(treeName.c_str());
   if(!inTree) ERROR("Input tree not found! Exiting");
  
-  setConfigValues(config);
+  top::check(setConfigValues(config), "Cannot set config values");
   if(SRNames.empty()) ERROR("No SR specified");
 
   if(!MMType) ERROR("No MM type selected");
   std::string toolName =  MMType==1 ? "CP::LhoodMM_tools/LHMTool" : "CP::AsymptMatrixTool/ASMTool";
   
   asg::AnaToolHandle<CP::IFakeBkgTool> MMTool(toolName);
-  initializeMMTool(MMTool);
+  top::check(initializeMMTool(MMTool), "MMTool cannot be initialized");
 
   INFO(Form("Reading branches for TTree %s", inTree->GetName()));
   TTreeReader reader(inTree);

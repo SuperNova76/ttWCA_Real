@@ -7,15 +7,16 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttWCA
-  ROOT_VERSION: 6.18.04-x86_64-centos7-gcc8-opt
+  ROOT_VERSION: 6.20.06-x86_64-centos7-gcc8-opt
   BUILD_DIR: build
   RUN_DIR: run
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
   SAMPLE_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_TOPQ1.e6337_s3126_r10724_p4174/DAOD_TOPQ1.21644694._000800.pool.root.1
+  NTUP_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/Ntup_data/data.root
   
 .analysis_image: &image
-  image: atlas/analysisbase:21.2.138
+  image: atlas/analysisbase:21.2.143
   tags:
     - cvmfs
   before_script:
@@ -38,7 +39,7 @@ build:
     - lsetup acm
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
-    - acmSetup "--sourcedir=../ AnalysisBase,21.2.138"
+    - acmSetup "--sourcedir=../ AnalysisBase,21.2.143"
     - acm compile
     - cd ../
     - mv $BUILD_DIR $PACKAGE_NAME
@@ -72,4 +73,4 @@ run_utils:
   - cd ../
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - cd ${PACKAGE_NAME}/utils
-  - runMMTool "" Config.conf
+  - runMMTool $NTUP_NAME Config.conf
