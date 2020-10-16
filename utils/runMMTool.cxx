@@ -51,7 +51,7 @@ static std::string effFile(""), selection(""), process(""), SRNames("");
 
 static const std::string tightKey("tight");
 static const std::string treeName("nominal");
-static const std::string branchDict("BranchMap.conf");
+static const std::string branchDict("branchMap.conf");
 
 static const double M_Z(91.1876);
 static const double M_W(80.3850);
@@ -184,6 +184,26 @@ StatusCode initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> &tool){
   return StatusCode::SUCCESS;
 }
 
+StatusCode initializeMMTool(asg::AnaToolHandle<CP::ILinearFakeBkgTool> &tool){
+  if(selection.empty() || process.empty() || effFile.empty()){
+    INFO("MM Tool needs [Selection] [Process] arguments and efficiency file");
+    return StatusCode::FAILURE;
+  }
+  MSG::Level msgLevel = debug ? MSG::DEBUG : MSG::FATAL;
+
+  top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot set property: InputFiles");
+  top::check(tool.setProperty("Selection",       selection),          "Cannot set property: Selection");
+  top::check(tool.setProperty("Process",         process),            "Cannot set property: Process");
+  top::check(tool.setProperty("EnergyUnit",      "GeV"),              "Cannot set property: EnergyUnit");
+  top::check(tool.setProperty("OutputLevel",     msgLevel),           "Cannot set property: OutputLevel");
+  top::check(tool.setProperty("TightDecoration", tightKey+",as_char"),"Cannot set property: TightDecoration");
+
+  top::check(tool.initialize(), "MMTool cannot be initialized");
+  INFO(Form("Initialized tool: %s", tool.name().c_str()));
+  return StatusCode::SUCCESS;
+}
+
+
 int main(int argc, char* argv[]){
   if(argc < 2) throw std::invalid_argument("Too few arguments. Run runMMTool [input.root] [Config.txt]");
   name = argv[0];
@@ -205,12 +225,20 @@ int main(int argc, char* argv[]){
  
   top::check(setConfigValues(config), "Cannot set config values");
   if(SRNames.empty()) ERROR("No SR specified");
-
-  if(!MMType) ERROR("No MM type selected");
-  std::string toolName =  MMType==1 ? "CP::LhoodMM_tools/LHMTool" : "CP::AsymptMatrixTool/ASMTool";
   
-  asg::AnaToolHandle<CP::IFakeBkgTool> MMTool(toolName);
-  top::check(initializeMMTool(MMTool), "MMTool cannot be initialized");
+  asg::AnaToolHandle<CP::IFakeBkgTool>       LHMTool("CP::LhoodMM_tools/LHMTool");
+  asg::AnaToolHandle<CP::ILinearFakeBkgTool> ASMTool("CP::AsymptMatrixTool/ASMTool");
+
+  switch( MMType ){
+  case 1:
+    top::check(initializeMMTool(LHMTool), "LHMTool cannot be initialized");
+    break;
+  case 2:
+    top::check(initializeMMTool(ASMTool), "ASMTool cannot be initialized");
+    break;
+  default: 
+    ERROR("No MM type selected"); 
+  }
 
   INFO(Form("Reading branches for TTree %s", inTree->GetName()));
   TTreeReader reader(inTree);
@@ -244,10 +272,11 @@ int main(int argc, char* argv[]){
   
   unsigned int NEvents(0);
   for(unsigned int entry(0); entry<treeEntries; entry++){
-    
+
     reader.SetEntry(entry);
     DEBUG(Form("Processing entry %i", entry));
-   
+
+    float weightMM(0);   
     std::vector<double> lepPt  = {*lep0_pt,  *lep1_pt,  *lep2_pt};
     std::vector<double> lepEta = {*lep0_eta, *lep1_eta, *lep2_eta};
     std::vector<double> lepPhi = {*lep0_phi, *lep1_phi, *lep2_phi};
@@ -263,15 +292,35 @@ int main(int argc, char* argv[]){
     xAOD::IParticleContainer leptons = makeIParticleContainer(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
     printLeptons(leptons);
 
-    top::check( MMTool->addEvent(leptons), "Cannot execute addEvent()");
+    switch( MMType ){
+    case 1:
+      top::check( LHMTool->addEvent(leptons), "Cannot execute LHMTool::addEvent()");
+      break;
+    case 2:
+      top::check( ASMTool->addEvent(leptons), "Cannot execute ASMTool::addEvent()");
+      top::check( ASMTool->getEventWeight(weightMM, selection, process), "Unable to get ASM weight");
+      DEBUG(Form("Entry %i, N(lep) = %i :: weight(ASM) = %.3f",entry, (int)leptons.size(), weightMM));
+      break;
+    default:
+      ERROR("No MM type selected");
+    }
+
     NEvents++;
   }
   INFO(Form("Processed %i events", NEvents));
 
   float yields(0), yieldsUP(0), yieldsDOWN(0);
-  top::check( MMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute getTotalYield()");
-
-  INFO(Form("%s::totalYields()\t %.3f (nom) %.3f (up) %.3f (down)",MMTool.name().c_str(), yields, yieldsUP, yieldsDOWN));
+  switch( MMType ){
+  case 1:
+    top::check( LHMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute LHMTool::getTotalYield()");
+    break;
+  case 2:
+    top::check( ASMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute ASMTool::getTotalYield()");
+    break;
+  default:
+    ERROR("No MM type selected");
+  }
+  INFO(Form("MMTool::totalYields()\t %.3f (nom) %.3f (up) %.3f (down)", yields, yieldsUP, yieldsDOWN));
 
   INFO("Finalizing");
   auto end = std::time(nullptr);
