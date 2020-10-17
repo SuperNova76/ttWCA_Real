@@ -165,7 +165,8 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vec
   return leptons;
 }
 
-StatusCode initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> &tool){
+template <typename T>
+StatusCode initializeMMTool(T &tool){
   if(selection.empty() || process.empty() || effFile.empty()){
     INFO("MM Tool needs [Selection] [Process] arguments and efficiency file");
     return StatusCode::FAILURE;
@@ -183,26 +184,6 @@ StatusCode initializeMMTool(asg::AnaToolHandle<CP::IFakeBkgTool> &tool){
   INFO(Form("Initialized tool: %s", tool.name().c_str()));
   return StatusCode::SUCCESS;
 }
-
-StatusCode initializeMMTool(asg::AnaToolHandle<CP::ILinearFakeBkgTool> &tool){
-  if(selection.empty() || process.empty() || effFile.empty()){
-    INFO("MM Tool needs [Selection] [Process] arguments and efficiency file");
-    return StatusCode::FAILURE;
-  }
-  MSG::Level msgLevel = debug ? MSG::DEBUG : MSG::FATAL;
-
-  top::check(tool.setProperty("InputFiles",      tokenize(effFile)),  "Cannot set property: InputFiles");
-  top::check(tool.setProperty("Selection",       selection),          "Cannot set property: Selection");
-  top::check(tool.setProperty("Process",         process),            "Cannot set property: Process");
-  top::check(tool.setProperty("EnergyUnit",      "GeV"),              "Cannot set property: EnergyUnit");
-  top::check(tool.setProperty("OutputLevel",     msgLevel),           "Cannot set property: OutputLevel");
-  top::check(tool.setProperty("TightDecoration", tightKey+",as_char"),"Cannot set property: TightDecoration");
-
-  top::check(tool.initialize(), "MMTool cannot be initialized");
-  INFO(Form("Initialized tool: %s", tool.name().c_str()));
-  return StatusCode::SUCCESS;
-}
-
 
 int main(int argc, char* argv[]){
   if(argc < 2) throw std::invalid_argument("Too few arguments. Run runMMTool [input.root] [Config.txt]");
