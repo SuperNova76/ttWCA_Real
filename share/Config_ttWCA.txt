@@ -3,7 +3,7 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 DynamicKeys Debug,JetCharge,IFFClassification
 
 Debug False
-JetCharge True
+JetCharge False
 IFFClassification True
 
 #NEvents 1000
@@ -32,7 +32,7 @@ PRWActualMu_AF GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33pr
 PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_348885-364292_OflLumi-13TeV-010.root
 
 #setup of TDP file
-TDPPath $WorkDir_DIR/data/ttWCA/XSection-MC16-13TeV.data
+#TDPPath $WorkDir_DIR/data/ttWCA/XSection-MC16-13TeV.data
 #TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
 
 #BTag DF (uncomment this for Sherpa 228 samples only)
@@ -41,8 +41,8 @@ TDPPath $WorkDir_DIR/data/ttWCA/XSection-MC16-13TeV.data
 ### Object container names
 ElectronCollectionName Electrons
 MuonCollectionName Muons
-JetCollectionName AntiKt4EMTopoJets_BTagging201810
-#JetCollectionName AntiKt4EMPFlowJets_BTagging201903
+#JetCollectionName AntiKt4EMTopoJets_BTagging201810
+JetCollectionName AntiKt4EMPFlowJets_BTagging201903
 LargeJetCollectionName None
 TauCollectionName None
 PhotonCollectionName None
@@ -50,22 +50,22 @@ TrackJetCollectionName None
 JetGhostTrackDecoName None
 
 ### Large-R configuration
-LargeRJESJMSConfig CombMass
-LargeRJetPt 200000
-LargeRJetEta 2
-LargeJetSubstructure None
+#LargeRJESJMSConfig CombMass
+#LargeRJetPt 200000
+#LargeRJetEta 2
+#LargeJetSubstructure None
 
 ### Reclustered jet configuration
-UseRCJets True
+#UseRCJets True
 #UseRCJetSubstructure True
-RCJetEta 2.0
-UseVarRCJets True
-VarRCJetMassScale m_w,m_t
-VarRCJetRho 2
+#RCJetEta 2.0
+#UseVarRCJets True
+#VarRCJetMassScale m_w,m_t
+#VarRCJetRho 2
 
 ### Truth configuration
 TruthCollectionName TruthParticles
-TruthJetCollectionName AntiKt4TruthWZJets
+TruthJetCollectionName AntiKt4TruthDressedWZJets
 TruthLargeRJetCollectionName AntiKt10TruthTrimmedPtFrac5SmallR20Jets
 TopPartonHistory ttbar
 TopParticleLevel True
@@ -94,13 +94,13 @@ ElectronIsolation PLVTight
 ElectronIsolationLoose PLVLoose
 
 ### Photon configuration
-PhotonPt 25000
-PhotonEta 2.5
-PhotonID Tight
-PhotonIDLoose Loose
-PhotonIsolation FixedCutTight
-PhotonIsolationLoose FixedCutLoose
-PhotonUseRadiativeZ False
+#PhotonPt 25000
+#PhotonEta 2.5
+#PhotonID Tight
+#PhotonIDLoose Loose
+#PhotonIsolation FixedCutTight
+#PhotonIsolationLoose FixedCutLoose
+#PhotonUseRadiativeZ False
 
 ### Muon configuration
 MuonPt 10000
@@ -117,13 +117,13 @@ JVTWP Medium
 ForwardJVTWP Medium
 
 ### Tau configuration
-TauPt 25000
-TauJetIDWP RNNMedium
-TauJetIDWPLoose RNNLoose
-TauEleBDTWP Loose
-TauEleBDTWPLoose Loose
-TauEleOLR False
-TauEleOLRLoose False
+#TauPt 25000
+#TauJetIDWP RNNMedium
+#TauJetIDWPLoose RNNLoose
+#TauEleBDTWP Loose
+#TauEleBDTWPLoose Loose
+#TauEleOLR False
+#TauEleOLRLoose False
 
 # DoTight/DoLoose to activate the loose and tight trees
 # each should be one in: Data, MC, Both, False
@@ -135,13 +135,11 @@ UseAodMetaData True
 #IsAFII False
 
 ### Boosted jet taggers configuration
-BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
+#BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
 
 ### B-tagging configuration
-BTaggingCaloJetWP MV2c10:FixedCutBEff_77 MV2c10:Continuous
-BTagVariableSaveList MV2c10_discriminant
-#BTaggingCaloJetWP DL1r:FixedCutBEff_77 DL1r:Continuous
-
+BTaggingCaloJetWP DL1r:FixedCutBEff_77 DL1r:Continuous
+BTagVariableSaveList DL1r_discriminant
 
 # Example of how to remove systematics from b-tag EV
 #BTaggingSystExcludedFromEV FT_EFF_JET_BJES_Response;FT_EFF_JET_EffectiveNP_1;FT_EFF_EG_RESOLUTION_ALL
@@ -233,7 +231,7 @@ MU_N 10000 >= 1
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 25000 >= 0
-JET_N_BTAG MV2c10:FixedCutBEff_77 >= 0
+JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
 
@@ -274,7 +272,7 @@ MU_N 10000 >= 2
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 25000 >= 0
-JET_N_BTAG MV2c10:FixedCutBEff_77 >= 0
+JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
 
@@ -315,7 +313,7 @@ EL_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 25000 >= 0
-JET_N_BTAG MV2c10:FixedCutBEff_77 >= 0
+JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
 
@@ -356,7 +354,7 @@ MU_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 25000 >= 0
-JET_N_BTAG MV2c10:FixedCutBEff_77 >= 0
+JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
 
