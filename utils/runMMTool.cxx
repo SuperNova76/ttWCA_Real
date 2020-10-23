@@ -212,11 +212,9 @@ int main(int argc, char* argv[]){
 
   switch( MMType ){
   case 1:
-    top::check(initializeMMTool(LHMTool), "LHMTool cannot be initialized");
-    break;
+    top::check(initializeMMTool(LHMTool), "LHMTool cannot be initialized"); break;
   case 2:
-    top::check(initializeMMTool(ASMTool), "ASMTool cannot be initialized");
-    break;
+    top::check(initializeMMTool(ASMTool), "ASMTool cannot be initialized"); break;
   default: 
     ERROR("No MM type selected"); 
   }
@@ -275,14 +273,13 @@ int main(int argc, char* argv[]){
 
     switch( MMType ){
     case 1:
-      top::check( LHMTool->addEvent(leptons), "Cannot execute LHMTool::addEvent()");
-      break;
+      top::check( LHMTool->addEvent(leptons), "Cannot execute LHMTool::addEvent()"); break;
     case 2:
       top::check( ASMTool->addEvent(leptons), "Cannot execute ASMTool::addEvent()");
       top::check( ASMTool->getEventWeight(weightMM, selection, process), "Unable to get ASM weight");
       DEBUG(Form("Entry %i, N(lep) = %i :: weight(ASM) = %.3f",entry, (int)leptons.size(), weightMM));
       break;
-    default:
+    default: 
       ERROR("No MM type selected");
     }
 
@@ -293,11 +290,9 @@ int main(int argc, char* argv[]){
   float yields(0), yieldsUP(0), yieldsDOWN(0);
   switch( MMType ){
   case 1:
-    top::check( LHMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute LHMTool::getTotalYield()");
-    break;
+    top::check( LHMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute LHMTool::getTotalYield()"); break;
   case 2:
-    top::check( ASMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute ASMTool::getTotalYield()");
-    break;
+    top::check( ASMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute ASMTool::getTotalYield()"); break;
   default:
     ERROR("No MM type selected");
   }
@@ -306,5 +301,6 @@ int main(int argc, char* argv[]){
   INFO("Finalizing");
   auto end = std::time(nullptr);
   INFO(std::ctime(&end));
-}
 
+  return EXIT_SUCCESS;
+}
