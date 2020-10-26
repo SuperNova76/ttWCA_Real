@@ -7,6 +7,7 @@
 #include <cmath>
 #include <ctime>  
 #include <numeric>
+#include <utility>
 #include <stdexcept>
 
 #include "TROOT.h"
@@ -107,6 +108,27 @@ TString getBranch(const char* name){
   return out;
 }
 
+std::pair<std::string, std::string> getArgs1LX(unsigned int nLep){
+
+  std::string selection(""), process(">=1F[L]");
+  switch(nLep){
+  case 1:
+    selection = "T"; 
+    break;
+  case 2:
+    selection = "T!T+!TT";
+    break;
+  case 3:
+    selection = "T!T!T+!TT!T+!T!TT";
+    break;
+  case 4:
+    selection = "T!T!T!T+!TT!T!T+!T!TT!T+!T!T!TT";
+    break;
+  default: break;
+  }
+  return std::make_pair(selection, process);
+}
+
 void sortLeptons(std::vector<double> &pt, std::vector<double> &eta, std::vector<double> &phi, std::vector<double> &charge, std::vector<double> &type, std::vector<double> &tight){
 
   std::vector<double> pt_sorted(0), eta_sorted(0), phi_sorted(0), charge_sorted(0), type_sorted(0), tight_sorted(0);
@@ -132,10 +154,12 @@ void sortLeptons(std::vector<double> &pt, std::vector<double> &eta, std::vector<
   return;
 }
 
-xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vector<double> eta, std::vector<double> phi, std::vector<double> charge, std::vector<double> type, std::vector<double> isTight){
-  unsigned int nLep(pt.size());
+xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vector<double> eta, std::vector<double> phi, std::vector<double> charge, std::vector<double> type, std::vector<double> isTight, bool inGeV=true){
+  
   xAOD::IParticleContainer leptons(SG::VIEW_ELEMENTS);
+  float ptScale = inGeV ? 1000. : 1.;
 
+  unsigned int nLep(pt.size());
   for(unsigned int i(0); i<nLep; i++){
    
     int lepPDG = type.at(i) == 0 ? 13 : 11; //this has to be adapted according to the way lepton flavors are stored in custom Ntuples
@@ -143,7 +167,7 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vec
     case 11:{
       xAOD::Electron *el = new xAOD::Electron();
       el->makePrivateStore();
-      el->setP4(pt.at(i)*1000, eta.at(i), phi.at(i), M_EL*1000);
+      el->setP4(pt.at(i)*ptScale, eta.at(i), phi.at(i), M_EL*ptScale);
       el->setCharge(charge.at(i));
       el->auxdata<char>(tightKey) = isTight.at(i)!=0;
 
@@ -152,7 +176,7 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vec
     case 13:{
       xAOD::Muon *mu = new xAOD::Muon();
       mu->makePrivateStore();
-      mu->setP4(pt.at(i)*1000, eta.at(i), phi.at(i));
+      mu->setP4(pt.at(i)*ptScale, eta.at(i), phi.at(i));
       mu->setCharge(charge.at(i));
       mu->auxdata<char>(tightKey) = isTight.at(i)!=0;
 
@@ -249,7 +273,7 @@ int main(int argc, char* argv[]){
   ULong64_t treeEntries = inTree->GetEntries();
   INFO(Form("Reading TTree %s :: Entries = %ld", inTree->GetName(), (long)treeEntries));
   
-  unsigned int NEvents(0);
+  unsigned int NEvents(0); float sumWeights(0);
   for(unsigned int entry(0); entry<treeEntries; entry++){
 
     reader.SetEntry(entry);
@@ -282,7 +306,7 @@ int main(int argc, char* argv[]){
     default: 
       ERROR("No MM type selected");
     }
-
+    sumWeights += weightMM;
     NEvents++;
   }
   INFO(Form("Processed %i events", NEvents));
@@ -297,6 +321,7 @@ int main(int argc, char* argv[]){
     ERROR("No MM type selected");
   }
   INFO(Form("MMTool::totalYields()\t %.3f (nom) %.3f (up) %.3f (down)", yields, yieldsUP, yieldsDOWN));
+  if(MMType==2) INFO(Form("ASMTool::sumWeights()\t %.3f",sumWeights));
 
   INFO("Finalizing");
   auto end = std::time(nullptr);
