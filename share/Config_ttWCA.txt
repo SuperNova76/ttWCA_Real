@@ -66,9 +66,10 @@ JetGhostTrackDecoName None
 ### Truth configuration
 TruthCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthDressedWZJets
-TruthLargeRJetCollectionName AntiKt10TruthTrimmedPtFrac5SmallR20Jets
+TruthLargeRJetCollectionName None #AntiKt10TruthTrimmedPtFrac5SmallR20Jets
 TopPartonHistory ttbar
-TopParticleLevel True
+TopPartonLevel True
+TopParticleLevel False
 TruthBlockInfo False
 PDFInfo True
 
@@ -91,7 +92,7 @@ ElectronPt 10000
 ElectronID TightLH
 ElectronIDLoose LooseAndBLayerLH
 ElectronIsolation PLVTight
-ElectronIsolationLoose PLVLoose
+ElectronIsolationLoose None
 
 ### Photon configuration
 #PhotonPt 25000
@@ -107,12 +108,13 @@ MuonPt 10000
 MuonQuality Medium
 MuonQualityLoose Medium
 MuonIsolation PflowTight_FixedRad
-MuonIsolationLoose PflowLoose_FixedRad
+MuonIsolationLoose None
 doExtraSmearing False
 do2StationsHighPt False
 
 ### Jet configuration
-JetPt 25000
+JetPt 20000
+JetEta 4.5
 JVTWP Medium
 ForwardJVTWP Medium
 
@@ -128,11 +130,15 @@ ForwardJVTWP Medium
 # DoTight/DoLoose to activate the loose and tight trees
 # each should be one in: Data, MC, Both, False
 DoTight Both
-DoLoose Data
+DoLoose Both
 
 # Turn on MetaData to pull IsAFII from metadata
 UseAodMetaData True
 #IsAFII False
+
+# Turn on fakes MM weights
+FakesMMWeightsIFF True
+FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D.root:3T:>=1F[T]
 
 ### Boosted jet taggers configuration
 #BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
