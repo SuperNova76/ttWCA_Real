@@ -270,6 +270,14 @@ int main(int argc, char* argv[]){
   TTreeReaderValue<Double_t> lep1_isTight = {reader, getBranch("lep1_isTight")};
   TTreeReaderValue<Double_t> lep2_isTight = {reader, getBranch("lep2_isTight")};
 
+  TTreeReaderValue<Double_t> EtMiss =  {reader, getBranch("EtMiss")};
+  TTreeReaderValue<Double_t> nJet   =  {reader, getBranch("nJet")};
+  TTreeReaderValue<Double_t> nBjet  =  {reader, getBranch("nBjet")};
+  TTreeReaderValue<Double_t> isZ    =  {reader, getBranch("isZ")};
+
+
+
+
   ULong64_t treeEntries = inTree->GetEntries();
   INFO(Form("Reading TTree %s :: Entries = %ld", inTree->GetName(), (long)treeEntries));
   
@@ -306,6 +314,10 @@ int main(int argc, char* argv[]){
     default: 
       ERROR("No MM type selected");
     }
+
+    for(auto l : leptons) delete l;
+    leptons.clear();
+
     sumWeights += weightMM;
     NEvents++;
   }
