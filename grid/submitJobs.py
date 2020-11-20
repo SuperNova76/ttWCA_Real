@@ -9,8 +9,8 @@ def main():
     parser = ArgumentParser(description="Script for submitting grid jobs from sample list")
     parser.add_argument("Samples",   help="List of input MC or data samples (.txt)")
     parser.add_argument("--Config",  help="Name of top-config file (path is resovled automatically)", default="Config_ttWCA.txt")
-    parser.add_argument("--Version", help="Version of the production",                                default="uctatlas_v9")
-    parser.add_argument("--Submit",  type=int, help="Submit jobs (or only print the prun-command)",   default=0)
+    parser.add_argument("--Version", help="Version of the production",                                default="uctatlas__v1")
+    parser.add_argument("--Submit",  type=int, help="Submit jobs (or only print the prun-command)",   default=1)
     options = parser.parse_args()
 
     if not os.path.isfile(options.Samples): 
@@ -31,13 +31,14 @@ def main():
 def makeJob(DS,config,version,submit):
     if not len(DS) or DS.isspace() or  DS[0]=='#': return 0
     DS = DS.split()[0].split(':')[-1]
+    print
     info("Sample: {0}".format(DS))
 
     cmd  = "prun \\\n"
     cmd += "--inDS={0} \\\n"                                                                                               .format(DS)
     cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                .format(os.getenv('RUCIO_ACCOUNT'), makeOutputName(DS), version)
     cmd += "--excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git \\\n".format(ACM_SOURCE.split("/")[-1])
-    cmd += "--cmtConfig={0} --rootVer={1} --osMatching  \\\n"                                                              .format(os.getenv('CMTCONFIG'), ROOT.gROOT.GetVersion())
+    cmd += "--useAthenaPackages --cmtConfig={0} --osMatching  \\\n"                                                        .format(os.getenv('CMTCONFIG'))
     cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                         .format(findFile(ACM_SOURCE.split("/")[-1],config))
     cmd += "--extFile={0}/ttWCA/share/* \\\n"                                                                              .format(ACM_SOURCE.split("/")[-1])
     cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                         .format(NFILESPERJOB)
@@ -79,7 +80,7 @@ def findFile(path,key):
     return d[0]
 
 def info(msg):
-    print("\033[1mINFO:\t{0}\033[0m".format(msg));
+    print("\033[1;34mINFO:\t{0}\033[0m".format(msg));
 
 def error(msg):
     print("\033[1;31mERROR:\t{0}\033[0m".format(msg))
