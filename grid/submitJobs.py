@@ -8,6 +8,7 @@ NFILESPERJOB = 5
 def main():
     parser = ArgumentParser(description="Script for submitting grid jobs from sample list")
     parser.add_argument("Samples",   help="List of input MC or data samples (.txt)")
+    parser.add_argument("--User",    help="Name of user (CERN name)",                                 default="")
     parser.add_argument("--Config",  help="Name of top-config file (path is resovled automatically)", default="Config_ttWCA.txt")
     parser.add_argument("--Version", help="Version of the production",                                default="uctatlas__v1")
     parser.add_argument("--Submit",  type=int, help="Submit jobs (or only print the prun-command)",   default=1)
@@ -16,19 +17,22 @@ def main():
     if not os.path.isfile(options.Samples): 
         error("List of samples not found, aborting")
 
+    if not len(options.User):
+        error("Please provide your username (CERN name)")
+
     if not "{0}/{1}".format(os.getcwd(),ACM_SOURCE.split("/")[-1]) == ACM_SOURCE: 
         error("Incorrect directory. Please submit from {0}/../".format(ACM_SOURCE))
 
     NJobs = 0
     for sample in open(options.Samples): 
-        NJobs = NJobs + makeJob(sample,options.Config,options.Version,options.Submit)
+        NJobs = NJobs + makeJob(sample,options.User,options.Config,options.Version,options.Submit)
 
     info("Processed {0} jobs".format(NJobs))
     info("Done")
     return
 
 
-def makeJob(DS,config,version,submit):
+def makeJob(DS,username,config,version,submit):
     if not len(DS) or DS.isspace() or  DS[0]=='#': return 0
     DS = DS.split()[0].split(':')[-1]
     print
@@ -36,7 +40,7 @@ def makeJob(DS,config,version,submit):
 
     cmd  = "prun \\\n"
     cmd += "--inDS={0} \\\n"                                                                                               .format(DS)
-    cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                .format(os.getenv('RUCIO_ACCOUNT'), makeOutputName(DS), version)
+    cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                .format(username,makeOutputName(DS),version)
     cmd += "--excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git \\\n".format(ACM_SOURCE.split("/")[-1])
     cmd += "--useAthenaPackages --cmtConfig={0} --osMatching  \\\n"                                                        .format(os.getenv('CMTCONFIG'))
     cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                         .format(findFile(ACM_SOURCE.split("/")[-1],config))
@@ -80,7 +84,7 @@ def findFile(path,key):
     return d[0]
 
 def info(msg):
-    print("\033[1;34mINFO:\t{0}\033[0m".format(msg));
+    print("\033[1;34mINFO:\t{0}\033[0m".format(msg))
 
 def error(msg):
     print("\033[1;31mERROR:\t{0}\033[0m".format(msg))

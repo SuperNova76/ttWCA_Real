@@ -9,7 +9,7 @@ if [ ! $ATLAS_LOCAL_ACM_VERSION ]; then
     source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     
     echo "--> setup extra modules"
-    lsetup "rucio" "git" "panda" "pyami" "cmake"
+    lsetup "rucio -w" "git" "panda" "pyami" "cmake"
 fi
 
 if [ ! $ACMSOURCEDIR ]; then
