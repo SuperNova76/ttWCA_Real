@@ -1,38 +1,41 @@
-import os,sys,time,ROOT
+import os,sys,time,subprocess
 from glob import glob
 from argparse import ArgumentParser
 
 ACM_SOURCE   = os.getenv('ACMSOURCEDIR')
-NFILESPERJOB = 5
 
 def main():
     parser = ArgumentParser(description="Script for submitting grid jobs from sample list")
-    parser.add_argument("Samples",   help="List of input MC or data samples (.txt)")
-    parser.add_argument("--User",    help="Name of user (CERN name)",                                 default="")
-    parser.add_argument("--Config",  help="Name of top-config file (path is resovled automatically)", default="Config_ttWCA.txt")
-    parser.add_argument("--Version", help="Version of the production",                                default="uctatlas__v1")
-    parser.add_argument("--Submit",  type=int, help="Submit jobs (or only print the prun-command)",   default=1)
+    parser.add_argument("Samples",      help="List of input MC or data samples (.txt)")
+    parser.add_argument("--User",       help="Name of user (CERN name)",                                 default="")
+    parser.add_argument("--Config",     help="Name of top-config file (path is resovled automatically)", default="Config_ttWCA.txt")
+    parser.add_argument("--Version",    help="Version of the production",                                default="uctatlas__v1")
+    parser.add_argument("--FilesPerJob",type=int, help="Number of files per job (prun option)",          default=5)
+    parser.add_argument("--Submit",     type=int, help="Submit jobs (or only print the prun-command)",   default=1)
     options = parser.parse_args()
 
     if not os.path.isfile(options.Samples): 
         error("List of samples not found, aborting")
 
-    if not len(options.User):
-        error("Please provide your username (CERN name)")
+    username = options.User
+    if not len(username):
+        info("Username not found. Trying to find it")
+        username = findUser()
+        if not len(username): error("No username found. Please provide your username (CERN name) or setup a grid proxy")
 
     if not "{0}/{1}".format(os.getcwd(),ACM_SOURCE.split("/")[-1]) == ACM_SOURCE: 
         error("Incorrect directory. Please submit from {0}/../".format(ACM_SOURCE))
 
     NJobs = 0
     for sample in open(options.Samples): 
-        NJobs = NJobs + makeJob(sample,options.User,options.Config,options.Version,options.Submit)
+        NJobs = NJobs + makeJob(sample,username,options.Config,options.Version,options.FilesPerJob,options.Submit)
 
     info("Processed {0} jobs".format(NJobs))
     info("Done")
     return
 
 
-def makeJob(DS,username,config,version,submit):
+def makeJob(DS,username,config,version,filesperjob,submit):
     if not len(DS) or DS.isspace() or  DS[0]=='#': return 0
     DS = DS.split()[0].split(':')[-1]
     print
@@ -45,7 +48,7 @@ def makeJob(DS,username,config,version,submit):
     cmd += "--useAthenaPackages --cmtConfig={0} --osMatching  \\\n"                                                        .format(os.getenv('CMTCONFIG'))
     cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                         .format(findFile(ACM_SOURCE.split("/")[-1],config))
     cmd += "--extFile={0}/ttWCA/share/* \\\n"                                                                              .format(ACM_SOURCE.split("/")[-1])
-    cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                         .format(NFILESPERJOB)
+    cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                         .format(filesperjob)
 
     print(cmd)
     if submit: os.system(cmd)
@@ -82,6 +85,13 @@ def findFile(path,key):
     if len(d)==0: error("No files with key {0} found".format(key))
     if len(d)> 1: error("More than one file with key {0} found: {1}".format(key,d))
     return d[0]
+
+def findUser():
+    sub = subprocess.Popen("voms-proxy-info", shell=True, stdout=subprocess.PIPE)
+    proxyinfo = sub.stdout.read()
+    username = proxyinfo.split("/")[5].strip("CN=")
+    info("Username from voms-proxy-info: {0}".format(username))
+    return username
 
 def info(msg):
     print("\033[1;34mINFO:\t{0}\033[0m".format(msg))
