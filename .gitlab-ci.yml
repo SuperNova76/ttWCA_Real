@@ -83,6 +83,6 @@ load_plotter:
   - cd ../
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - cd ${PACKAGE_NAME}/ttWPlotter
-  - python -c "import ROOT; ROOT.gROOT.LoadMacro('ttWSelector.cxx++');"
-  - python -c "import ROOT; ROOT.gROOT.LoadMacro('ttWPlotter.cxx++');"
+  - python -c "import ROOT; ROOT.gROOT.LoadMacro('Selector/ttWSelector.cxx++');"
+  - python -c "import ROOT; ROOT.gROOT.LoadMacro('Plotter/ttWPlotter.cxx++');"
   - python reader.py --help
