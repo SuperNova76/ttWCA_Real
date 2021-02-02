@@ -16,7 +16,7 @@ variables:
   NTUP_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/Ntup_data/data.root
   
 .analysis_image: &image
-  image: atlas/analysisbase:21.2.143
+  image: atlas/analysisbase:21.2.157
   tags:
     - cvmfs
   before_script:
@@ -39,7 +39,7 @@ build:
     - lsetup acm
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
-    - acmSetup "--sourcedir=../ AnalysisBase,21.2.143"
+    - acmSetup "--sourcedir=../ AnalysisBase,21.2.157"
     - acm compile
     - cd ../
     - mv $BUILD_DIR $PACKAGE_NAME
@@ -74,3 +74,13 @@ run_utils:
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - cd ${PACKAGE_NAME}/utils
   - runMMTool $NTUP_NAME Config.conf
+
+load_plotter:
+  <<: *image
+  stage: test
+  dependencies: [build]
+  script:
+  - cd ${PACKAGE_NAME}/ttWPlotter
+  - python -c "import ROOT; ROOT.gROOT.LoadMacro('ttWSelector.cxx++');"
+  - python -c "import ROOT; ROOT.gROOT.LoadMacro('ttWPlotter.cxx++');"
+  - python reader.py --help

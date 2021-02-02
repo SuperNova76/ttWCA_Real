@@ -123,12 +123,12 @@ Bool_t ttWSelector::Process(Long64_t entry){
   float w(1.);
   if(isMC && doWeight){ 
     w *= normWeight;
-    DEBUG(APP_NAME, Form("NormWeight = %.6f, lepSF=%.3f, triggerSF=%.3f, bTagSF=%.3f, prwSF=%.3f, jvtSF=%.3f", w, weight_leptonSF, weight_globalLeptonTriggerSF, weight_bTagSF_DL1r_77, weight_pileup, weight_jvt));
-    w *= weight_leptonSF * weight_globalLeptonTriggerSF * weight_bTagSF_DL1r_77 * weight_pileup * weight_jvt; 
+    w *= weight_leptonSF * weight_globalLeptonTriggerSF * weight_bTagSF_DL1r_77 * weight_pileup * weight_jvt;
+    DEBUG(APP_NAME, Form("NormWeight = %.6f, lepSF=%.3f, triggerSF=%.3f, bTagSF=%.3f, prwSF=%.3f, jvtSF=%.3f \t total=%.3f", w, weight_leptonSF, weight_globalLeptonTriggerSF, weight_bTagSF_DL1r_77, weight_pileup, weight_jvt, w));
   }
  
   bool is3L_LLL = pt_lep0_pt>0 && pt_lep1_pt>0 && pt_lep2_pt>0 ;
-  bool is3L_TTT = is3L_LLL && (pt_lep0_isTight==1 && pt_lep1_isTight==1 && pt_lep2_isTight==1);
+  bool is3L_TTT = is3L_LLL && ( TMath::Abs(pt_lep0_isTight)==1 && TMath::Abs(pt_lep1_isTight)==1 && TMath::Abs(pt_lep2_isTight)==1);
 
   //bool fakeLep1 = isMC && isFake(GenName, type_lep1, true_type_lep1, true_origin_lep1, TruthIFF_Class_lep1);
   //bool fakeLep2 = isMC && isFake(GenName, type_lep2, true_type_lep2, true_origin_lep2, TruthIFF_Class_lep2);
@@ -149,7 +149,7 @@ Bool_t ttWSelector::Process(Long64_t entry){
   int sumQ = TMath::Abs(pt_lep0_charge + pt_lep1_charge + pt_lep2_charge);
 
   DEBUG(APP_NAME, Form("pt(lep1)=%.1f (T=%i), pt(lep2)=%.1f (T=%i), pt(lep3)=%.1f (T=%i), (isZ=%i), sum(Q)=%i, Ht=%.1f", 
-		       (float)pt_lep0_pt, (int)pt_lep0_isTight, (float)pt_lep1_pt, (int)pt_lep1_isTight, (float)pt_lep2_pt, (int)pt_lep2_isTight, (int)isZ, (int)sumQ==1, (float)HT));
+		       (float)pt_lep0_pt, (int)TMath::Abs(pt_lep0_isTight), (float)pt_lep1_pt, (int)TMath::Abs(pt_lep1_isTight), (float)pt_lep2_pt, (int)TMath::Abs(pt_lep2_isTight), (int)isZ, (int)sumQ==1, (float)HT));
 
   bool pass3L = is3L_PPP && (pt_lep0_pt > lepPtCuts[0] && pt_lep1_pt > lepPtCuts[1] && pt_lep2_pt > lepPtCuts[2]);
   addCutflow(w, pass3L, "pass3L");

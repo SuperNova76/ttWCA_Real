@@ -65,8 +65,8 @@ def readFile(filename, path, lumi, debug):
     Selector.setOutPathName(path)
     Selector.setOutFileName("hist_{0}".format(filename.split("/")[-1]))
     Selector.setLumiNorm(lumi)
-    Selector.setGenName(getGenName(filename))
-    Selector.setMCcamp(getMCcamp(filename))
+    #Selector.setGenName(getGenName(filename))
+    #Selector.setMCcamp(getMCcamp(filename))
     for i in range(intree.GetEntries()): Selector.Process(i)
   
     Selector.SlaveTerminate()
