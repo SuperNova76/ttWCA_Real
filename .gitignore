@@ -10,4 +10,4 @@ ttWPlotter/Plotter/*.d
 ttWPlotter/Plotter/*.so
 ttWPlotter/Plotter/*.pcm
 #
-ttWPlotter/HISTOS/hist_*_.root
+ttWPlotter/HISTOS/hist_*.root
