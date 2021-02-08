@@ -626,10 +626,8 @@ TString ttWPlotter::mcType(TString filename){
 
   std::vector<TString> filename_vec = this->tokenize(filename);
   TString fname = filename_vec.back();
-  TString id = fname(5,6);
-
-  if(!id.IsDigit()){ std::cout << CNAME << "\t ERROR MCId " << id << " is not a number " << std::endl; abort(); }
-  return MCTypes[id];
+  TString proc  = fname.ReplaceAll("hist_","").ReplaceAll(".root","");
+  return MCTypes[proc];
 }
 
 bool ttWPlotter::containsStr(std::vector<TString> v, TString s){
@@ -654,13 +652,12 @@ std::vector< TString > ttWPlotter::tokenize(TString s){
 bool ttWPlotter::setColor(TH1F* h, TString name){
   if(!h) return true;
 
-  if(name.Contains("_tWZ")){   h->SetLineColor(kBlack);  h->SetFillColor(kYellow-9); return true;}
   if(name.Contains("_VV")){ h->SetLineColor(kBlack);     h->SetFillColor(kAzure+8);  return true;}
-  if(name.Contains("_ttX")){   h->SetLineColor(kBlack);  h->SetFillColor(kOrange+1); return true;}
+  if(name.Contains("_ttW")){   h->SetLineColor(kBlack);  h->SetFillColor(kOrange+1); return true;}
   if(name.Contains("_ttZ")){ h->SetLineColor(kBlack);    h->SetFillColor(kAzure-3);  return true;}
   if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kRed-5);    return true;}
   if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kGreen-6);  return true;}
-  if(name.Contains("_tHX")) {  h->SetLineColor(kBlack);  h->SetFillColor(kMagenta-7); return true;}
+  if(name.Contains("_ttH")) {  h->SetLineColor(kBlack);  h->SetFillColor(kMagenta-7); return true;}
   if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kRed+2);    return true;} 
   return true;
 }
@@ -668,12 +665,11 @@ bool ttWPlotter::setColor(TH1F* h, TString name){
 TString ttWPlotter::getLegendEntry(TH1F* h){
   if(!h) return "";
   TString hname = h->GetName();
-  if(hname.Contains("_tWZ"))   return "tWZ";
   if(hname.Contains("_VV"))    return "WZ/ZZ+jets";
   if(hname.Contains("_ttZ"))   return "t#bar{t}Z";
-  if(hname.Contains("_ttX"))   return "t#bar{t}+X(W/H)";
+  if(hname.Contains("_ttW"))   return "t#bar{t}W"; 
+  if(hname.Contains("_ttH"))   return "t#bar{t}H";
   if(hname.Contains("_tZ"))    return "tZq";
-  if(hname.Contains("_tHX"))   return "tHq/tHW";
   if(hname.Contains("_Other")) return "Other";
   if(hname.Contains("_Fakes")) return "Fake leptons";
   return "";
@@ -837,96 +833,12 @@ TString ttWPlotter::xLabel(TString name){
 }
 
 void ttWPlotter::setMCTypes(std::map<TString, TString> &m){
-
-  m["364250"] = "VV"; //ZZ->llll
-  m["364253"] = "VV";  //WZ->lllv
-  
-  m["364283"] = "VV"; //ZZ->llll (EW)
-  m["364284"] = "VV"; //WZ->lllv (EW)
-
-  m["364288"] = "VV"; //ZZ->llll (low pt)
-  m["364289"] = "VV"; //WZ->lllv (low pt)
-
-  m["410155"] = "ttX"; //ttW
-
-  m["346443"] = "ttX"; //ttH(1l)
-  m["346444"] = "ttX"; //ttH(2l)
-  m["346445"] = "ttX"; //ttH(0l)
-
-  m["410218"] = "ttZ"; //Zee
-  m["410219"] = "ttZ"; //Zmumu
-  m["410220"] = "ttZ"; //Ztautau
-  
-  m["412118"] = "tWZ"; 
-  m["412063"] = "tZ";
- 
-  m["346799"] = "tHX";
-  m["346678"] = "tHX";
-  
-  m["364242"] = "Other"; //VVV
-  m["364243"] = "Other";
-  m["364244"] = "Other";
-  m["364245"] = "Other";
-  m["364246"] = "Other";
-  m["364247"] = "Other";
-  m["364248"] = "Other";
-  m["364249"] = "Other";
-
-  m["304014"] = "Other"; //3-top  
-  m["412043"] = "Other"; //4-top
-
-  m["342282"] = "Other"; //gg->H
-  m["342283"] = "Other"; //VBF->H
-  m["342284"] = "Other"; //WH
-  m["342285"] = "Other"; //ZH
-
-  bool DDFakes = true;
-  if(DDFakes){
-    m["999999"] = "Fakes";
-  }
-  else{
-    m["410472"] = "Fakes"; //ttbar
-
-    m["410646"] = "Fakes"; //tW (t)
-    m["410647"] = "Fakes"; //tW (tbar) 
-
-    m["410156"] = "Fakes"; //ttZ, Z->vv
-    m["410157"] = "Fakes"; //ttZ, Z->qq
-  
-    m["364100"] = "Fakes"; //Z+jets
-    m["364101"] = "Fakes";
-    m["364102"] = "Fakes";
-    m["364103"] = "Fakes";
-    m["364104"] = "Fakes";
-    m["364105"] = "Fakes";
-    m["364106"] = "Fakes";
-    m["364107"] = "Fakes";
-    m["364108"] = "Fakes";
-    m["364109"] = "Fakes";
-    m["364110"] = "Fakes";
-    m["364100"] = "Fakes";
-    m["364111"] = "Fakes";
-    m["364112"] = "Fakes";
-    m["364113"] = "Fakes";
-    m["364114"] = "Fakes";
-    m["364115"] = "Fakes";
-    m["364116"] = "Fakes";
-    m["364117"] = "Fakes";
-    m["364118"] = "Fakes";
-    m["364119"] = "Fakes";
-    m["364120"] = "Fakes";
-    m["364121"] = "Fakes";
-    m["364122"] = "Fakes";
-    m["364123"] = "Fakes";
-    m["364124"] = "Fakes";
-    m["364125"] = "Fakes";
-    m["364126"] = "Fakes";
-    m["364127"] = "Fakes";
-    m["364128"] = "Fakes";
-    m["364129"] = "Fakes";
-    m["364130"] = "Fakes";
-  }
-
+  m["vv"]    = "VV";
+  m["ttz"]   = "ttZ";
+  m["ttw"]   = "ttW";
+  m["tth"]   = "ttH";
+  m["tz"]    = "tZ";
+  m["other"] = "Other";
+  m["tt"]    = "Fakes";
   return;
 }
-
