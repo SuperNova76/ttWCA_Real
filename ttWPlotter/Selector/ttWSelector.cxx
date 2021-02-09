@@ -23,27 +23,96 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
   cutflowEvents.clear();
   cutflowWeights.clear();
 
-  //SR
-  makeHisto("Njets_SR",   bins_njets);
+  //SR1b_low
+  makeHisto("Njets_SR1b_low",   bins_njets);
 
-  makeHisto("LepPt1_SR",  10, 0,  500.);
-  makeHisto("LepPt2_SR",  10, 0,  250.);
-  makeHisto("LepPt3_SR",  10, 0,  250.);
+  makeHisto("LepPt1_SR1b_low",  10, 0,  500.);
+  makeHisto("LepPt2_SR1b_low",  10, 0,  250.);
+  makeHisto("LepPt3_SR1b_low",  10, 0,  250.);
 
-  makeHisto("JetPt1_SR",  10, 0,  500.);
-  makeHisto("JetPt2_SR",  10, 0,  250.);
+  makeHisto("JetPt1_SR1b_low",  10, 0,  500.);
+  makeHisto("JetPt2_SR1b_low",  10, 0,  250.);
 
-  makeHisto("LepEta1_SR",  6, -3.0, 3.0);
-  makeHisto("LepPhi1_SR",  8, -4.0, 4.0);
+  makeHisto("LepEta1_SR1b_low",  6, -3.0, 3.0);
+  makeHisto("LepPhi1_SR1b_low",  8, -4.0, 4.0);
 
-  makeHisto("JetEta1_SR",  6, -3.0, 3.0);
-  makeHisto("JetPhi1_SR",  8, -4.0, 4.0);
+  makeHisto("JetEta1_SR1b_low",  6, -3.0, 3.0);
+  makeHisto("JetPhi1_SR1b_low",  8, -4.0, 4.0);
 
-  makeHisto("LepEta2_SR",  6, -3.0, 3.0);
-  makeHisto("LepPhi2_SR",  8, -4.0, 4.0);
+  makeHisto("LepEta2_SR1b_low",  6, -3.0, 3.0);
+  makeHisto("LepPhi2_SR1b_low",  8, -4.0, 4.0);
 
-  makeHisto("Ht_SR",      20, 0,  1000.);
-  makeHisto("EtMiss_SR",  10, 0,   300.);
+  makeHisto("Ht_SR1b_low",      20, 0,  1000.);
+  makeHisto("EtMiss_SR1b_low",  10, 0,   300.);
+
+
+  //SR1b_high
+  makeHisto("Njets_SR1b_high",   bins_njets);
+
+  makeHisto("LepPt1_SR1b_high",  10, 0,  500.);
+  makeHisto("LepPt2_SR1b_high",  10, 0,  250.);
+  makeHisto("LepPt3_SR1b_high",  10, 0,  250.);
+
+  makeHisto("JetPt1_SR1b_high",  10, 0,  500.);
+  makeHisto("JetPt2_SR1b_high",  10, 0,  250.);
+
+  makeHisto("LepEta1_SR1b_high",  6, -3.0, 3.0);
+  makeHisto("LepPhi1_SR1b_high",  8, -4.0, 4.0);
+
+  makeHisto("JetEta1_SR1b_high",  6, -3.0, 3.0);
+  makeHisto("JetPhi1_SR1b_high",  8, -4.0, 4.0);
+
+  makeHisto("LepEta2_SR1b_high",  6, -3.0, 3.0);
+  makeHisto("LepPhi2_SR1b_high",  8, -4.0, 4.0);
+
+  makeHisto("Ht_SR1b_high",      20, 0,  1000.);
+  makeHisto("EtMiss_SR1b_high",  10, 0,   300.);
+
+
+  //SR2b_low
+  makeHisto("Njets_SR2b_low",   bins_njets);
+
+  makeHisto("LepPt1_SR2b_low",  10, 0,  500.);
+  makeHisto("LepPt2_SR2b_low",  10, 0,  250.);
+  makeHisto("LepPt3_SR2b_low",  10, 0,  250.);
+
+  makeHisto("JetPt1_SR2b_low",  10, 0,  500.);
+  makeHisto("JetPt2_SR2b_low",  10, 0,  250.);
+
+  makeHisto("LepEta1_SR2b_low",  6, -3.0, 3.0);
+  makeHisto("LepPhi1_SR2b_low",  8, -4.0, 4.0);
+
+  makeHisto("JetEta1_SR2b_low",  6, -3.0, 3.0);
+  makeHisto("JetPhi1_SR2b_low",  8, -4.0, 4.0);
+
+  makeHisto("LepEta2_SR2b_low",  6, -3.0, 3.0);
+  makeHisto("LepPhi2_SR2b_low",  8, -4.0, 4.0);
+
+  makeHisto("Ht_SR2b_low",      20, 0,  1000.);
+  makeHisto("EtMiss_SR2b_low",  10, 0,   300.);
+
+
+  //SR2b_high
+  makeHisto("Njets_SR2b_high",   bins_njets);
+
+  makeHisto("LepPt1_SR2b_high",  10, 0,  500.);
+  makeHisto("LepPt2_SR2b_high",  10, 0,  250.);
+  makeHisto("LepPt3_SR2b_high",  10, 0,  250.);
+
+  makeHisto("JetPt1_SR2b_high",  10, 0,  500.);
+  makeHisto("JetPt2_SR2b_high",  10, 0,  250.);
+
+  makeHisto("LepEta1_SR2b_high",  6, -3.0, 3.0);
+  makeHisto("LepPhi1_SR2b_high",  8, -4.0, 4.0);
+
+  makeHisto("JetEta1_SR2b_high",  6, -3.0, 3.0);
+  makeHisto("JetPhi1_SR2b_high",  8, -4.0, 4.0);
+
+  makeHisto("LepEta2_SR2b_high",  6, -3.0, 3.0);
+  makeHisto("LepPhi2_SR2b_high",  8, -4.0, 4.0);
+
+  makeHisto("Ht_SR2b_high",      20, 0,  1000.);
+  makeHisto("EtMiss_SR2b_high",  10, 0,   300.);
 
 
   //CR-Fake
@@ -88,27 +157,6 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("Ht_CRttZ",      20, 0,  1000.);
   makeHisto("EtMiss_CRttZ",  10, 0,   300.);
-
-
-  //WZ-CR
-  makeHisto("LepPt1_CRWZ",  10, 0,  500.);
-  makeHisto("LepPt2_CRWZ",  10, 0,  250.);
-  makeHisto("LepPt3_CRWZ",  10, 0,  250.);
-
-  makeHisto("JetPt1_CRWZ",  10, 0,  500.);
-  makeHisto("JetPt2_CRWZ",  10, 0,  250.);
-
-  makeHisto("LepEta1_CRWZ",  6, -3.0, 3.0);
-  makeHisto("LepPhi1_CRWZ",  8, -4.0, 4.0);
-
-  makeHisto("JetEta1_CRWZ",  6, -3.0, 3.0);
-  makeHisto("JetPhi1_CRWZ",  8, -4.0, 4.0);
-
-  makeHisto("LepEta2_CRWZ",  6, -3.0, 3.0);
-  makeHisto("LepPhi2_CRWZ",  8, -4.0, 4.0);
-
-  makeHisto("Ht_CRWZ",      20, 0,  1000.);
-  makeHisto("EtMiss_CRWZ",  10, 0,   300.);
 }
 
 
@@ -154,37 +202,111 @@ Bool_t ttWSelector::Process(Long64_t entry){
   bool pass3L = is3L_PPP && (pt_lep0_pt > lepPtCuts[0] && pt_lep1_pt > lepPtCuts[1] && pt_lep2_pt > lepPtCuts[2]);
   addCutflow(w, pass3L, "pass3L");
   
-  bool pass_SR     = pass3L && nJets>=2 && nBTags>=1 && sumQ==1 && !isZ; 
-  bool pass_CRFake = pass3L && nJets==3 && nBTags==1;
-  bool pass_CRttZ  = pass3L && nJets>=4 && nBTags>=2 && MET>50 && sumQ==1 && isZ;
-  bool pass_CRWZ   = pass3L && nJets==1 && nBTags==0 && MET>50 && sumQ==1 && isZ;
+  bool pass_SR1b_low  = pass3L && nJets>=4 && nJets<7 && nBTags==1 && sumQ==1 && !isZ;
+  bool pass_SR2b_low  = pass3L && nJets>=4 && nJets<7 && nBTags==2 && sumQ==1 && !isZ;
+  bool pass_SR1b_high = pass3L && nJets>=2 && nJets<4 && nBTags==1 && sumQ==1 && !isZ;
+  bool pass_SR2b_high = pass3L && nJets>=2 && nJets<4 && nBTags==2 && sumQ==1 && !isZ;
+ 
+  bool pass_CRFake = pass3L && nJets>=4 && nJets<7 && nBTags==1;
+  bool pass_CRttZ  = pass3L && nJets>=2 && nJets<7 && nBTags==2 && sumQ==1 && isZ;
 
-  addCutflow(w, pass_SR,     "SR");
-  addCutflow(w, pass_CRFake, "CRFake");
-  addCutflow(w, pass_CRttZ,  "CRttZ");
-  addCutflow(w, pass_CRWZ,   "CRWZ");
+  addCutflow(w, pass_SR1b_low,  "SR1b_low");
+  addCutflow(w, pass_SR2b_low,  "SR2b_low");
+  addCutflow(w, pass_SR1b_high, "SR1b_high");
+  addCutflow(w, pass_SR2b_high, "SR2b_high");
+  addCutflow(w, pass_CRFake,    "CRFake");
+  addCutflow(w, pass_CRttZ,     "CRttZ");
 
-  if(pass_SR){  
-    fillHisto("Njets_SR",  nJets, w);
+  if(pass_SR1b_low){  
+    fillHisto("Njets_SR1b_low",  nJets, w);
     
-    fillHisto("LepPt1_SR", pt_lep0_pt, w);
-    fillHisto("LepPt2_SR", pt_lep1_pt, w);
-    fillHisto("LepPt3_SR", pt_lep2_pt, w);
+    fillHisto("LepPt1_SR1b_low", pt_lep0_pt, w);
+    fillHisto("LepPt2_SR1b_low", pt_lep1_pt, w);
+    fillHisto("LepPt3_SR1b_low", pt_lep2_pt, w);
 
-    fillHisto("JetPt1_SR", pt_jet0_pt, w);
-    fillHisto("JetPt2_SR", pt_jet1_pt, w);
+    fillHisto("JetPt1_SR1b_low", pt_jet0_pt, w);
+    fillHisto("JetPt2_SR1b_low", pt_jet1_pt, w);
 
-    fillHisto("LepEta1_SR", pt_lep0_eta, w);
-    fillHisto("LepPhi1_SR", pt_lep0_phi, w);
+    fillHisto("LepEta1_SR1b_low", pt_lep0_eta, w);
+    fillHisto("LepPhi1_SR1b_low", pt_lep0_phi, w);
 
-    fillHisto("JetEta1_SR", pt_jet0_eta, w);
-    fillHisto("JetPhi1_SR", pt_jet0_phi, w);
+    fillHisto("JetEta1_SR1b_low", pt_jet0_eta, w);
+    fillHisto("JetPhi1_SR1b_low", pt_jet0_phi, w);
 
-    fillHisto("LepEta2_SR", pt_lep1_eta, w);
-    fillHisto("LepPhi2_SR", pt_lep1_phi, w);
+    fillHisto("LepEta2_SR1b_low", pt_lep1_eta, w);
+    fillHisto("LepPhi2_SR1b_low", pt_lep1_phi, w);
 
-    fillHisto("Ht_SR",      HT, w);
-    fillHisto("EtMiss_SR", MET, w);
+    fillHisto("Ht_SR1b_low",      HT, w);
+    fillHisto("EtMiss_SR1b_low", MET, w);
+  }
+
+  if(pass_SR1b_high){  
+    fillHisto("Njets_SR1b_high",  nJets, w);
+    
+    fillHisto("LepPt1_SR1b_high", pt_lep0_pt, w);
+    fillHisto("LepPt2_SR1b_high", pt_lep1_pt, w);
+    fillHisto("LepPt3_SR1b_high", pt_lep2_pt, w);
+
+    fillHisto("JetPt1_SR1b_high", pt_jet0_pt, w);
+    fillHisto("JetPt2_SR1b_high", pt_jet1_pt, w);
+
+    fillHisto("LepEta1_SR1b_high", pt_lep0_eta, w);
+    fillHisto("LepPhi1_SR1b_high", pt_lep0_phi, w);
+
+    fillHisto("JetEta1_SR1b_high", pt_jet0_eta, w);
+    fillHisto("JetPhi1_SR1b_high", pt_jet0_phi, w);
+
+    fillHisto("LepEta2_SR1b_high", pt_lep1_eta, w);
+    fillHisto("LepPhi2_SR1b_high", pt_lep1_phi, w);
+
+    fillHisto("Ht_SR1b_high",      HT, w);
+    fillHisto("EtMiss_SR1b_high", MET, w);
+  }
+
+  if(pass_SR2b_low){  
+    fillHisto("Njets_SR2b_low",  nJets, w);
+    
+    fillHisto("LepPt1_SR2b_low", pt_lep0_pt, w);
+    fillHisto("LepPt2_SR2b_low", pt_lep1_pt, w);
+    fillHisto("LepPt3_SR2b_low", pt_lep2_pt, w);
+
+    fillHisto("JetPt1_SR2b_low", pt_jet0_pt, w);
+    fillHisto("JetPt2_SR2b_low", pt_jet1_pt, w);
+
+    fillHisto("LepEta1_SR2b_low", pt_lep0_eta, w);
+    fillHisto("LepPhi1_SR2b_low", pt_lep0_phi, w);
+
+    fillHisto("JetEta1_SR2b_low", pt_jet0_eta, w);
+    fillHisto("JetPhi1_SR2b_low", pt_jet0_phi, w);
+
+    fillHisto("LepEta2_SR2b_low", pt_lep1_eta, w);
+    fillHisto("LepPhi2_SR2b_low", pt_lep1_phi, w);
+
+    fillHisto("Ht_SR2b_low",      HT, w);
+    fillHisto("EtMiss_SR2b_low", MET, w);
+  }
+
+  if(pass_SR2b_high){  
+    fillHisto("Njets_SR2b_high",  nJets, w);
+    
+    fillHisto("LepPt1_SR2b_high", pt_lep0_pt, w);
+    fillHisto("LepPt2_SR2b_high", pt_lep1_pt, w);
+    fillHisto("LepPt3_SR2b_high", pt_lep2_pt, w);
+
+    fillHisto("JetPt1_SR2b_high", pt_jet0_pt, w);
+    fillHisto("JetPt2_SR2b_high", pt_jet1_pt, w);
+
+    fillHisto("LepEta1_SR2b_high", pt_lep0_eta, w);
+    fillHisto("LepPhi1_SR2b_high", pt_lep0_phi, w);
+
+    fillHisto("JetEta1_SR2b_high", pt_jet0_eta, w);
+    fillHisto("JetPhi1_SR2b_high", pt_jet0_phi, w);
+
+    fillHisto("LepEta2_SR2b_high", pt_lep1_eta, w);
+    fillHisto("LepPhi2_SR2b_high", pt_lep1_phi, w);
+
+    fillHisto("Ht_SR2b_high",      HT, w);
+    fillHisto("EtMiss_SR2b_high", MET, w);
   }
 
   if(pass_CRFake){
@@ -229,27 +351,6 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
     fillHisto("Ht_CRttZ",      HT, w);
     fillHisto("EtMiss_CRttZ", MET, w);
-  }
-
-  if(pass_CRWZ){
-    fillHisto("LepPt1_CRWZ", pt_lep0_pt, w);
-    fillHisto("LepPt2_CRWZ", pt_lep1_pt, w);
-    fillHisto("LepPt3_CRWZ", pt_lep2_pt, w);
-
-    fillHisto("JetPt1_CRWZ", pt_jet0_pt, w);
-    fillHisto("JetPt2_CRWZ", pt_jet1_pt, w);
-
-    fillHisto("LepEta1_CRWZ", pt_lep0_eta, w);
-    fillHisto("LepPhi1_CRWZ", pt_lep0_phi, w);
-
-    fillHisto("JetEta1_CRWZ", pt_jet0_eta, w);
-    fillHisto("JetPhi1_CRWZ", pt_jet0_phi, w);
-
-    fillHisto("LepEta2_CRWZ", pt_lep1_eta, w);
-    fillHisto("LepPhi2_CRWZ", pt_lep1_phi, w);
-
-    fillHisto("Ht_CRWZ",      HT, w);
-    fillHisto("EtMiss_CRWZ", MET, w);
   }
 
   sumWeights += w;

@@ -16,7 +16,7 @@
   p.drawOverflow(1);
   p.drawAtlasLabel(1);
   p.drawLegNumbers(0);
-  p.setRatioLine("ttW");
+  //p.setRatioLine("ttW");
   p.setYRangeRatio(0.2,1.8);
 
   //Signal process and norm
@@ -42,29 +42,96 @@
   bool fixedYRange(false);
   if(fixedYRange) p.setYRange(0.015,24);
 
-  bool SR(true), CRFake(true), CRttZ(true), CRWZ(false);
+  bool SR1b_low(true), SR1b_high(true), SR2b_low(true), SR2b_high(true);
+  bool CRFake(true), CRttZ(true);
 
-  if(SR){
-    p.plot("Njets_SR",      1, 2,  10,  "SR: 3l-1b2j");
+  if(SR1b_low){
+    p.plot("Njets_SR1b_low",      1,  2,  10,  "SR: 3l-1b,2-3j");
+   
+    p.plot("LepPt1_SR1b_low",     1,  0,  500, "SR: 3l-1b,2-3j");
+    p.plot("LepPt2_SR1b_low",     1,  0,  250, "SR: 3l-1b,2-3j");
+    p.plot("LepPt3_SR1b_low",     1,  0,  250, "SR: 3l-1b,2-3j");
 
-    p.plot("LepPt1_SR",     1,  0,  500, "SR: 3l-1b2j");
-    p.plot("LepPt2_SR",     1,  0,  250, "SR: 3l-1b2j");
-    p.plot("LepPt3_SR",     1,  0,  250, "SR: 3l-1b2j");
+    p.plot("JetPt1_SR1b_low",     1,  0,  500, "SR: 3l-1b,2-3j");
+    p.plot("JetPt2_SR1b_low",     1,  0,  250, "SR: 3l-1b,2-3j");
 
-    p.plot("JetPt1_SR",     1,  0,  500, "SR: 3l-1b2j");
-    p.plot("JetPt2_SR",     1,  0,  250, "SR: 3l-1b2j");
+    p.plot("LepEta1_SR1b_low",    1, -3.0, 3.0, "SR: 3l-1b,2-3j");
+    p.plot("LepPhi1_SR1b_low",    1, -4.0, 4.0, "SR: 3l-1b,2-3j");
 
-    p.plot("LepEta1_SR",    1, -3.0, 3.0, "SR: 3l-1b2j");
-    p.plot("LepPhi1_SR",    1, -4.0, 4.0, "SR: 3l-1b2j");
+    p.plot("JetEta1_SR1b_low",    1, -3.0, 3.0, "SR: 3l-1b,2-3j");
+    p.plot("JetPhi1_SR1b_low",    1, -4.0, 4.0, "SR: 3l-1b,2-3j");
 
-    p.plot("JetEta1_SR",    1, -3.0, 3.0, "SR: 3l-1b2j");
-    p.plot("JetPhi1_SR",    1, -4.0, 4.0, "SR: 3l-1b2j");
+    p.plot("LepEta2_SR1b_low",    1, -3.0, 3.0, "SR: 3l-1b,2-3j");
+    p.plot("LepPhi2_SR1b_low",    1, -4.0, 4.0, "SR: 3l-1b,2-3j");
 
-    p.plot("LepEta2_SR",    1, -3.0, 3.0, "SR: 3l-1b2j");
-    p.plot("LepPhi2_SR",    1, -4.0, 4.0, "SR: 3l-1b2j");
+    p.plot("Ht_SR1b_low",         1, 300, 1000, "SR: 3l-1b,2-3j");
+    p.plot("EtMiss_SR1b_low",     1,  0,   300, "SR: 3l-1b,2-3j");
+  }
 
-    p.plot("Ht_SR",         1, 300, 1000, "SR: 3l-1b2j");
-    p.plot("EtMiss_SR",     1,  0,   300, "SR: 3l-1b2j");
+  if(SR1b_high){
+    p.plot("Njets_SR1b_high",      1,  2,  10,  "SR: 3l-1b,#geq4j");
+    p.plot("LepPt1_SR1b_high",     1,  0,  500, "SR: 3l-1b,#geq4j");
+    p.plot("LepPt2_SR1b_high",     1,  0,  250, "SR: 3l-1b,#geq4j");
+    p.plot("LepPt3_SR1b_high",     1,  0,  250, "SR: 3l-1b,#geq4j");
+
+    p.plot("JetPt1_SR1b_high",     1,  0,  500, "SR: 3l-1b,#geq4j");
+    p.plot("JetPt2_SR1b_high",     1,  0,  250, "SR: 3l-1b,#geq4j");
+
+    p.plot("LepEta1_SR1b_high",    1, -3.0, 3.0, "SR: 3l-1b,#geq4j");
+    p.plot("LepPhi1_SR1b_high",    1, -4.0, 4.0, "SR: 3l-1b,#geq4j");
+
+    p.plot("JetEta1_SR1b_high",    1, -3.0, 3.0, "SR: 3l-1b,#geq4j");
+    p.plot("JetPhi1_SR1b_high",    1, -4.0, 4.0, "SR: 3l-1b,#geq4j");
+
+    p.plot("LepEta2_SR1b_high",    1, -3.0, 3.0, "SR: 3l-1b,#geq4j");
+    p.plot("LepPhi2_SR1b_high",    1, -4.0, 4.0, "SR: 3l-1b,#geq4j");
+
+    p.plot("Ht_SR1b_high",         1, 300, 1000, "SR: 3l-1b,#geq4j");
+    p.plot("EtMiss_SR1b_high",     1,  0,   300, "SR: 3l-1b,#geq4j");
+  }
+
+  if(SR2b_low){
+    p.plot("Njets_SR2b_low",      1,  2,  10,  "SR: 3l-2b,2-3j");
+    p.plot("LepPt1_SR2b_low",     1,  0,  500, "SR: 3l-2b,2-3j");
+    p.plot("LepPt2_SR2b_low",     1,  0,  250, "SR: 3l-2b,2-3j");
+    p.plot("LepPt3_SR2b_low",     1,  0,  250, "SR: 3l-2b,2-3j");
+
+    p.plot("JetPt1_SR2b_low",     1,  0,  500, "SR: 3l-2b,2-3j");
+    p.plot("JetPt2_SR2b_low",     1,  0,  250, "SR: 3l-2b,2-3j");
+
+    p.plot("LepEta1_SR2b_low",    1, -3.0, 3.0, "SR: 3l-2b,2-3j");
+    p.plot("LepPhi1_SR2b_low",    1, -4.0, 4.0, "SR: 3l-2b,2-3j");
+
+    p.plot("JetEta1_SR2b_low",    1, -3.0, 3.0, "SR: 3l-2b,2-3j");
+    p.plot("JetPhi1_SR2b_low",    1, -4.0, 4.0, "SR: 3l-2b,2-3j");
+
+    p.plot("LepEta2_SR2b_low",    1, -3.0, 3.0, "SR: 3l-2b,2-3j");
+    p.plot("LepPhi2_SR2b_low",    1, -4.0, 4.0, "SR: 3l-2b,2-3j");
+
+    p.plot("Ht_SR2b_low",         1, 300, 1000, "SR: 3l-2b,2-3j");
+    p.plot("EtMiss_SR2b_low",     1,  0,   300, "SR: 3l-2b,2-3j");
+  }
+
+  if(SR2b_high){
+    p.plot("Njets_SR2b_high",      1,  2,  10,  "SR: 3l-2b,#geq4j");
+    p.plot("LepPt1_SR2b_high",     1,  0,  500, "SR: 3l-2b,#geq4j");
+    p.plot("LepPt2_SR2b_high",     1,  0,  250, "SR: 3l-2b,#geq4j");
+    p.plot("LepPt3_SR2b_high",     1,  0,  250, "SR: 3l-2b,#geq4j");
+
+    p.plot("JetPt1_SR2b_high",     1,  0,  500, "SR: 3l-2b,#geq4j");
+    p.plot("JetPt2_SR2b_high",     1,  0,  250, "SR: 3l-2b,#geq4j");
+
+    p.plot("LepEta1_SR2b_high",    1, -3.0, 3.0, "SR: 3l-2b,#geq4j");
+    p.plot("LepPhi1_SR2b_high",    1, -4.0, 4.0, "SR: 3l-2b,#geq4j");
+
+    p.plot("JetEta1_SR2b_high",    1, -3.0, 3.0, "SR: 3l-2b,#geq4j");
+    p.plot("JetPhi1_SR2b_high",    1, -4.0, 4.0, "SR: 3l-2b,#geq4j");
+
+    p.plot("LepEta2_SR2b_high",    1, -3.0, 3.0, "SR: 3l-2b,#geq4j");
+    p.plot("LepPhi2_SR2b_high",    1, -4.0, 4.0, "SR: 3l-2b,#geq4j");
+
+    p.plot("Ht_SR2b_high",         1, 300, 1000, "SR: 3l-2b,#geq4j");
+    p.plot("EtMiss_SR2b_high",     1,  0,   300, "SR: 3l-2b,#geq4j");
   }
 
   if(CRFake){
@@ -90,7 +157,7 @@
 
   if(CRttZ){
     p.plot("Njets_CRttZ",      1, 4,  10,   "CR: 3l-ttZ");
-   
+
     p.plot("LepPt1_CRttZ",     1,  0,  500, "CR: 3l-ttZ");
     p.plot("LepPt2_CRttZ",     1,  0,  250, "CR: 3l-ttZ");
     p.plot("LepPt3_CRttZ",     1,  0,  250, "CR: 3l-ttZ");
@@ -110,22 +177,4 @@
     p.plot("Ht_CRttZ",         1, 300, 1000, "CR: 3l-ttZ");
     p.plot("EtMiss_CRttZ",     1,  0,  300, "CR: 3l-ttZ");
   }
-
-  if(CRWZ){
-    p.plot("LepPt1_CRWZ",     1,  0,  500, "CR: 3l-WZ");
-    p.plot("LepPt2_CRWZ",     1,  0,  250, "CR: 3l-WZ");
-    p.plot("LepPt3_CRWZ",     1,  0,  250, "CR: 3l-WZ");
-
-    p.plot("JetPt1_CRWZ",     1,  0,  500, "CR: 3l-WZ");
-   
-    p.plot("LepEta1_CRWZ",    1, -3.0, 3.0, "CR: 3l-WZ");
-    p.plot("LepPhi1_CRWZ",    1, -4.0, 4.0, "CR: 3l-WZ");
-
-    p.plot("JetEta1_CRWZ",    1, -3.0, 3.0, "CR: 3l-WZ");
-    p.plot("JetPhi1_CRWZ",    1, -4.0, 4.0, "CR: 3l-WZ");
-
-    p.plot("Ht_CRWZ",         1, 300, 1000, "CR: 3l-WZ");
-    p.plot("EtMiss_CRWZ",     1,  0,  300, "CR: 3l-WZ");
-  }
-
 }
