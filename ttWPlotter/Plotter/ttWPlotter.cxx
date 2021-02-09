@@ -113,7 +113,7 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
   THStack *hBkg_Stack  = this->makeStack(hBkg, name, xMin, xMax);
 
   TString xlab(this->xLabel(name)), ylab(Form("Events / %i GeV",(int)(hBkg_Tot->GetXaxis()->GetXmax()-hBkg_Tot->GetXaxis()->GetXmin())/hBkg_Tot->GetNbinsX()));
-  if( name.Contains("Njets") || name.Contains("NJets") || name.Contains("Nlep") || name.Contains("NLep") || name.Contains("Eta") || name.Contains("Phi") || hBkg_Tot->GetXaxis()->IsVariableBinSize()) ylab = "Events";
+  if( name.Contains("Njets") || name.Contains("NJets") || name.Contains("Nlep") || name.Contains("NLep") || name.Contains("Eta") || name.Contains("Phi") || name.Contains("Deta") || hBkg_Tot->GetXaxis()->IsVariableBinSize()) ylab = "Events";
 
   TCanvas *c = new TCanvas(name,name, 1, 10, 770, 560);
   TPad *pad1 = new TPad(name+"_p1", name+"_p1", 0., 0.30 , 1.00, 1.00, -1, 0, 0 );
@@ -652,13 +652,13 @@ std::vector< TString > ttWPlotter::tokenize(TString s){
 bool ttWPlotter::setColor(TH1F* h, TString name){
   if(!h) return true;
 
-  if(name.Contains("_VV")){ h->SetLineColor(kBlack);     h->SetFillColor(kAzure+8);   return true;}
-  if(name.Contains("_ttW")){   h->SetLineColor(kBlack);  h->SetFillColor(kOrange+1);  return true;}
-  if(name.Contains("_ttZ")){ h->SetLineColor(kBlack);    h->SetFillColor(kAzure-3);   return true;}
-  if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kRed-5);     return true;}
-  if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kGreen-6);   return true;}
-  if(name.Contains("_ttH")) {  h->SetLineColor(kBlack);  h->SetFillColor(kMagenta-7); return true;}
-  if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kRed+2);     return true;} 
+  if(name.Contains("_VV")){ h->SetLineColor(kBlack);     h->SetFillColor(kYellow-8);   return true;}
+  if(name.Contains("_ttW")){   h->SetLineColor(kBlack);  h->SetFillColor(kYellow-7);  return true;}
+  if(name.Contains("_ttZ")){ h->SetLineColor(kBlack);    h->SetFillColor(kRed);   return true;}
+  if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kGreen-4);     return true;}
+  if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kMagenta-7);   return true;}
+  if(name.Contains("_ttH")) {  h->SetLineColor(kBlack);  h->SetFillColor(kBlue); return true;}
+  if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kCyan-7);     return true;} 
   return true;
 }
 
@@ -671,7 +671,7 @@ TString ttWPlotter::getLegendEntry(TH1F* h){
   if(hname.Contains("_ttH"))   return "t#bar{t}H";
   if(hname.Contains("_tZ"))    return "tZq";
   if(hname.Contains("_Other")) return "Other";
-  if(hname.Contains("_Fakes")) return "Fake leptons";
+  if(hname.Contains("_Fakes")) return "t#bar{t} (fakes)";
   return "";
 }
 
