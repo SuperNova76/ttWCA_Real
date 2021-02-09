@@ -190,6 +190,6 @@
     p.plot("Ht_CRttZ",         1, 300, 1000, "CR: 3l ttZ");
     p.plot("EtMiss_CRttZ",     1,   0,  300, "CR: 3l ttZ");
 
-    p.plot("Deta_CRFake",      1, -2.5, 2.5, "CR: 3l ttZ");
+    p.plot("Deta_CRttZ",      1, -2.5, 2.5,  "CR: 3l ttZ");
   }
 }
