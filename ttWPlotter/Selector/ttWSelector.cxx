@@ -42,9 +42,10 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
   makeHisto("LepEta2_SR1b_low",  6, -3.0, 3.0);
   makeHisto("LepPhi2_SR1b_low",  8, -4.0, 4.0);
 
-  makeHisto("Ht_SR1b_low",      20, 0,  1000.);
-  makeHisto("EtMiss_SR1b_low",  10, 0,   300.);
-
+  makeHisto("Ht_SR1b_low",      20,  0, 1000.);
+  makeHisto("EtMiss_SR1b_low",  10,  0,  300.);
+  
+  makeHisto("Deta_SR1b_low",    2, -2.5,  2.5); 
 
   //SR1b_high
   makeHisto("Njets_SR1b_high",   bins_njets);
@@ -67,6 +68,8 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("Ht_SR1b_high",      20, 0,  1000.);
   makeHisto("EtMiss_SR1b_high",  10, 0,   300.);
+
+  makeHisto("Deta_SR1b_high",    2, -2.5,  2.5);
 
 
   //SR2b_low
@@ -91,6 +94,8 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
   makeHisto("Ht_SR2b_low",      20, 0,  1000.);
   makeHisto("EtMiss_SR2b_low",  10, 0,   300.);
 
+  makeHisto("Deta_SR2b_low",    2, -2.5,  2.5);
+
 
   //SR2b_high
   makeHisto("Njets_SR2b_high",   bins_njets);
@@ -114,6 +119,7 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
   makeHisto("Ht_SR2b_high",      20, 0,  1000.);
   makeHisto("EtMiss_SR2b_high",  10, 0,   300.);
 
+  makeHisto("Deta_SR2b_high",    2, -2.5,  2.5);
 
   //CR-Fake
   makeHisto("LepPt1_CRFake",   10, 0,  500.);
@@ -134,6 +140,8 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("Ht_CRFake",      20, 0,  1000.);
   makeHisto("EtMiss_CRFake",  10, 0,   300.);
+
+  makeHisto("Deta_CRFake",    2, -2.5,  2.5);
 
  
   //ttZ-CR
@@ -157,6 +165,8 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("Ht_CRttZ",      20, 0,  1000.);
   makeHisto("EtMiss_CRttZ",  10, 0,   300.);
+
+  makeHisto("Deta_CRttZ",    2, -2.5,  2.5);
 }
 
 
@@ -193,7 +203,7 @@ Bool_t ttWSelector::Process(Long64_t entry){
   addCutflow(w, is3L_TTT, "3L_tight");
   addCutflow(w, is3L_PPP, "3L_tight_prompt");
   
-  bool isZ = NZ_Cands > 0;
+  bool isZ = NZ_Cands == 1;
   int sumQ = TMath::Abs(pt_lep0_charge + pt_lep1_charge + pt_lep2_charge);
 
   DEBUG(APP_NAME, Form("pt(lep1)=%.1f (T=%i), pt(lep2)=%.1f (T=%i), pt(lep3)=%.1f (T=%i), (isZ=%i), sum(Q)=%i, Ht=%.1f", 
@@ -202,10 +212,10 @@ Bool_t ttWSelector::Process(Long64_t entry){
   bool pass3L = is3L_PPP && (pt_lep0_pt > lepPtCuts[0] && pt_lep1_pt > lepPtCuts[1] && pt_lep2_pt > lepPtCuts[2]);
   addCutflow(w, pass3L, "pass3L");
   
-  bool pass_SR1b_low  = pass3L && nJets>=4 && nJets<7 && nBTags==1 && sumQ==1 && !isZ;
-  bool pass_SR2b_low  = pass3L && nJets>=4 && nJets<7 && nBTags==2 && sumQ==1 && !isZ;
-  bool pass_SR1b_high = pass3L && nJets>=2 && nJets<4 && nBTags==1 && sumQ==1 && !isZ;
-  bool pass_SR2b_high = pass3L && nJets>=2 && nJets<4 && nBTags==2 && sumQ==1 && !isZ;
+  bool pass_SR1b_low  = pass3L && nJets>=2 && nJets<4 && nBTags==1 && sumQ==1 && !isZ;
+  bool pass_SR2b_low  = pass3L && nJets>=2 && nJets<4 && nBTags==2 && sumQ==1 && !isZ;
+  bool pass_SR1b_high = pass3L && nJets>=4 && nJets<7 && nBTags==1 && sumQ==1 && !isZ;
+  bool pass_SR2b_high = pass3L && nJets>=4 && nJets<7 && nBTags==2 && sumQ==1 && !isZ;
  
   bool pass_CRFake = pass3L && nJets>=4 && nJets<7 && nBTags==1;
   bool pass_CRttZ  = pass3L && nJets>=2 && nJets<7 && nBTags==2 && sumQ==1 && isZ;
@@ -238,6 +248,8 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
     fillHisto("Ht_SR1b_low",      HT, w);
     fillHisto("EtMiss_SR1b_low", MET, w);
+
+    fillHisto("Deta_SR1b_low", dEta_bdt, w);
   }
 
   if(pass_SR1b_high){  
@@ -261,6 +273,8 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
     fillHisto("Ht_SR1b_high",      HT, w);
     fillHisto("EtMiss_SR1b_high", MET, w);
+
+    fillHisto("Deta_SR1b_high", dEta_bdt, w); 
   }
 
   if(pass_SR2b_low){  
@@ -284,6 +298,8 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
     fillHisto("Ht_SR2b_low",      HT, w);
     fillHisto("EtMiss_SR2b_low", MET, w);
+
+    fillHisto("Deta_SR2b_low", dEta_bdt, w); 
   }
 
   if(pass_SR2b_high){  
@@ -307,6 +323,8 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
     fillHisto("Ht_SR2b_high",      HT, w);
     fillHisto("EtMiss_SR2b_high", MET, w);
+
+    fillHisto("Deta_SR2b_high", dEta_bdt, w); 
   }
 
   if(pass_CRFake){
@@ -328,6 +346,8 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
     fillHisto("Ht_CRFake",      HT, w);
     fillHisto("EtMiss_CRFake", MET, w);
+
+    fillHisto("Deta_CRFake", dEta_bdt, w); 
   }
 
   if(pass_CRttZ){
@@ -351,6 +371,8 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
     fillHisto("Ht_CRttZ",      HT, w);
     fillHisto("EtMiss_CRttZ", MET, w);
+
+    fillHisto("Deta_CRttZ", dEta_bdt, w); 
   }
 
   sumWeights += w;

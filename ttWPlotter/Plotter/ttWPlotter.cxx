@@ -652,13 +652,13 @@ std::vector< TString > ttWPlotter::tokenize(TString s){
 bool ttWPlotter::setColor(TH1F* h, TString name){
   if(!h) return true;
 
-  if(name.Contains("_VV")){ h->SetLineColor(kBlack);     h->SetFillColor(kAzure+8);  return true;}
-  if(name.Contains("_ttW")){   h->SetLineColor(kBlack);  h->SetFillColor(kOrange+1); return true;}
-  if(name.Contains("_ttZ")){ h->SetLineColor(kBlack);    h->SetFillColor(kAzure-3);  return true;}
-  if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kRed-5);    return true;}
-  if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kGreen-6);  return true;}
+  if(name.Contains("_VV")){ h->SetLineColor(kBlack);     h->SetFillColor(kAzure+8);   return true;}
+  if(name.Contains("_ttW")){   h->SetLineColor(kBlack);  h->SetFillColor(kOrange+1);  return true;}
+  if(name.Contains("_ttZ")){ h->SetLineColor(kBlack);    h->SetFillColor(kAzure-3);   return true;}
+  if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kRed-5);     return true;}
+  if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kGreen-6);   return true;}
   if(name.Contains("_ttH")) {  h->SetLineColor(kBlack);  h->SetFillColor(kMagenta-7); return true;}
-  if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kRed+2);    return true;} 
+  if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kRed+2);     return true;} 
   return true;
 }
 
@@ -829,6 +829,7 @@ TString ttWPlotter::xLabel(TString name){
   if(name.Contains("dRapZt")) return "#Deltay(#it{Z},#it{t}^{lep})";
   if(name.Contains("dPhitt")) return "#Delta#phi(#it{l_{t}}^{+},#it{l_{t}}^{-})/#pi";
   if(name.Contains("ttPt"))   return "p_{T}^{ #it{t#bar{t}}} [GeV]";
+  if(name.Contains("Deta"))   return "#Delta#it{#eta}_{BDT}"; 
   return "";
 }
 

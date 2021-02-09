@@ -9,3 +9,4 @@ rm -f Plotter/*.pcm
 
 echo "-> Removing old ROOT files"
 rm -f HISTOS/*.root
+rm -rf eq_*
