@@ -103,6 +103,7 @@ class ttWPlotter
   void setBkgError(TString name, float value);
   void setSignal(TString name, float norm=1);
   void printBinErrors(TH1F *h, bool print);
+  void getChi2(TH1F *hBkg, TH1F *hDat);
   void applyBkgNorm(std::vector<TString> bkgNames, std::vector<TH1F*> hVec, std::vector<float> norm);
   void applyFlatError(std::vector<TString> bkgNames, std::vector<TH1F*> hVec, std::vector<float> error);
   void applyVariationError(std::vector<TH1F*> bkg, TString bkg_type, TH1F *upValues, TH1F *downValues);

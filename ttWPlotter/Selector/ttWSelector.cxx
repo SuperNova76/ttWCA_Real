@@ -7,8 +7,9 @@
 void ttWSelector::Begin(TTree * /*tree*/){
 
   const char* APP_NAME("Initalize");
-  INFO(APP_NAME, Form("Debug mode = %i", (int)debug)   );
-  INFO(APP_NAME, Form("isMC       = %i", (int)isMC)    );
+  INFO(APP_NAME, Form("Debug mode = %i", (int)debug)    );
+  INFO(APP_NAME, Form("isMC       = %i", (int)isMC)     );
+  INFO(APP_NAME, Form("noMCFakes  = %i", (int)noMCFakes));
 
   TString option = GetOption();
 }
@@ -121,28 +122,6 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("Deta_SR2b_high",    2, -2.5,  2.5);
 
-  //CR-Fake
-  makeHisto("LepPt1_CRFake",   10, 0,  500.);
-  makeHisto("LepPt2_CRFake",   10, 0,  250.);
-  makeHisto("LepPt3_CRFake",   10, 0,  250.);
-
-  makeHisto("JetPt1_CRFake",   10, 0,  500.);
-  makeHisto("JetPt2_CRFake",   10, 0,  250.);
-
-  makeHisto("LepEta1_CRFake",  6, -3.0, 3.0);
-  makeHisto("LepPhi1_CRFake",  8, -4.0, 4.0);
-
-  makeHisto("JetEta1_CRFake",  6, -3.0, 3.0);
-  makeHisto("JetPhi1_CRFake",  8, -4.0, 4.0);
-   
-  makeHisto("LepEta2_CRFake",  6, -3.0, 3.0);
-  makeHisto("LepPhi2_CRFake",  8, -4.0, 4.0);
-
-  makeHisto("Ht_CRFake",      20, 0,  1000.);
-  makeHisto("EtMiss_CRFake",  10, 0,   300.);
-
-  makeHisto("Deta_CRFake",    2, -2.5,  2.5);
-
  
   //ttZ-CR
   makeHisto("Njets_CRttZ",   bins_njets);
@@ -188,22 +167,21 @@ Bool_t ttWSelector::Process(Long64_t entry){
   bool is3L_LLL = pt_lep0_pt>0 && pt_lep1_pt>0 && pt_lep2_pt>0 ;
   bool is3L_TTT = is3L_LLL && ( TMath::Abs(pt_lep0_isTight)==1 && TMath::Abs(pt_lep1_isTight)==1 && TMath::Abs(pt_lep2_isTight)==1);
 
-  //bool fakeLep1 = isMC && isFake(GenName, type_lep1, true_type_lep1, true_origin_lep1, TruthIFF_Class_lep1);
-  //bool fakeLep2 = isMC && isFake(GenName, type_lep2, true_type_lep2, true_origin_lep2, TruthIFF_Class_lep2);
-  //bool fakeLep3 = isMC && isFake(GenName, type_lep3, true_type_lep3, true_origin_lep3, TruthIFF_Class_lep3);
-  //countLepTypes(TruthIFF_Class_lep1, TruthIFF_Class_lep2, TruthIFF_Class_lep3);
+  bool fakeLep1 = isMC && isFake(pt_lep0_type, pt_lep0_iff);
+  bool fakeLep2 = isMC && isFake(pt_lep1_type, pt_lep1_iff);
+  bool fakeLep3 = isMC && isFake(pt_lep2_type, pt_lep2_iff);
+  countLepTypes(pt_lep0_iff, pt_lep1_iff, pt_lep2_iff);
 
-  //bool removeMCFakes = true;
-  //bool isMCFake = removeMCFakes ? (fakeLep1 || fakeLep2 || fakeLep3) : false;
+  //bool isMCFake = noMCFakes ? (fakeLep1 || fakeLep2 || fakeLep3) : false;
+  bool isMCFake = noMCFakes ? (isMC && isFakeEvent(pt_lep0_iff, pt_lep1_iff, pt_lep2_iff)) : false;
 
-  //bool is3L_PPP = is3L_TTT && !isMCFake;
-  bool is3L_PPP = is3L_TTT;
+  bool is3L_PPP = is3L_TTT && !isMCFake;
 
   addCutflow(w, is3L_LLL, "3L_loose");
   addCutflow(w, is3L_TTT, "3L_tight");
   addCutflow(w, is3L_PPP, "3L_tight_prompt");
   
-  bool isZ = NZ_Cands == 1;
+  bool isZ = (NZ_Cands == 1);
   int sumQ = TMath::Abs(pt_lep0_charge + pt_lep1_charge + pt_lep2_charge);
 
   DEBUG(APP_NAME, Form("pt(lep1)=%.1f (T=%i), pt(lep2)=%.1f (T=%i), pt(lep3)=%.1f (T=%i), (isZ=%i), sum(Q)=%i, Ht=%.1f", 
@@ -216,15 +194,13 @@ Bool_t ttWSelector::Process(Long64_t entry){
   bool pass_SR2b_low  = pass3L && nJets>=2 && nJets<4 && nBTags==2 && sumQ==1 && !isZ;
   bool pass_SR1b_high = pass3L && nJets>=4 && nJets<7 && nBTags==1 && sumQ==1 && !isZ;
   bool pass_SR2b_high = pass3L && nJets>=4 && nJets<7 && nBTags==2 && sumQ==1 && !isZ;
- 
-  bool pass_CRFake = pass3L && nJets>=4 && nJets<7 && nBTags==1;
+
   bool pass_CRttZ  = pass3L && nJets>=2 && nJets<7 && nBTags==2 && sumQ==1 && isZ;
 
   addCutflow(w, pass_SR1b_low,  "SR1b_low");
   addCutflow(w, pass_SR2b_low,  "SR2b_low");
   addCutflow(w, pass_SR1b_high, "SR1b_high");
   addCutflow(w, pass_SR2b_high, "SR2b_high");
-  addCutflow(w, pass_CRFake,    "CRFake");
   addCutflow(w, pass_CRttZ,     "CRttZ");
 
   if(pass_SR1b_low){  
@@ -327,29 +303,6 @@ Bool_t ttWSelector::Process(Long64_t entry){
     fillHisto("Deta_SR2b_high", dEta_bdt, w); 
   }
 
-  if(pass_CRFake){
-    fillHisto("LepPt1_CRFake", pt_lep0_pt, w);
-    fillHisto("LepPt2_CRFake", pt_lep1_pt, w);
-    fillHisto("LepPt3_CRFake", pt_lep2_pt, w);
-
-    fillHisto("JetPt1_CRFake", pt_jet0_pt, w);
-    fillHisto("JetPt2_CRFake", pt_jet1_pt, w);
-
-    fillHisto("LepEta1_CRFake", pt_lep0_eta, w);
-    fillHisto("LepPhi1_CRFake", pt_lep0_phi, w);
-
-    fillHisto("JetEta1_CRFake", pt_jet0_eta, w);
-    fillHisto("JetPhi1_CRFake", pt_jet0_phi, w);
-
-    fillHisto("LepEta2_CRFake", pt_lep1_eta, w);
-    fillHisto("LepPhi2_CRFake", pt_lep1_phi, w);
-
-    fillHisto("Ht_CRFake",      HT, w);
-    fillHisto("EtMiss_CRFake", MET, w);
-
-    fillHisto("Deta_CRFake", dEta_bdt, w); 
-  }
-
   if(pass_CRttZ){
     fillHisto("Njets_CRttZ",  nJets, w);
 
@@ -424,18 +377,16 @@ void ttWSelector::checkBinContent(TH1F* h){
   for(int i(0); i<=h->GetNbinsX(); i++){ if(h->GetBinContent(i)<0.){ h->SetBinContent(i,0); h->SetBinError(i,0); } }
 }
 
-bool ttWSelector::isFake(TString mcname, float type, int truthType, int truthOrigin, float IFFClass){
-  TString lepFlavor = type==1. ? "Electron" : (type==2. ? "Muon" : (type==3 ? "Tau" : "Unknown"));
-  DEBUG("makeHisto", Form("Generator: %s, type=%.0f(%s), truthType=%i truthOrigin=%i, IFFClass=%.0f", mcname.Data(), type, lepFlavor.Data(), truthType, truthOrigin, IFFClass));
+bool ttWSelector::isFakeEvent(float class_lep1, float class_lep2, float class_lep3){
+  if(class_lep1 < 5 && class_lep2 < 5 && class_lep3 < 5) return false;
+  return true;
+}
 
-  if(mcname.Contains("Sherpa")){
-    if(type==1. &&  IFFClass==2)  return false;
-    if(type==2. && (IFFClass==4 || (truthType==5 && truthOrigin==0))) return false;
-  }
-  else{
-    if(type==1. && IFFClass==2) return false;
-    if(type==2. && IFFClass==4) return false;
-  }
+bool ttWSelector::isFake(float type, float IFFClass){
+  TString lepFlavor = type==0. ? "Electron" : (type==1. ? "Muon" : "Unknown");
+  DEBUG("makeHisto", Form("Type=%.0f(%s), IFFClass=%.0f", type, lepFlavor.Data(), IFFClass));
+  if(type==0. && (IFFClass==2 || IFFClass==3 || IFFClass==0)) return false;
+  if(type==1. && (IFFClass==4 || IFFClass==0)) return false;
   return true;
 }
 

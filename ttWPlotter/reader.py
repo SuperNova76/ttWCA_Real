@@ -8,11 +8,12 @@ from argparse import ArgumentParser
 def main():
 
     parser = ArgumentParser(description="Script for TH1F creation from Ntuple input")
-    parser.add_argument("--File",    help="Name of input file", default="")
-    parser.add_argument("--InPath",  help="Name of input path", default="")
-    parser.add_argument("--OutPath", help="Location of output file", default="HISTOS")
-    parser.add_argument("--Lumi", type=float, help="Luminosity in fb^-1", default=1)
-    parser.add_argument("--Debug",type=int,   help="Debug messages for selector class", default=0)
+    parser.add_argument("--File",      help="Name of input file", default="")
+    parser.add_argument("--InPath",    help="Name of input path", default="")
+    parser.add_argument("--OutPath",   help="Location of output file", default="HISTOS")
+    parser.add_argument("--NoMCFakes", type=int,   help="Remove truth-level fakes from MC",  default=1)
+    parser.add_argument("--Lumi",      type=float, help="Luminosity in fb^-1",               default=1)
+    parser.add_argument("--Debug",     type=int,   help="Debug messages for selector class", default=0)
     options = parser.parse_args()
 
     if ( not len(options.File) or not os.path.isfile(options.File) ) and not len(options.InPath): 
@@ -30,7 +31,7 @@ def main():
     if noROOTErr: ROOT.gROOT.ProcessLine("gErrorIgnoreLevel = kFatal")
 
     if len(options.File):
-        readFile(options.File, options.OutPath, options.Lumi, options.Debug)
+        readFile(options.File, options.OutPath, options.NoMCFakes, options.Lumi, options.Debug)
         return
 
     infiles = sorted(glob(options.InPath+"/*.root"))
@@ -43,11 +44,11 @@ def main():
     print; info("Infiles:"); print(infiles)
     for infile in infiles:
         print; info("Reading {0}".format(infile))
-        readFile(infile, options.OutPath, options.Lumi, options.Debug)
+        readFile(infile, options.OutPath, options.NoMCFakes, options.Lumi, options.Debug)
         time.sleep(0.5)
     return
 
-def readFile(filename, path, lumi, debug):
+def readFile(filename, path, nofakes, lumi, debug):
 
     infile = ROOT.TFile(filename)
     intree = infile.Get("nominal")
@@ -60,8 +61,9 @@ def readFile(filename, path, lumi, debug):
 
     Selector.Init(intree)
     Selector.setDebug(debug)
-    Selector.Begin(intree)    
-    Selector.SlaveBegin(intree) 
+    Selector.rmMCFakes(nofakes)
+    Selector.Begin(intree)
+    Selector.SlaveBegin(intree)
     Selector.setOutPathName(path)
     Selector.setOutFileName("hist_{0}".format(filename.split("/")[-1]))
     Selector.setLumiNorm(lumi)

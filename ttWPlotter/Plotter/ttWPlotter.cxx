@@ -163,15 +163,20 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
   TGraphAsymmErrors *Bkg_Err = this->errorGraph(hBkg_Tot);
   Bkg_Err->Draw("E2 SAME");
 
-  TH1F *hSig(0);
+  TH1F *hSig1(0), *hSig2(0);
   if(sigName.Length()){
-    hSig = (TH1F*)(this->getBkgComponent(sigName, hBkg))->Clone(Form("Sig_%s",sigName.Data()));
-    hSig->Scale(sigNorm);
-    hSig->SetLineColor( hSig->GetFillColor() );
-    hSig->SetLineWidth(2);
-    hSig->SetFillStyle(0);
-    hSig->Draw("HIST SAME");
-    if(Debug){std::cout << CNAME <<"::plot()\t " << Form("Draw %s with Integral %.3f", hSig->GetName(), hSig->Integral()) << std::endl;}
+    hSig1 = (TH1F*)(this->getBkgComponent(sigName, hBkg))->Clone(Form("Sig1_%s",sigName.Data()));
+    hSig2 = (TH1F*)(this->getBkgComponent(sigName, hBkg))->Clone(Form("Sig2_%s",sigName.Data()));
+    hSig1->Scale(sigNorm);  hSig2->Scale(sigNorm);
+    hSig1->SetLineWidth(2); hSig2->SetLineWidth(2);
+    hSig1->SetFillStyle(0); hSig2->SetFillStyle(0);
+    hSig1->SetLineStyle(1); hSig2->SetLineStyle(7);
+    hSig1->SetLineColor( hSig1->GetFillColor() );
+    hSig2->SetLineColor( kBlack );
+    hSig1->Draw("HIST SAME");
+    hSig2->Draw("HIST SAME");
+
+    if(Debug){std::cout << CNAME <<"::plot()\t " << Form("Draw %s with Integral %.3f", hSig1->GetName(), hSig1->Integral()) << std::endl;}
   }
 
   //Draw datas
@@ -188,6 +193,7 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
     data->SetMarkerColor(kBlack);
     data->SetLineColor(kBlack);
     data->Draw("PEX0 SAME");
+    this->getChi2(hBkg_Tot,data);
   }
   gPad->RedrawAxis();
   
@@ -281,7 +287,7 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
     sigLeg->SetFillColor(0);
     sigLeg->SetFillStyle(0);
     sigLeg->SetLineColor(0);
-    sigLeg->AddEntry(hSig, Form("%s #times %.0f",getLegendEntry(hSig).Data(),sigNorm), "l");
+    sigLeg->AddEntry(hSig1, Form("%s #times %.0f",getLegendEntry(hSig1).Data(),sigNorm), "l");
     sigLeg->Draw("SAME");
   }
   
@@ -671,7 +677,7 @@ TString ttWPlotter::getLegendEntry(TH1F* h){
   if(hname.Contains("_ttH"))   return "t#bar{t}H";
   if(hname.Contains("_tZ"))    return "tZq";
   if(hname.Contains("_Other")) return "Other";
-  if(hname.Contains("_Fakes")) return "t#bar{t} (fakes)";
+  if(hname.Contains("_Fakes")) return "Fakes";
   return "";
 }
 
@@ -792,6 +798,15 @@ void ttWPlotter::applyFlatError(std::vector<TString> bkgNames, std::vector<TH1F*
   }
   return;
 }
+
+void ttWPlotter::getChi2(TH1F *hBkg, TH1F *hDat){
+  if(!hBkg || !hDat) return;
+  double pVal(0), chi2(0);
+  pVal = hDat->Chi2Test(hBkg, "UW OF");
+  chi2 = hDat->Chi2Test(hBkg, "UW OF CHI2/NDF");
+  std::cout << CNAME << "::getChi2() \t" << Form("Chi2(%s,%s) = %.3f, p-Val = %.3f",hBkg->GetName(),hDat->GetName(),(float)chi2,(float)pVal) << std::endl;
+  return;
+}
   
 TString ttWPlotter::xLabel(TString name){
 
@@ -840,6 +855,10 @@ void ttWPlotter::setMCTypes(std::map<TString, TString> &m){
   m["tth"]   = "ttH";
   m["tz"]    = "tZ";
   m["other"] = "Other";
-  m["tt"]    = "Fakes";
+
+  bool DDFakes = true;
+  if(DDFakes) m["fakes"] = "Fakes";
+  else        m["tt"]    = "Fakes";
+
   return;
 }
