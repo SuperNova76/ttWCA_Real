@@ -70,7 +70,7 @@ void printLeptons(xAOD::IParticleContainer& leptons){
   for(auto l : leptons) DEBUG( Form("Lepton[type=%i]: pt=%.1f, eta=%.3f, phi=%.3f, tight=%i", l->type(), l->pt(), l->eta(), l->phi(), (int)l->auxdata<char>(tightKey)) );
 }
 
-bool ptMatch(double pt1, double pt2){ return TMath::Abs(pt1-pt2)/pt1 < 0.001; }
+bool ptMatch(double pt1, double pt2){ return TMath::Abs(pt1-pt2)/pt1 < 1E-6; }
 
 std::vector<std::string> tokenize(TString in){ 
   std::vector<std::string> out(0);
@@ -211,7 +211,7 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vec
   unsigned int nLep(pt.size());
   for(unsigned int i(0); i<nLep; i++){
    
-    int lepPDG = type.at(i)==1 ? 11 : (type.at(i)==2 ? 13 : 0); //depends on Ntuple format
+    int lepPDG = type.at(i)==0 ? 11 : (type.at(i)==1 ? 13 : 0); //depends on Ntuple format
     switch( lepPDG ){
     case 11:{
       xAOD::Electron *el = new xAOD::Electron();
@@ -258,21 +258,24 @@ StatusCode initializeMMTool(T &tool){
   return StatusCode::SUCCESS;
 }
 
-bool passCuts(TString name, std::vector<double> lepPt, std::vector<double> lepCharge, double njet, double nbjet, double met, bool isZ){
+bool passCuts(TString name, std::vector<double> lepPt, std::vector<double> lepCharge, double njet, double nbjet, bool isZ){
   bool pass(false);
-  const std::vector<double> lepPtCuts = {27., 20., 20.};
+  const std::vector<double> lepPtCuts = {30., 20., 10.};
 
-  if(name == "SR")
-    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && nbjet>=1 && !isZ;
- 
-  if(name == "CRFake")
-    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && njet==3 && nbjet==1;
+  if(name == "SR1b_low")
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && njet<4 && nbjet==1 && !isZ;
+
+  if(name == "SR2b_low")
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && njet<4 && nbjet==2 && !isZ;
+
+  if(name == "SR1b_high")
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=4 && njet<7 && nbjet==1 && !isZ;
+
+  if(name == "SR2b_high")
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=4 && njet<7 && nbjet==2 && !isZ; 
 
   if(name == "CRttZ")
-    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=4 && nbjet>=2 && met>50 && isZ;
-  
-  if(name == "CRWZ")
-    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet==1 && nbjet==0 && met>50 && isZ;
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && njet<7 && nbjet==2 && isZ;
 
   return pass;
 }
@@ -342,11 +345,12 @@ int main(int argc, char* argv[]){
   TTreeReaderValue<Double_t> jet1_phi = {reader, getBranch("jet1_phi")};
   TTreeReaderValue<Double_t> jet2_phi = {reader, getBranch("jet2_phi")};
 
-  TTreeReaderValue<Double_t> EtMiss = {reader, getBranch("EtMiss")};
-  TTreeReaderValue<Double_t> Ht     = {reader, getBranch("Ht")};
-  TTreeReaderValue<Double_t> nZ     = {reader, getBranch("nZ")};
-  TTreeReaderValue<Double_t> nJet   = {reader, getBranch("nJet")};
-  TTreeReaderValue<Double_t> nBjet  = {reader, getBranch("nBjet")};
+  TTreeReaderValue<Double_t> EtMiss   = {reader, getBranch("EtMiss")};
+  TTreeReaderValue<Double_t> Ht       = {reader, getBranch("Ht")};
+  TTreeReaderValue<Double_t> nZ       = {reader, getBranch("nZ")};
+  TTreeReaderValue<Double_t> nJet     = {reader, getBranch("nJet")};
+  TTreeReaderValue<Double_t> nBjet    = {reader, getBranch("nBjet")};
+  TTreeReaderValue<Double_t> dEta_BDT = {reader, getBranch("dEta_BDT")};
  
   for(auto SR : SRs){
     INFO( Form("Running on region: %s", SR.c_str()) );
@@ -370,8 +374,9 @@ int main(int argc, char* argv[]){
     histos.emplace_back( makeHisto("LepEta2", 6, -3.0, 3.0) );
     histos.emplace_back( makeHisto("LepPhi2", 8, -4.0, 4.0) );
 
-    histos.emplace_back( makeHisto("Ht",     20, 0, 1000) );
-    histos.emplace_back( makeHisto("EtMiss", 10, 0,  300) );
+    histos.emplace_back( makeHisto("Ht",     20,   0, 1000) );
+    histos.emplace_back( makeHisto("EtMiss", 10,   0,  300) );
+    histos.emplace_back( makeHisto("Deta",   2, -2.5,  2.5) );
 
     addSuffix(histos, SR);
     std::vector<float> var(histos.size());
@@ -415,9 +420,9 @@ int main(int argc, char* argv[]){
     sortLeptons(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
 
     //Custom varibales
-    bool isZ = *nZ >= 1;
+    bool isZ = (*nZ == 1);
 
-    if( !passCuts((TString)SR, lepPt, lepCharge, *nJet, *nBjet, *EtMiss, isZ) ) continue;
+    if( !passCuts((TString)SR, lepPt, lepCharge, *nJet, *nBjet, isZ) ) continue;
     DEBUG( Form("Entry %i, N(jets)=%f, N(b-jets)=%f, EtMiss=%.2f, isZ=%i", (int)entry, (float) *nJet, (float) *nBjet, (float) *EtMiss, (int)isZ) );
 
     //Tight/Loose count
@@ -447,6 +452,7 @@ int main(int argc, char* argv[]){
 
     var[12] = (float) *Ht;
     var[13] = (float) *EtMiss;
+    var[14] = (float) *dEta_BDT;
 
     std::shared_ptr<xAOD::TStore> store = std::make_shared<xAOD::TStore>();
     std::shared_ptr<xAOD::TEvent> event = std::make_shared<xAOD::TEvent>();
