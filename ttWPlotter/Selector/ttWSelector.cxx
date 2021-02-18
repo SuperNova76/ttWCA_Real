@@ -174,7 +174,6 @@ Bool_t ttWSelector::Process(Long64_t entry){
 
   //bool isMCFake = noMCFakes ? (fakeLep1 || fakeLep2 || fakeLep3) : false;
   bool isMCFake = noMCFakes ? (isMC && isFakeEvent(pt_lep0_iff, pt_lep1_iff, pt_lep2_iff)) : false;
-
   bool is3L_PPP = is3L_TTT && !isMCFake;
 
   addCutflow(w, is3L_LLL, "3L_loose");
