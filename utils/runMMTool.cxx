@@ -62,7 +62,7 @@ void INFO(std::string msg){ std::cout << name << "\t INFO \t" << msg << std::end
 void DEBUG(std::string msg){ if(debug) std::cout << name << "\t DEBUG \t" << msg << std::endl; }
 void ERROR(std::string msg){ std::cout << name << "\t ERROR \t" << msg << std::endl; exit(1); }
 
-void printProcess(int entry, int allEntries, int div=50000, bool print=true){
+void printProcess(int entry, int allEntries, int div=10000, bool print=true){
   if(print && entry%div==0) INFO( Form("--> Processed %i events (%.0f %%)", entry, (float)entry/(float)allEntries * 100) ); 
 }
 
