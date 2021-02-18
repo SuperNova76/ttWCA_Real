@@ -383,7 +383,7 @@ bool ttWSelector::isFakeEvent(float class_lep1, float class_lep2, float class_le
 
 bool ttWSelector::isFake(float type, float IFFClass){
   TString lepFlavor = type==0. ? "Electron" : (type==1. ? "Muon" : "Unknown");
-  DEBUG("makeHisto", Form("Type=%.0f(%s), IFFClass=%.0f", type, lepFlavor.Data(), IFFClass));
+  DEBUG("isFake", Form("Type=%.0f(%s), IFFClass=%.0f", type, lepFlavor.Data(), IFFClass));
   if(type==0. && (IFFClass==2 || IFFClass==3 || IFFClass==0)) return false;
   if(type==1. && (IFFClass==4 || IFFClass==0)) return false;
   return true;
