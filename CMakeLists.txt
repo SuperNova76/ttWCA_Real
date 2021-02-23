@@ -1,5 +1,5 @@
 # Declare the name of this package:
-atlas_subdir( ttWCA None )
+atlas_subdir( ttWCA )
 
 # This package depends on other packages:
 atlas_depends_on_subdirs( PUBLIC
@@ -16,14 +16,13 @@ atlas_depends_on_subdirs( PUBLIC
 find_package( ROOT REQUIRED COMPONENTS Core Gpad Tree Hist RIO MathCore Graf )
 
 # Generate a CINT dictionary source file:
-atlas_add_root_dictionary( ttWCA _cintDictSource
+atlas_add_root_dictionary( ttWCA ttWCACintDict
                            ROOT_HEADERS Root/LinkDef.h
                            EXTERNAL_PACKAGES ROOT )
 
 # Build a library that other components can link against:
-atlas_add_library( ttWCA Root/*.cxx Root/*.h Root/*.icc
-                   ttWCA/*.h ttWCA/*.icc ttWCA/*/*.h
-                   ttWCA/*/*.icc ${_cintDictSource} 
+atlas_add_library( ttWCA
+                   ttWCA/*.h Root/*.cxx ${ttWCACintDict}
                    PUBLIC_HEADERS ttWCA
                    LINK_LIBRARIES TopObjectSelectionTools
                                   TopEventSelectionTools

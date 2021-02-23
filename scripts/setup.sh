@@ -1,6 +1,7 @@
-export REL="21.2.157"
+export REL="21.2.160"
+export SOURCE_DIR="uctanalysistop"
 
-if [ ! $ATLAS_LOCAL_ACM_VERSION ]; then 
+if [ ! $ATLAS_LOCAL_ROOT_BASE ]; then 
     echo "--> get voms-proxy"
     voms-proxy-init -voms atlas
     
@@ -12,15 +13,19 @@ if [ ! $ATLAS_LOCAL_ACM_VERSION ]; then
     lsetup "rucio -w" "git" "panda" "pyami" "cmake"
 fi
 
-if [ ! $ACMSOURCEDIR ]; then
-    echo "--> acm Setup"
-    if [ ! -d build ]; then mkdir build; fi
-    cd build
-    acmSetup "--sourcearea=../uctanalysistop/ AnalysisBase,${REL}"
+if [ ! $AnalysisBase_SET_UP ]; then
+    echo "--> AnalysisBase Setup"
+    cd ${SOURCE_DIR}
+    asetup "AnalysisBase,${REL},here"
     cd ..
 fi
 
-echo "--> acm Compile"
-acm compile
+echo "--> cmake Compile"
+if [ ! -d build ]; then mkdir build; fi
+cd build
+cmake ../${SOURCE_DIR}
+cmake --build ./
+source */setup.sh
+cd ..
 
 echo "--> done"
