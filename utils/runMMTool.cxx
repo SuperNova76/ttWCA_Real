@@ -102,7 +102,7 @@ StatusCode setConfigValues(TString conf){
   selection = env.GetValue("Selection",    "");
   process   = env.GetValue("Process",      "");
   SRNames   = env.GetValue("SignalRegion", "");
-  OutFile  =  env.GetValue("OutFileName",  "");
+  OutFile   = env.GetValue("OutFileName",  "");
   env.PrintEnv();
   return StatusCode::SUCCESS;
 }
@@ -295,6 +295,7 @@ int main(int argc, char* argv[]){
 
   TFile *inFile = TFile::Open(input, "READ");
   if(!inFile || inFile->IsZombie()) ERROR("Invalid root file! Exiting");
+  INFO( Form("Reading input file %s", inFile->GetName()) );
 
   TTree* inTree = (TTree*)inFile->Get(treeName.c_str());
   if(!inTree) ERROR("Input tree not found! Exiting");
@@ -381,126 +382,126 @@ int main(int argc, char* argv[]){
     addSuffix(histos, SR);
     std::vector<float> var(histos.size());
   
-  //Tool initialization
-  asg::AnaToolHandle<CP::IFakeBkgTool>       LHMTool("CP::LhoodMM_tools/LHMTool_"+SR);
-  asg::AnaToolHandle<CP::ILinearFakeBkgTool> ASMTool("CP::AsymptMatrixTool/ASMTool_"+SR);
-  switch( MMType ){
-  case 1:
-    top::check(initializeMMTool(LHMTool), "LHMTool cannot be initialized");
-    for(unsigned int i(0); i<var.size(); i++)
-      top::check( LHMTool->register1DHistogram(histos[i], &var[i]), "Unable to register histogram" );
-    break;
-  case 2:
-    top::check(initializeMMTool(ASMTool), "ASMTool cannot be initialized");
-    for(unsigned int i(0); i<var.size(); i++)
-      top::check( ASMTool->register1DHistogram(histos[i], &var[i]), "Unable to register histogram" );
-    break;
-  default: 
-    ERROR("No MM type selected");
-  }
-  
-  ULong64_t treeEntries = inTree->GetEntries();
-  INFO( Form("Reading TTree %s :: Entries = %ld", inTree->GetName(), (long)treeEntries) );
-  
-  unsigned int NEvents(0), NLep(0), NLoose(0), NTight(0); float sumWeights(0);
-  for(unsigned int entry(0); entry<treeEntries; entry++){
-
-    reader.SetEntry(entry);
-    printProcess(entry, (int)treeEntries);
-    DEBUG( Form("Processing entry %i", entry) );
-
-    float weightMM(0);   
-    std::vector<double> lepPt  = {*lep1_pt,  *lep2_pt,  *lep3_pt};
-    std::vector<double> lepEta = {*lep1_eta, *lep2_eta, *lep3_eta};
-    std::vector<double> lepPhi = {*lep1_phi, *lep2_phi, *lep3_phi};
-
-    std::vector<double> lepCharge = {*lep1_charge,  *lep2_charge,  *lep3_charge};
-    std::vector<double> lepType   = {*lep1_type,    *lep2_type,    *lep3_type};
-    std::vector<double> lepTight  = {*lep1_isTight, *lep2_isTight, *lep3_isTight};
-    sortLeptons(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
-
-    //Custom varibales
-    bool isZ = (*nZ == 1);
-
-    if( !passCuts((TString)SR, lepPt, lepCharge, *nJet, *nBjet, isZ) ) continue;
-    DEBUG( Form("Entry %i, N(jets)=%f, N(b-jets)=%f, EtMiss=%.2f, isZ=%i", (int)entry, (float) *nJet, (float) *nBjet, (float) *EtMiss, (int)isZ) );
-
-    //Tight/Loose count
-    for(auto T : lepTight){
-      (T==1) ? NTight++ : NLoose++;
-      NLep++;
-    }
-
-    //Variable association
-    var[0]  = (float) *nJet;
- 
-    var[1]  = (float) *lep1_pt;
-    var[2]  = (float) *lep2_pt;
-    var[3]  = (float) *lep3_pt;
-
-    var[4]  = (float) *jet1_pt;
-    var[5]  = (float) *jet2_pt;
-
-    var[6]  = (float) *lep1_eta;
-    var[7]  = (float) *lep1_phi;
-
-    var[8]  = (float) *jet1_eta;
-    var[9]  = (float) *jet1_phi;
-
-    var[10] = (float) *lep2_eta;
-    var[11] = (float) *lep2_phi;
-
-    var[12] = (float) *Ht;
-    var[13] = (float) *EtMiss;
-    var[14] = (float) *dEta_BDT;
-
-    std::shared_ptr<xAOD::TStore> store = std::make_shared<xAOD::TStore>();
-    std::shared_ptr<xAOD::TEvent> event = std::make_shared<xAOD::TEvent>();
-
-    xAOD::IParticleContainer leptons = makeIParticleContainer(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
-    printLeptons(leptons);
-
+    //Tool initialization
+    asg::AnaToolHandle<CP::IFakeBkgTool>       LHMTool("CP::LhoodMM_tools/LHMTool_"+SR);
+    asg::AnaToolHandle<CP::ILinearFakeBkgTool> ASMTool("CP::AsymptMatrixTool/ASMTool_"+SR);
     switch( MMType ){
     case 1:
-      top::check( LHMTool->addEvent(leptons), "Cannot execute LHMTool::addEvent()"); break;
+      top::check(initializeMMTool(LHMTool), "LHMTool cannot be initialized");
+      for(unsigned int i(0); i<var.size(); i++)
+	top::check( LHMTool->register1DHistogram(histos[i], &var[i]), "Unable to register histogram" );
+      break;
     case 2:
-      top::check( ASMTool->addEvent(leptons), "Cannot execute ASMTool::addEvent()");
-      top::check( ASMTool->getEventWeight(weightMM, selection, process), "Unable to get ASM weight");
-      DEBUG( Form("Entry %i, N(lep) = %i :: weight(ASM) = %.3f", entry, (int)leptons.size(), weightMM) );
+      top::check(initializeMMTool(ASMTool), "ASMTool cannot be initialized");
+      for(unsigned int i(0); i<var.size(); i++)
+	top::check( ASMTool->register1DHistogram(histos[i], &var[i]), "Unable to register histogram" );
       break;
     default: 
       ERROR("No MM type selected");
     }
+  
+    ULong64_t treeEntries = inTree->GetEntries();
+    INFO( Form("Reading TTree %s :: Entries = %ld", inTree->GetName(), (long)treeEntries) );
+  
+    unsigned int NEvents(0), NLep(0), NLoose(0), NTight(0); float sumWeights(0);
+    for(unsigned int entry(0); entry<treeEntries; entry++){
 
-    for(auto l : leptons) delete l;
-    leptons.clear();
+      reader.SetEntry(entry);
+      printProcess(entry, (int)treeEntries);
+      DEBUG( Form("Processing entry %i", entry) );
 
-    sumWeights += weightMM;
-    NEvents++;
-  }
-  INFO( Form("Processed %i events for region %s :: N(lep)=%i, N(tight)=%i, N(loose)=%i \n", NEvents, SR.c_str(), NLep, NTight, NLoose) );
+      float weightMM(0);   
+      std::vector<double> lepPt  = {*lep1_pt,  *lep2_pt,  *lep3_pt};
+      std::vector<double> lepEta = {*lep1_eta, *lep2_eta, *lep3_eta};
+      std::vector<double> lepPhi = {*lep1_phi, *lep2_phi, *lep3_phi};
 
-  float yields(0), yieldsUP(0), yieldsDOWN(0);
-  switch( MMType ){
-  case 1:
-    top::check( LHMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute LHMTool::getTotalYield()"); break;
-  case 2:
-    top::check( ASMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute ASMTool::getTotalYield()"); break;
-  default:
-    ERROR("No MM type selected");
-  }
-  INFO( Form("MMTool::totalYields(%s) %.3f (nom) %.3f (up) %.3f (down)", SR.c_str(), yields, yieldsUP, yieldsDOWN) );
-  if(MMType==2) INFO( Form("ASMTool::sumWeights(%s) %.3f", SR.c_str(), sumWeights) );
+      std::vector<double> lepCharge = {*lep1_charge,  *lep2_charge,  *lep3_charge};
+      std::vector<double> lepType   = {*lep1_type,    *lep2_type,    *lep3_type};
+      std::vector<double> lepTight  = {*lep1_isTight, *lep2_isTight, *lep3_isTight};
+      sortLeptons(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
 
-  for(auto h : histos){
-    INFO( Form("Getting binned estimations in %s for %s:", SR.c_str(), h->GetName()) ); 
+      //Custom varibales
+      bool isZ = (*nZ == 1);
+
+      if( !passCuts((TString)SR, lepPt, lepCharge, *nJet, *nBjet, isZ) ) continue;
+      DEBUG( Form("Entry %i, N(jets)=%f, N(b-jets)=%f, EtMiss=%.2f, isZ=%i", (int)entry, (float) *nJet, (float) *nBjet, (float) *EtMiss, (int)isZ) );
+
+      //Tight/Loose count
+      for(auto T : lepTight){
+	(T==1) ? NTight++ : NLoose++;
+	NLep++;
+      }
+
+      //Variable association
+      var[0]  = (float) *nJet;
+ 
+      var[1]  = (float) *lep1_pt;
+      var[2]  = (float) *lep2_pt;
+      var[3]  = (float) *lep3_pt;
+
+      var[4]  = (float) *jet1_pt;
+      var[5]  = (float) *jet2_pt;
+
+      var[6]  = (float) *lep1_eta;
+      var[7]  = (float) *lep1_phi;
+
+      var[8]  = (float) *jet1_eta;
+      var[9]  = (float) *jet1_phi;
+
+      var[10] = (float) *lep2_eta;
+      var[11] = (float) *lep2_phi;
+
+      var[12] = (float) *Ht;
+      var[13] = (float) *EtMiss;
+      var[14] = (float) *dEta_BDT;
+
+      std::shared_ptr<xAOD::TStore> store = std::make_shared<xAOD::TStore>();
+      std::shared_ptr<xAOD::TEvent> event = std::make_shared<xAOD::TEvent>();
+
+      xAOD::IParticleContainer leptons = makeIParticleContainer(lepPt, lepEta, lepPhi, lepCharge, lepType, lepTight);
+      printLeptons(leptons);
+
+      switch( MMType ){
+      case 1:
+	top::check( LHMTool->addEvent(leptons), "Cannot execute LHMTool::addEvent()"); break;
+      case 2:
+	top::check( ASMTool->addEvent(leptons), "Cannot execute ASMTool::addEvent()");
+	top::check( ASMTool->getEventWeight(weightMM, selection, process), "Unable to get ASM weight");
+	DEBUG( Form("Entry %i, N(lep) = %i :: weight(ASM) = %.3f", entry, (int)leptons.size(), weightMM) );
+	break;
+      default: 
+	ERROR("No MM type selected");
+      }
+
+      for(auto l : leptons) delete l;
+      leptons.clear();
+
+      sumWeights += weightMM;
+      NEvents++;
+    }
+    INFO( Form("Processed %i events for region %s :: N(lep)=%i, N(tight)=%i, N(loose)=%i \n", NEvents, SR.c_str(), NLep, NTight, NLoose) );
+
+    float yields(0), yieldsUP(0), yieldsDOWN(0);
+    switch( MMType ){
+    case 1:
+      top::check( LHMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute LHMTool::getTotalYield()"); break;
+    case 2:
+      top::check( ASMTool->getTotalYield(yields, yieldsUP, yieldsDOWN), "Cannot execute ASMTool::getTotalYield()"); break;
+    default:
+      ERROR("No MM type selected");
+    }
+    INFO( Form("MMTool::totalYields(%s) %.3f (nom) %.3f (up) %.3f (down)", SR.c_str(), yields, yieldsUP, yieldsDOWN) );
+    if(MMType==2) INFO( Form("ASMTool::sumWeights(%s) %.3f", SR.c_str(), sumWeights) );
+
+    for(auto h : histos){
+      INFO( Form("Getting binned estimations in %s for %s:", SR.c_str(), h->GetName()) ); 
     
-    for(int i(1); i<=h->GetNbinsX(); i++) INFO( Form("%s yields: Bin [%i] -> MM yields = %.3f", h->GetName(), i, (float)h->GetBinContent(i)) ); 
-    INFO( Form("%s Integral: %.3f \n", h->GetName(), h->Integral()) );
-  }
+      for(int i(1); i<=h->GetNbinsX(); i++) INFO( Form("%s yields: Bin [%i] -> MM yields = %.3f", h->GetName(), i, (float)h->GetBinContent(i)) ); 
+      INFO( Form("%s Integral: %.3f \n", h->GetName(), h->Integral()) );
+    }
 
-  TString outFileName(OutFile);
-  top::check(writeHistos(histos, outFileName), "Cannot write histograms to output file");
+    TString outFileName(OutFile);
+    top::check(writeHistos(histos, outFileName), "Cannot write histograms to output file");
   }
 
   INFO("Finalizing");
