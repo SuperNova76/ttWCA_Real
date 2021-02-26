@@ -48,6 +48,7 @@ class ttWPlotter
     Variations = 0;
     ratioYMin  = 0;
     ratioYMax  = 0;
+    doMMFakes  = 1;
     PlotLabel.Clear();
     InPath.Clear();
     AtlasStylePath.Clear();
@@ -153,6 +154,7 @@ class ttWPlotter
   bool  OFBin;
   bool  legNo;
   bool  doData;
+  bool  doMMFakes;
   bool  Variations;
   bool  AtlasLabel;
 

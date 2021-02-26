@@ -658,13 +658,13 @@ std::vector< TString > ttWPlotter::tokenize(TString s){
 bool ttWPlotter::setColor(TH1F* h, TString name){
   if(!h) return true;
 
-  if(name.Contains("_VV")){ h->SetLineColor(kBlack);     h->SetFillColor(kYellow-8);   return true;}
+  if(name.Contains("_VV")){ h->SetLineColor(kBlack);     h->SetFillColor(kYellow-8);  return true;}
   if(name.Contains("_ttW")){   h->SetLineColor(kBlack);  h->SetFillColor(kYellow-7);  return true;}
-  if(name.Contains("_ttZ")){ h->SetLineColor(kBlack);    h->SetFillColor(kRed);   return true;}
-  if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kGreen-4);     return true;}
-  if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kMagenta-7);   return true;}
-  if(name.Contains("_ttH")) {  h->SetLineColor(kBlack);  h->SetFillColor(kBlue); return true;}
-  if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kCyan-7);     return true;} 
+  if(name.Contains("_ttZ")){ h->SetLineColor(kBlack);    h->SetFillColor(kRed);       return true;}
+  if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kGreen-4);   return true;}
+  if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kMagenta-7); return true;}
+  if(name.Contains("_ttH")) {  h->SetLineColor(kBlack);  h->SetFillColor(kBlue);      return true;}
+  if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kCyan-7);    return true;} 
   return true;
 }
 
@@ -677,7 +677,8 @@ TString ttWPlotter::getLegendEntry(TH1F* h){
   if(hname.Contains("_ttH"))   return "t#bar{t}H";
   if(hname.Contains("_tZ"))    return "tZq";
   if(hname.Contains("_Other")) return "Other";
-  if(hname.Contains("_Fakes")) return "Fakes";
+  if(hname.Contains("_Fakes") &&  doMMFakes ) return "Fakes (MM)";
+  if(hname.Contains("_Fakes") && !doMMFakes ) return "Fakes (MC)";
   return "";
 }
 
@@ -856,9 +857,8 @@ void ttWPlotter::setMCTypes(std::map<TString, TString> &m){
   m["tz"]    = "tZ";
   m["other"] = "Other";
 
-  bool DDFakes = true;
-  if(DDFakes) m["fakes"] = "Fakes";
-  else        m["tt"]    = "Fakes";
+  if(doMMFakes) m["fakes"] = "Fakes";
+  else          m["tt"]    = "Fakes";
 
   return;
 }
