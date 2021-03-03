@@ -21,12 +21,19 @@ for fname in fnames:
         if sample[0] == "#": continue
         print("\033[1;34mChecking dataset: {0}\033[0m".format(sample))
 
-        cmd = "rucio list-dids {0} --short --filter type=CONTAINER".format(sample)
-        sub = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-        dsname = sub.stdout.read().strip('\n')
+        getDSID = "rucio list-dids {0} --short --filter type=CONTAINER".format(sample)
+        outDSID = subprocess.Popen(getDSID, shell=True, stdout=subprocess.PIPE)
+        dsname  =  outDSID.stdout.read().strip('\n')
 
-        if sample == dsname: 
-            print("\033[1;32m--> Dataset found\033[0m")
+        if sample == dsname:
+            getFiles = "rucio list-files {0}".format(dsname)
+            outFiles = subprocess.Popen(getFiles, shell=True, stdout=subprocess.PIPE)
+
+            fileInfo = outFiles.stdout.read().split('Total')
+            nEvents = fileInfo[-1].split(' : ')[-1].strip('\n')
+            nFiles  = fileInfo[-3].split(' : ')[-1].strip('\n')
+
+            print("\033[1;32m--> Dataset found: N(files)={0}, N(events)={1}\033[0m".format(nFiles,nEvents))
             N_found = N_found+1
         else: 
             print("\033[1;31m--> Dataset not found\033[0m")
