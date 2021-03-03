@@ -42,13 +42,13 @@ def makeJob(DS,username,config,version,filesperjob,submit):
     info("Sample: {0}".format(DS))
 
     cmd  = "prun \\\n"
-    cmd += "--inDS={0} \\\n"                                                                                               .format(DS)
-    cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                .format(username,makeOutputName(DS),version)
-    cmd += "--excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git \\\n".format(ACM_SOURCE.split("/")[-1])
-    cmd += "--useAthenaPackages --cmtConfig={0} --osMatching  \\\n"                                                        .format(os.getenv('CMTCONFIG'))
-    cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                         .format(findFile(ACM_SOURCE.split("/")[-1],config))
-    cmd += "--extFile={0}/ttWCA/share/* \\\n"                                                                              .format(ACM_SOURCE.split("/")[-1])
-    cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                         .format(filesperjob)
+    cmd += "--inDS={0} \\\n"                                                                                                                     .format(DS)
+    cmd += "--outDS=user.{0}.{1}.{2}/ \\\n"                                                                                                      .format(username,makeOutputName(DS),version)
+    cmd += "--excludeFile=build,run,{0}/analyses,{0}/scripts,{0}/tools,{0}/.git,{0}/ATNtupleProduction,{0}/ttWCA/.git,{0}/ttWCA/ttWPlotter \\\n" .format(ACM_SOURCE.split("/")[-1])
+    cmd += "--useAthenaPackages --cmtConfig={0} --osMatching  \\\n"                                                                              .format(os.getenv('CMTCONFIG'))
+    cmd += "--writeInputToTxt=IN:in.txt --outputs=output.root --exec=\"top-xaod {0} in.txt\" \\\n"                                               .format(findFile(ACM_SOURCE.split("/")[-1],config))
+    cmd += "--extFile={0}/ttWCA/share/* \\\n"                                                                                                    .format(ACM_SOURCE.split("/")[-1])
+    cmd += "--nFilesPerJob={0} --nGBPerJob=MAX --mergeOutput \\\n"                                                                               .format(filesperjob)
 
     print(cmd)
     if submit: os.system(cmd)

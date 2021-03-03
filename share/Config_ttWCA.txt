@@ -107,7 +107,7 @@ ElectronIsolationLoose None
 MuonPt 10000
 MuonQuality Medium
 MuonQualityLoose Medium
-MuonIsolation PflowTight_FixedRad
+MuonIsolation PLVTight
 MuonIsolationLoose None
 doExtraSmearing False
 do2StationsHighPt False
