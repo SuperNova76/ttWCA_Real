@@ -2,6 +2,9 @@ import os,sys,time,subprocess
 from glob import glob
 from argparse import ArgumentParser
 
+if not "ACMSOURCEDIR" in os.environ:
+    print("ACM source-direcory not set... please compile the tool before submitting jobs:\n\n . uctanalysistop/ttWCA/scripts/setup.sh\n"); sys.exit(1)
+
 ACM_SOURCE   = os.getenv('ACMSOURCEDIR')
 
 def main():
