@@ -8,9 +8,9 @@ from argparse import ArgumentParser
 def main():
 
     parser = ArgumentParser(description="Script for TH1F creation from Ntuple input")
-    parser.add_argument("--File",      help="Name of input file", default="")
-    parser.add_argument("--InPath",    help="Name of input path", default="")
-    parser.add_argument("--OutPath",   help="Location of output file", default="HISTOS")
+    parser.add_argument("--File",    help="Name of input file", default="")
+    parser.add_argument("--InPath",  help="Name of input path", default="")
+    parser.add_argument("--OutPath", help="Location of output file [default=HISTOS]", default="HISTOS")
     parser.add_argument("--NoMCFakes", type=int,   help="Remove truth-level fakes from MC",  default=1)
     parser.add_argument("--Lumi",      type=float, help="Luminosity in fb^-1",               default=1)
     parser.add_argument("--Debug",     type=int,   help="Debug messages for selector class", default=0)
@@ -22,6 +22,9 @@ def main():
     if len(options.OutPath) and not os.path.isdir(options.OutPath):
         info("Directory {0} does not exist, creating".format(options.OutPath)) 
         os.mkdir(options.OutPath);
+
+    if not "ROOTSYS" in os.environ:
+        error("No ROOT setup found. Please setup ROOT first")
 
     info("Loading selector")
     if ROOT.gROOT.LoadMacro("Selector/ttWSelector.cxx++") == -1:
