@@ -2,13 +2,13 @@
 
 void ttWPlotter::doDebug(bool debug){
   Debug = debug;
-  std::cout << CNAME << "::doDebug() \t" << Debug << std::endl;
+  std::cout << CNAME << "::debugStream() \t" << Debug << std::endl;
   return;
 }
 
 void ttWPlotter::doPrint(bool print){
   Print = print;
-  std::cout << CNAME << "::doPrint() \t" << Print << std::endl;
+  std::cout << CNAME << "::printPlots() \t" << Print << std::endl;
 }
 
 void ttWPlotter::setInPath(TString path){
@@ -25,7 +25,7 @@ void ttWPlotter::setOutPath(TString path){
 
 void ttWPlotter::setStyle(bool setAtlas){ 
   Style = true;
-  std::cout << CNAME << "::setStyle() \t" << setAtlas << std::endl;
+  std::cout << CNAME << "::setATLASstyle() \t" << setAtlas << std::endl;
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(000000);
   if(!setAtlas) return;
@@ -50,7 +50,13 @@ void ttWPlotter::setBkgError(TString name, float value){
 
 void ttWPlotter::useData(bool data){
   doData = data;
-  std::cout << CNAME << "::useData() \t" << doData << std::endl;
+  std::cout << CNAME << "::showData()  \t" << doData << std::endl;
+  return;
+}
+
+void ttWPlotter::useMMFakes(bool useMM){
+  doMMFakes = useMM;
+  std::cout << CNAME << "::useMMFakes() \t" << doMMFakes << std::endl;
   return;
 }
 

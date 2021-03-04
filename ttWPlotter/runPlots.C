@@ -9,6 +9,8 @@
   float lumi = 139.;
 
   p.useData(1);
+  p.useMMFakes(1);
+
   p.doLogY(0);
   p.setInPath(path);
   p.setOutPath(OutPath);
@@ -50,7 +52,6 @@
   TString label_SR1b_high = "SR: 3#it{l}, 1#it{b}, #geq4#it{j}";
   TString label_SR2b_high = "SR: 3#it{l}, 2#it{b}, #geq4#it{j}";
   TString label_CRttZ     = "CR: #it{t#bar{t}Z}";
-
 
   if(SR1b_low){
     p.plot("Njets_SR1b_low",      1,  2,  10,  label_SR1b_low);

@@ -48,7 +48,7 @@ class ttWPlotter
     Variations = 0;
     ratioYMin  = 0;
     ratioYMax  = 0;
-    doMMFakes  = 1;
+    doMMFakes  = 0;
     PlotLabel.Clear();
     InPath.Clear();
     AtlasStylePath.Clear();
@@ -78,6 +78,7 @@ class ttWPlotter
   void doPrint(bool print);  
   
   void useData(bool data);
+  void useMMFakes(bool useMM);
   void setStyle(bool setAtlas);
   void setInPath(TString path);
   void setAtlasStylePath(TString path){AtlasStylePath = path;}
