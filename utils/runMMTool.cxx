@@ -72,6 +72,11 @@ void printLeptons(xAOD::IParticleContainer& leptons){
 
 bool ptMatch(double pt1, double pt2){ return TMath::Abs(pt1-pt2)/pt1 < 1E-6; }
 
+bool isFile(std::string name){
+  TFile *f = TFile::Open(name.c_str());
+  return !(bool)f->IsZombie();
+}
+
 std::vector<std::string> tokenize(TString in){ 
   std::vector<std::string> out(0);
   TObjArray *arr = in.Tokenize(",");
@@ -240,7 +245,7 @@ xAOD::IParticleContainer makeIParticleContainer(std::vector<double> pt, std::vec
 
 template <typename T>
 StatusCode initializeMMTool(T &tool){
-  if(selection.empty() || process.empty() || effFile.empty()){
+  if(selection.empty() || process.empty() || effFile.empty() || !isFile(effFile)){
     INFO("MM Tool needs [Selection] [Process] arguments and efficiency file");
     return StatusCode::FAILURE;
   }
