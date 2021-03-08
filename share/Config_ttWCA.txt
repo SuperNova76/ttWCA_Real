@@ -33,10 +33,10 @@ PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_3
 
 #setup of TDP file
 #TDPPath $WorkDir_DIR/data/ttWCA/XSection-MC16-13TeV.data
-#TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
+TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
 
-#BTag DF (uncomment this for Sherpa 228 samples only)
-#BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2020-03-11_Sh228_v3.root
+#setup of BTag CDI
+BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2020-03-11_v3.root
 
 ### Object container names
 ElectronCollectionName Electrons

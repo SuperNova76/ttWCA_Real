@@ -34,7 +34,8 @@ With `infiles.txt` a list of locally existing DAOD_TOPQ1 files.
 
 
 + To submit jobs to the grid:
+Should be executed in the directory where run, build and source are:
 ```
-python source/ttWCA/python/submitJobs.py source/ttWCA/python/samples.txt
+python source/ttWCA/grid/submitJobs.py source/ttWCA/grid/input.txt --Config=ConfigTOP.txt --Version=YourSuffix
 ```
-With `samples.txt` a list of datasets obtained with `rucio list-dids mc16_13TeV:mc16_13TeV.*.deriv.DAOD_TOPQ1.p* --short --filter type=CONTAINER`. Please submit this from the parent directory of your acm source directory.
+With `input.txt` as a list of xAOD containers (full name, including scope), `--Config` the top-configuration file with the object defintions, preselection, etc., and `--Version` a custom suffix (version no.) to label the output containers. See `submitJobs.py --help` for further options.

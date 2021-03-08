@@ -15,7 +15,7 @@ variables:
   NTUP_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/Ntup_data/data.root
   
 .analysis_image: &image
-  image: atlas/analysisbase:21.2.160
+  image: atlas/analysisbase:21.2.161
   tags:
     - cvmfs
   before_script:
@@ -36,7 +36,7 @@ build:
     - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - lsetup cmake
-    - asetup "AnalysisBase,21.2.160,here"
+    - asetup "AnalysisBase,21.2.162,here"
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
     - cmake  ../
