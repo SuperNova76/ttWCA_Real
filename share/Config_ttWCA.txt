@@ -138,7 +138,7 @@ UseAodMetaData True
 
 # Turn on fakes MM weights
 FakesMMWeightsIFF True
-FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D.root:3T:>=1F[T]
+FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D_PLV_noConv.root:3T:>=1F[T]
 
 ### Boosted jet taggers configuration
 #BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
