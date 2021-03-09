@@ -30,8 +30,8 @@ def main():
     if ROOT.gROOT.LoadMacro("Selector/ttWSelector.cxx++") == -1:
         error("Selector could not be loaded")
 
-    noROOTErr = False
-    if noROOTErr: ROOT.gROOT.ProcessLine("gErrorIgnoreLevel = kFatal")
+    if not options.Debug:
+        ROOT.gROOT.ProcessLine("gErrorIgnoreLevel = kFatal")
 
     if len(options.File):
         readFile(options.File, options.OutPath, options.NoMCFakes, options.Lumi, options.Debug)
