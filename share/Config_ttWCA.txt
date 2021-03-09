@@ -136,6 +136,9 @@ DoLoose Both
 UseAodMetaData True
 #IsAFII False
 
+#Needed for tWZ DR1/2
+#NominalWeightNames " dyn=  -1 muR=0.10000E+01 muF=0.10000E+01 "
+
 # Turn on fakes MM weights
 FakesMMWeightsIFF True
 FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D_PLV_noConv.root:3T:>=1F[T]
