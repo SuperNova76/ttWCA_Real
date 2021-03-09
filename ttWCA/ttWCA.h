@@ -42,8 +42,8 @@ namespace top{
 
       std::shared_ptr<top::TopConfig> m_config;
 
-      void MSG_INFO(TString msg){ std::cout << Form("ttWCA() \t INFO \t %s",msg.Data()) << std::endl; }
-      void MSG_DEBUG(TString msg){ if(m_debug) std::cout << Form("ttWCA() \t DEBUG \t %s",msg.Data()) << std::endl; }
+      void MSG_INFO(TString msg){ std::cout << Form("top::ttWCA() \t INFO \t %s",msg.Data()) << std::endl; }
+      void MSG_DEBUG(TString msg){ if(m_debug) std::cout << Form("top::ttWCA() \t DEBUG \t %s",msg.Data()) << std::endl; }
 
       void processJets(const top::Event& event);
       void processMuons(const top::Event& event);
