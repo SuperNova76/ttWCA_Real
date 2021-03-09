@@ -190,11 +190,11 @@ Bool_t ttWSelector::Process(Long64_t entry){
   addCutflow(w, pass3L, "pass3L");
   
   bool pass_SR1b_low  = pass3L && nJets>=2 && nJets<4 && nBTags==1 && sumQ==1 && !isZ;
-  bool pass_SR2b_low  = pass3L && nJets>=2 && nJets<4 && nBTags==2 && sumQ==1 && !isZ;
+  bool pass_SR2b_low  = pass3L && nJets>=2 && nJets<4 && nBTags>=2 && sumQ==1 && !isZ;
   bool pass_SR1b_high = pass3L && nJets>=4 && nJets<7 && nBTags==1 && sumQ==1 && !isZ;
-  bool pass_SR2b_high = pass3L && nJets>=4 && nJets<7 && nBTags==2 && sumQ==1 && !isZ;
+  bool pass_SR2b_high = pass3L && nJets>=4 && nJets<7 && nBTags>=2 && sumQ==1 && !isZ;
 
-  bool pass_CRttZ  = pass3L && nJets>=2 && nJets<7 && nBTags==2 && sumQ==1 && isZ;
+  bool pass_CRttZ  = pass3L && nJets>=2 && nJets<7 && nBTags>=2 && sumQ==1 && isZ;
 
   addCutflow(w, pass_SR1b_low,  "SR1b_low");
   addCutflow(w, pass_SR2b_low,  "SR2b_low");

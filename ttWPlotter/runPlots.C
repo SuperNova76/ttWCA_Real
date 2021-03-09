@@ -45,12 +45,12 @@
   bool fixedYRange(false);
   if(fixedYRange) p.setYRange(0.015,24);
 
-  bool SR1b_low(true), SR1b_high(true), SR2b_low(true), SR2b_high(true), CRttZ(true);
+  bool SR1b_low(true), SR1b_high(false), SR2b_low(false), SR2b_high(false), CRttZ(false);
 
   TString label_SR1b_low  = "SR: 3#it{l}, 1#it{b}, 2-3#it{j}";
-  TString label_SR2b_low  = "SR: 3#it{l}, 2#it{b}, 2-3#it{j}";
+  TString label_SR2b_low  = "SR: 3#it{l}, #geq2#it{b}, 2-3#it{j}";
   TString label_SR1b_high = "SR: 3#it{l}, 1#it{b}, #geq4#it{j}";
-  TString label_SR2b_high = "SR: 3#it{l}, 2#it{b}, #geq4#it{j}";
+  TString label_SR2b_high = "SR: 3#it{l}, #geq2#it{b}, #geq4#it{j}";
   TString label_CRttZ     = "CR: #it{t#bar{t}Z}";
 
   if(SR1b_low){

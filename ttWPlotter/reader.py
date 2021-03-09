@@ -51,10 +51,16 @@ def main():
         time.sleep(0.5)
     return
 
-def readFile(filename, path, nofakes, lumi, debug):
+def readFile(filename, path, nofakes, lumi, debug, treename="nominal"):
 
     infile = ROOT.TFile(filename)
-    intree = infile.Get("nominal")
+    if not infile.GetListOfKeys().Contains(treename):
+        info("File {0} does not contain tree with name {1}. Skipping file".format(filename,treename)); return
+
+    intree = infile.Get(treename)
+    if not intree.InheritsFrom("TTree"):
+        info("Object {0} in file {1} is no TTree type. Skipping file".format(treename,filename)); return
+
     info("--> Input tree({0}) has {1} entries".format(intree.GetName(),intree.GetEntries()))
  
     if isData(filename): 

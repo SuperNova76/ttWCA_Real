@@ -15,14 +15,14 @@ def main():
     if not os.path.exists(directory):
         print("Directory {0} does not exist".format(directory)); sys.exit(1)
 
-    files = sorted(glob(directory+"/*data*.root"))
+    files = sorted(glob(directory+"/*/*data*.root"))
     if not len(files):
         print("No data files found"); sys.exit(1)
 
     print("Data files:"); print(files)
 
     tmpFile = "dataAll.root"
-    cmdAdd  = "hadd {0} {1}/*data*.root".format(tmpFile, directory)
+    cmdAdd  = "hadd {0} {1}/*/*data*.root".format(tmpFile, directory)
     cmdRm   = "rm {0}".format(tmpFile)
 
     if os.path.isfile(tmpFile):
