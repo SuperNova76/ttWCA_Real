@@ -137,7 +137,7 @@ UseAodMetaData True
 #IsAFII False
 
 #Needed for tWZ DR1/2
-#NominalWeightNames " dyn=  -1 muR=0.10000E+01 muF=0.10000E+01 "
+#NominalWeightNames " dyn=   0 muR=0.10000E+01 muF=0.10000E+01 "
 
 # Turn on fakes MM weights
 FakesMMWeightsIFF True

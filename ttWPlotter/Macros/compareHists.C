@@ -7,12 +7,12 @@
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  TString inpath  = "/lhome/ific/c/cardillo/ttW-CA/Ntuples/uctanalysistop/ttWCA/ttWPlotter/HISTOS/";
-  TString outpath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-12-02-21/";  
+  TString inpath  = "./";
+  TString outpath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-10-03-21/comp/";
 
   TString file1(""),file2(""),file3("");
-  file1 = "hist_fakes.root";
-  file2 = "hist_tt.root";
+  file1 = "HISTOS/hist_fakes.root";
+  file2 = "HISTOS_MC/hist_tt.root";
   file3 = "";
 
   TString label1 = " Fakes (MM)";
@@ -29,11 +29,10 @@
   std::cout << Form("File1: %s\nFile2: %s",f1->GetName(),f2->GetName()) << std::endl; 
   if(f3) std::cout << Form("File3: %s",f3->GetName()) << std::endl;
 
-  std::vector<TString> histnames = {"Ht_SR2b_low",
-				    "Ht_SR2b_high",
-				    "LepPt3_SR2b_low",
-				    "LepPt2_SR2b_high"
-
+  std::vector<TString> histnames = {"Njets_SR1b_low",  "LepPt2_SR1b_low",  "LepPt3_SR1b_low",  "Ht_SR1b_low",
+				    "Njets_SR2b_low",  "LepPt2_SR2b_low",  "LepPt3_SR2b_low",  "Ht_SR2b_low",
+				    "Njets_SR1b_high", "LepPt2_SR1b_high", "LepPt3_SR1b_high", "Ht_SR1b_high",
+                                    "Njets_SR2b_high", "LepPt2_SR2b_high", "LepPt3_SR2b_high", "Ht_SR2b_high",
   };
 
   for(auto histname : histnames){
@@ -128,14 +127,14 @@
     if(histname.Contains("EtMiss"))   xAxisName = "#it{E}_{T}^{miss} [GeV]";
     if(histname.Contains("ZPt"))      xAxisName = "#it{p}_{T}(#it{Z}) [GeV]";
     if(histname.Contains("Njets"))    xAxisName = "#it{N}_{jets}(#it{p}_{T} > 25 GeV)";
-    if(histname.Contains("Nbjets"))   xAxisName = "#it{N}_{b-jets}(#it{p}_{T} > 25 GeV)";
+    if(histname.Contains("Nbjets"))   xAxisName = "#it{N}_{#it{b}-jets}(#it{p}_{T} > 25 GeV)";
     if(histname.Contains("Deta"))     xAxisName = "#Delta#it{#eta}_{BDT}";
     h1->GetXaxis()->SetTitle(xAxisName);
 
     if(histname.Contains("_SR1b_low"))  SRlabel = "SR: 3#it{l}, 1#it{b}, 2-3#it{j}";
-    if(histname.Contains("_SR2b_low"))  SRlabel = "SR: 3#it{l}, 2#it{b}, 2-3#it{j}";
+    if(histname.Contains("_SR2b_low"))  SRlabel = "SR: 3#it{l}, #geq2#it{b}, 2-3#it{j}";
     if(histname.Contains("_SR1b_high")) SRlabel = "SR: 3#it{l}, 1#it{b}, #geq4#it{j}";
-    if(histname.Contains("_SR2b_high")) SRlabel = "SR: 3#it{l}, 2#it{b}, #geq4#it{j}";
+    if(histname.Contains("_SR2b_high")) SRlabel = "SR: 3#it{l}, #geq2#it{b}, #geq4#it{j}";
     if(histname.Contains("_CRttZ"))     SRlabel = "CR: #it{t#bar{t}Z}";
    
 
@@ -162,9 +161,9 @@
     h1->Draw("HIST SAME");
 
     TLegend *leg = new TLegend(0.58, h3 ? 0.53 : 0.55, 0.78, h3 ? 0.73 : 0.71);
-    leg->AddEntry(h1, label1);
-    leg->AddEntry(h2, label2);
-    if(h3) leg->AddEntry(h3, label3);
+    leg->AddEntry(h1, Form("%s: %.1f",label1.Data(), ev1));
+    leg->AddEntry(h2, Form("%s: %.1f",label2.Data(), ev2));
+    if(h3) leg->AddEntry(h3, Form("%s: %.1f",label3.Data(), ev3));
     leg->SetBorderSize(0);
     leg->SetTextSize(0.05);
     leg->Draw("SAME");

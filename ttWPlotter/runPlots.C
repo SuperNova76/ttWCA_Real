@@ -5,7 +5,7 @@
   p.setAtlasStylePath("/lhome/ific/c/cardillo/Atlas/atlasrootstyle/AtlasStyle.C");
 
   TString path = "HISTOS";
-  TString OutPath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-12-02-21/DD/";
+  TString OutPath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-10-03-21/DD/";
   float lumi = 139.;
 
   p.useData(1);
