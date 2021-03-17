@@ -366,7 +366,7 @@ int main(int argc, char* argv[]){
 
     histos.emplace_back( makeHisto("LepPt1", 10, 0, 500) );
     histos.emplace_back( makeHisto("LepPt2", 10, 0, 250) );
-    histos.emplace_back( makeHisto("LepPt3", 10, 0, 250) );
+    histos.emplace_back( makeHisto("LepPt3", 10, 0, 150) );
 
     histos.emplace_back( makeHisto("JetPt1", 10, 0, 500) );
     histos.emplace_back( makeHisto("JetPt2", 10, 0, 250) );

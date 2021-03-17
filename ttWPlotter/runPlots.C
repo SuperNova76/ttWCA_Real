@@ -58,7 +58,7 @@
 
     p.plot("LepPt1_SR1b_low",     1,  0,  500, label_SR1b_low);
     p.plot("LepPt2_SR1b_low",     1,  0,  250, label_SR1b_low);
-    p.plot("LepPt3_SR1b_low",     1,  0,  250, label_SR1b_low);
+    p.plot("LepPt3_SR1b_low",     1,  0,  150, label_SR1b_low);
 
     p.plot("JetPt1_SR1b_low",     1,  0,  500, label_SR1b_low);
     p.plot("JetPt2_SR1b_low",     1,  0,  250, label_SR1b_low);
@@ -82,7 +82,7 @@
 
     p.plot("LepPt1_SR1b_high",     1,  0,  500, label_SR1b_high);
     p.plot("LepPt2_SR1b_high",     1,  0,  250, label_SR1b_high);
-    p.plot("LepPt3_SR1b_high",     1,  0,  250, label_SR1b_high);
+    p.plot("LepPt3_SR1b_high",     1,  0,  150, label_SR1b_high);
 
     p.plot("JetPt1_SR1b_high",     1,  0,  500, label_SR1b_high);
     p.plot("JetPt2_SR1b_high",     1,  0,  250, label_SR1b_high);
@@ -106,7 +106,7 @@
 
     p.plot("LepPt1_SR2b_low",     1,  0,  500, label_SR2b_low);
     p.plot("LepPt2_SR2b_low",     1,  0,  250, label_SR2b_low);
-    p.plot("LepPt3_SR2b_low",     1,  0,  250, label_SR2b_low);
+    p.plot("LepPt3_SR2b_low",     1,  0,  150, label_SR2b_low);
 
     p.plot("JetPt1_SR2b_low",     1,  0,  500, label_SR2b_low);
     p.plot("JetPt2_SR2b_low",     1,  0,  250, label_SR2b_low);
@@ -130,7 +130,7 @@
 
     p.plot("LepPt1_SR2b_high",     1,  0,  500, label_SR2b_high);
     p.plot("LepPt2_SR2b_high",     1,  0,  250, label_SR2b_high);
-    p.plot("LepPt3_SR2b_high",     1,  0,  250, label_SR2b_high);
+    p.plot("LepPt3_SR2b_high",     1,  0,  150, label_SR2b_high);
 
     p.plot("JetPt1_SR2b_high",     1,  0,  500, label_SR2b_high);
     p.plot("JetPt2_SR2b_high",     1,  0,  250, label_SR2b_high);
@@ -154,7 +154,7 @@
 
     p.plot("LepPt1_CRttZ",     1,  0,  500, label_CRttZ);
     p.plot("LepPt2_CRttZ",     1,  0,  250, label_CRttZ);
-    p.plot("LepPt3_CRttZ",     1,  0,  250, label_CRttZ);
+    p.plot("LepPt3_CRttZ",     1,  0,  150, label_CRttZ);
 
     p.plot("JetPt1_CRttZ",     1,  0,  500, label_CRttZ);
     p.plot("JetPt2_CRttZ",     1,  0,  250, label_CRttZ);

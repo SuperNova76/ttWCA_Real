@@ -29,7 +29,7 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("LepPt1_SR1b_low",  10, 0,  500.);
   makeHisto("LepPt2_SR1b_low",  10, 0,  250.);
-  makeHisto("LepPt3_SR1b_low",  10, 0,  250.);
+  makeHisto("LepPt3_SR1b_low",  10, 0,  150.);
 
   makeHisto("JetPt1_SR1b_low",  10, 0,  500.);
   makeHisto("JetPt2_SR1b_low",  10, 0,  250.);
@@ -53,7 +53,7 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("LepPt1_SR1b_high",  10, 0,  500.);
   makeHisto("LepPt2_SR1b_high",  10, 0,  250.);
-  makeHisto("LepPt3_SR1b_high",  10, 0,  250.);
+  makeHisto("LepPt3_SR1b_high",  10, 0,  150.);
 
   makeHisto("JetPt1_SR1b_high",  10, 0,  500.);
   makeHisto("JetPt2_SR1b_high",  10, 0,  250.);
@@ -78,7 +78,7 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("LepPt1_SR2b_low",  10, 0,  500.);
   makeHisto("LepPt2_SR2b_low",  10, 0,  250.);
-  makeHisto("LepPt3_SR2b_low",  10, 0,  250.);
+  makeHisto("LepPt3_SR2b_low",  10, 0,  150.);
 
   makeHisto("JetPt1_SR2b_low",  10, 0,  500.);
   makeHisto("JetPt2_SR2b_low",  10, 0,  250.);
@@ -103,7 +103,7 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("LepPt1_SR2b_high",  10, 0,  500.);
   makeHisto("LepPt2_SR2b_high",  10, 0,  250.);
-  makeHisto("LepPt3_SR2b_high",  10, 0,  250.);
+  makeHisto("LepPt3_SR2b_high",  10, 0,  150.);
 
   makeHisto("JetPt1_SR2b_high",  10, 0,  500.);
   makeHisto("JetPt2_SR2b_high",  10, 0,  250.);
@@ -128,7 +128,7 @@ void ttWSelector::SlaveBegin(TTree * /*tree*/){
 
   makeHisto("LepPt1_CRttZ",  10, 0,  500.);
   makeHisto("LepPt2_CRttZ",  10, 0,  250.);
-  makeHisto("LepPt3_CRttZ",  10, 0,  250.);
+  makeHisto("LepPt3_CRttZ",  10, 0,  150.);
 
   makeHisto("JetPt1_CRttZ",  10, 0,  500.);
   makeHisto("JetPt2_CRttZ",  10, 0,  250.);
