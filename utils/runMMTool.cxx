@@ -265,7 +265,7 @@ StatusCode initializeMMTool(T &tool){
 
 bool passCuts(TString name, std::vector<double> lepPt, std::vector<double> lepCharge, double njet, double nbjet, bool isZ){
   bool pass(false);
-  const std::vector<double> lepPtCuts = {30., 20., 10.};
+  const std::vector<double> lepPtCuts = {30., 20., 15.};
 
   if(name == "SR1b_low")
     pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && njet<4 && nbjet==1 && !isZ;
