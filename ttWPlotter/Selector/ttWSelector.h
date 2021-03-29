@@ -37,7 +37,7 @@ class ttWSelector : public TSelector {
   TString GenName = "";
   TString MCcamp  = "";
 
-  const std::vector<float> lepPtCuts = {30., 20., 10.};
+  const std::vector<float> lepPtCuts = {30., 20., 15.};
 
   std::map<std::string, int> lepTypes = {{"Prompt",0}, {"ChMisID",0}, {"HF",0}, {"LF",0}, {"PhConv",0}, {"Tau",0},{"Unknown",0}};
 
