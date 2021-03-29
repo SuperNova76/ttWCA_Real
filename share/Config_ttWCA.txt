@@ -36,7 +36,7 @@ PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_3
 TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
 
 #setup of BTag CDI
-BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2020-03-11_v3.root
+#BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2020-03-11_v3.root
 
 ### Object container names
 ElectronCollectionName Electrons

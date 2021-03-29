@@ -12,7 +12,7 @@ def main():
     parser.add_argument("Samples",      help="List of input MC or data samples (.txt)")
     parser.add_argument("--User",       help="Name of user (CERN name)",                                 default="")
     parser.add_argument("--Config",     help="Name of top-config file (path is resovled automatically)", default="Config_ttWCA.txt")
-    parser.add_argument("--Version",    help="Version of the production",                                default="uctatlas_v3")
+    parser.add_argument("--Version",    help="Version of the production",                                default="uctatlas_v4")
     parser.add_argument("--FilesPerJob",type=int, help="Number of files per job (prun option)",          default=5)
     parser.add_argument("--Submit",     type=int, help="Submit jobs (or only print the prun-command)",   default=1)
     options = parser.parse_args()
