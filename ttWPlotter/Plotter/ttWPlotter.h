@@ -57,6 +57,7 @@ class ttWPlotter
     filesVar.clear();
     fnames.clear();
     fnamesVar.clear();
+    bkgList.clear();
     bkgTypes.clear();
     bkgTypesOriginal.clear();
     bkgErrNames.clear();
@@ -83,10 +84,12 @@ class ttWPlotter
   void setInPath(TString path);
   void setAtlasStylePath(TString path){AtlasStylePath = path;}
   void setOutPath(TString path);
+  void setBkgList(std::vector<TString> list);
   void setMCTypes(std::map<TString, TString> &m);
   bool getFileList(TString path, int type);
   void getFiles(int type);
   void getVariationFiles();
+  void sortByName(std::vector< TH1F* > &v, std::vector<TString> &n);
   void sortBySize(std::vector< TH1F* > &v, std::vector<TString> &n); 
   void sortBkg(std::vector<TFile*> Files, std::vector<TString> Types);
   void setLabel(TString l){PlotLabel = l;}
@@ -181,6 +184,7 @@ class ttWPlotter
   std::vector<TFile*> filesVar;
   std::vector<TString> fnames;
   std::vector<TString> fnamesVar;
+  std::vector<TString> bkgList;
   std::vector<TString> bkgTypes;
   std::vector<TString> bkgTypesOriginal;
   std::vector<TString> bkgErrNames;

@@ -34,6 +34,13 @@ void ttWPlotter::setStyle(bool setAtlas){
   return;
 }
 
+void ttWPlotter::setBkgList(std::vector<TString> list){
+  bkgList = list;
+  TString printList(""); for(auto l : list) printList = Form("%s \"%s\"",printList.Data(),l.Data());
+  std::cout << CNAME << "::setBkgList() \t{" << printList << " }" << std::endl;
+  return;
+}
+
 void ttWPlotter::setBkgNorm(TString name, float value){
   bkgNormNames.push_back(name);
   bkgNormValues.push_back(value);
@@ -415,6 +422,32 @@ TH1F* ttWPlotter::whiteCopy(TH1F* h){
   return hW;
 }
 
+void ttWPlotter::sortByName(std::vector< TH1F* > &v, std::vector<TString> &n){
+  std::vector<TH1F*> hOut; std::vector<TString> sOut;
+
+  std::vector<TString> bkg = bkgList; std::vector<int> index;
+  std::reverse(bkg.begin(),bkg.end());
+
+  for(unsigned int i(0); i<bkg.size(); i++){
+    for(unsigned int j(0); j<v.size(); j++){
+      TString histname = (v.at(j))->GetName();
+      if(histname.Contains("_"+bkg[i])) index.push_back(j);
+    }
+  }
+  for(unsigned int I(0); I<index.size(); I++){
+    hOut.push_back( v.at(index[I]) );
+    sOut.push_back( n.at(index[I]) );
+  }
+
+  if(Debug){for(unsigned int i (0); i<v.size(); i++) std::cout << CNAME <<"::sort()\t Unsorted: " << Form("%s,\t Integral = %.4f,\t BkgType = %s", (v.at(i))->GetName(), (v.at(i))->Integral(-1,(v.at(i))->GetNbinsX()+1), (n.at(i)).Data()) << std::endl; }
+  v.clear(); n.clear();
+  v = hOut;
+  n = sOut;
+
+  if(Debug){for(unsigned int i (0); i<v.size(); i++) std::cout << CNAME <<"::sort()\t Sorted:   " << Form("%s,\t Integral = %.4f,\t BkgType = %s", (v.at(i))->GetName(), (v.at(i))->Integral(-1,(v.at(i))->GetNbinsX()+1), (n.at(i)).Data()) << std::endl; }
+  return;
+}
+
 void ttWPlotter::sortBySize(std::vector< TH1F* > &v, std::vector<TString> &n){
   std::vector<TH1F*> hOut; std::vector<TString> sOut;
 
@@ -461,7 +494,11 @@ std::vector< TH1F* > ttWPlotter::getBkgHistos(TString name){
     
     hOut.push_back(H);
   }
-  this->sortBySize(hOut, bkgTypes);
+  if(bkgList.empty())
+    this->sortBySize(hOut, bkgTypes);
+  else
+    this->sortByName(hOut, bkgTypes);
+
   return hOut;
 }
 

@@ -5,7 +5,7 @@
   p.setAtlasStylePath("/lhome/ific/c/cardillo/Atlas/atlasrootstyle/AtlasStyle.C");
 
   TString path = "HISTOS";
-  TString OutPath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-10-03-21/DD/";
+  TString OutPath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-26-03-21/DD/";
   float lumi = 139.;
 
   p.useData(1);
@@ -19,7 +19,7 @@
   p.drawOverflow(1);
   p.drawAtlasLabel(1);
   p.drawLegNumbers(0);
-  //p.setRatioLine("ttW");
+  //  p.setRatioLine("Fakes");
   p.setYRangeRatio(0.2,1.8);
 
   //Signal process and norm
@@ -30,6 +30,7 @@
   p.setLabel("");
   p.setFigureFormat("eps");
 
+  p.setBkgList({"Fakes", "VV", "ttW", "ttZ", "ttH", "tZ", "Other"});
   p.setBkgNorm("Fakes", 1.00);
   bool setFlatErrors(false);
   if(setFlatErrors){
@@ -45,7 +46,7 @@
   bool fixedYRange(false);
   if(fixedYRange) p.setYRange(0.015,24);
 
-  bool SR1b_low(true), SR1b_high(false), SR2b_low(false), SR2b_high(false), CRttZ(false);
+  bool SR1b_low(true), SR1b_high(true), SR2b_low(true), SR2b_high(true), CRttZ(true);
 
   TString label_SR1b_low  = "SR: 3#it{l}, 1#it{b}, 2-3#it{j}";
   TString label_SR2b_low  = "SR: 3#it{l}, #geq2#it{b}, 2-3#it{j}";
@@ -74,6 +75,7 @@
 
     p.plot("Ht_SR1b_low",         1, 300, 1000, label_SR1b_low);
     p.plot("EtMiss_SR1b_low",     1,  0,   300, label_SR1b_low);
+
     p.plot("Deta_SR1b_low",       1, -2.5, 2.5, label_SR1b_low);
   }
 
@@ -98,6 +100,7 @@
 
     p.plot("Ht_SR1b_high",         1, 300, 1000, label_SR1b_high);
     p.plot("EtMiss_SR1b_high",     1,  0,   300, label_SR1b_high);
+
     p.plot("Deta_SR1b_high",       1, -2.5, 2.5, label_SR1b_high);
   }
 
@@ -122,6 +125,7 @@
 
     p.plot("Ht_SR2b_low",         1, 300, 1000, label_SR2b_low);
     p.plot("EtMiss_SR2b_low",     1,  0,   300, label_SR2b_low);
+
     p.plot("Deta_SR2b_low",       1, -2.5, 2.5, label_SR2b_low);
   }
 
@@ -146,6 +150,7 @@
 
     p.plot("Ht_SR2b_high",         1, 300, 1000, label_SR2b_high);
     p.plot("EtMiss_SR2b_high",     1,  0,   300, label_SR2b_high);
+
     p.plot("Deta_SR2b_high",       1, -2.5, 2.5, label_SR2b_high);
   }
 
@@ -170,6 +175,7 @@
     
     p.plot("Ht_CRttZ",         1, 300, 1000, label_CRttZ);
     p.plot("EtMiss_CRttZ",     1,   0,  300, label_CRttZ);
+
     p.plot("Deta_CRttZ",      1, -2.5, 2.5,  label_CRttZ);
   }
 }
