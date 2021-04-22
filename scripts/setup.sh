@@ -1,7 +1,5 @@
-export REL="21.2.162"
+export REL="21.2.168"
 export SOURCEDIR="uctanalysistop"
-
-export ALRB_acmVersion=previous
 
 if [ ! $ATLAS_LOCAL_ROOT ]; then
     echo "--> get voms-proxy"

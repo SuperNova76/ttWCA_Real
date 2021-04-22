@@ -11,11 +11,11 @@ variables:
   RUN_DIR: run
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
-  SAMPLE_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_TOPQ1.e6337_s3126_r10724_p4174/DAOD_TOPQ1.21644694._000800.pool.root.1
+  SAMPLE_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/mc16_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.deriv.DAOD_TOPQ1.e5070_s3126_r10724_p4346/DAOD_TOPQ1.23523673._000080.pool.root.1
   NTUP_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/Ntup_data/data.root
   
 .analysis_image: &image
-  image: atlas/analysisbase:21.2.162
+  image: atlas/analysisbase:21.2.168
   tags:
     - cvmfs
   before_script:
@@ -36,7 +36,7 @@ build:
     - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - lsetup cmake
-    - asetup "AnalysisBase,21.2.162,here"
+    - asetup "AnalysisBase,21.2.168,here"
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
     - cmake  ../

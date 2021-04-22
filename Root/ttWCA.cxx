@@ -105,7 +105,7 @@ namespace top{
   void ttWCA::printTrigger(const top::Event& event){
     for(auto selection : *m_config->allSelectionNames()){
       for(auto trigger : m_config->allTriggers_Tight(selection)){
-	MSG_DEBUG(Form("Selection %s \t pass trigger %s : %i", selection.c_str(), trigger.c_str(), (int)event.m_info->auxdataConst<char>("TRIGDEC_"+trigger)));
+	MSG_DEBUG(Form("Selection %s \t pass trigger %s : %i", selection.c_str(), trigger.first.c_str(), (int)event.m_info->auxdataConst<char>("TRIGDEC_"+trigger.first)));
       }
     }
   }
