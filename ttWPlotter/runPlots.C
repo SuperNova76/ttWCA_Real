@@ -5,7 +5,7 @@
   p.setAtlasStylePath("/lhome/ific/c/cardillo/Atlas/atlasrootstyle/AtlasStyle.C");
 
   TString path = "HISTOS";
-  TString OutPath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-26-03-21/DD/";
+  TString OutPath = "/lhome/ific/c/cardillo/ttW-CA/Plots/Plots-28-04-21/DD/";
   float lumi = 139.;
 
   p.useData(1);
@@ -31,7 +31,8 @@
   p.setFigureFormat("eps");
 
   p.setBkgList({"Fakes", "VV", "ttW", "ttZ", "ttH", "tZ", "Other"});
-  p.setBkgNorm("Fakes", 1.00);
+  //p.setBkgList({"Fakes_tt", "Fakes_Z", "VV", "ttW", "ttZ", "ttH", "tZ", "Other"});
+  //p.setBkgNorm("Fakes", 1.00);
   bool setFlatErrors(false);
   if(setFlatErrors){
     p.setBkgError("ttZ",   0.1);
@@ -55,7 +56,7 @@
   TString label_CRttZ     = "CR: #it{t#bar{t}Z}";
 
   if(SR1b_low){
-    p.plot("Njets_SR1b_low",      1,  2,  10,  label_SR1b_low);
+    p.plot("Njets_SR1b_low",      1,  2,   10,  label_SR1b_low);
 
     p.plot("LepPt1_SR1b_low",     1,  0,  500, label_SR1b_low);
     p.plot("LepPt2_SR1b_low",     1,  0,  250, label_SR1b_low);

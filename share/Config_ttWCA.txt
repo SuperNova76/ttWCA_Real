@@ -36,7 +36,7 @@ PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_3
 TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
 
 #setup of BTag CDI
-BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2021-04-16_v1.root
+#BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2021-04-16_v1.root
 
 ### Object container names
 ElectronCollectionName Electrons
@@ -88,7 +88,7 @@ LargeRJetUncertainties_NPModel CategoryReduction
 LargeRJESUncertaintyConfig Split23,Tau32WTA
 
 ### Electron configuration
-ElectronPt 10000
+ElectronPt 15000
 ElectronID TightLH
 ElectronIDLoose LooseAndBLayerLH
 ElectronIsolation PLVTight
@@ -105,7 +105,7 @@ UseElectronChargeIDSelection False
 #PhotonUseRadiativeZ False
 
 ### Muon configuration
-MuonPt 10000
+MuonPt 15000
 MuonQuality Medium
 MuonQualityLoose Medium
 MuonIsolation PLVTight
@@ -213,37 +213,37 @@ SUB EM_2015
 . BASIC
 . period_2015
 GTRIGDEC
-EL_N_OR_MU_N 10000 >= 1
+EL_N_OR_MU_N 15000 >= 1
 
 SUB EM_2016
 . BASIC
 . period_2016
 GTRIGDEC
-EL_N_OR_MU_N 10000 >= 1
+EL_N_OR_MU_N 15000 >= 1
 
 SUB EM_2017
 . BASIC
 . period_2017
 GTRIGDEC
-EL_N_OR_MU_N 10000 >= 1
+EL_N_OR_MU_N 15000 >= 1
 
 SUB EM_2018
 . BASIC
 . period_2018
 GTRIGDEC
-EL_N_OR_MU_N 10000 >= 1
+EL_N_OR_MU_N 15000 >= 1
 
 ########################
 ### eemu selections
 ########################
 
 SUB eemu_basic
-LEP_N 10000 >= 3
-EL_N 10000 >= 2
-MU_N 10000 >= 1
+LEP_N 15000 >= 3
+EL_N 15000 >= 2
+MU_N 15000 >= 1
 GTRIGMATCH
 JETCLEAN LooseBad
-JET_N 25000 >= 0
+JET_N 20000 >= 1
 JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
@@ -271,7 +271,7 @@ SAVE
 SELECTION eemu_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N_OR_MU_N 10000 >= 3
+EL_N_OR_MU_N 15000 >= 3
 . eemu_basic
 SAVE
 
@@ -279,12 +279,12 @@ SAVE
 ### mumue selections
 ########################
 SUB mumue_basic
-LEP_N 10000 >= 3
-EL_N 10000 >= 1
-MU_N 10000 >= 2
+LEP_N 15000 >= 3
+EL_N 15000 >= 1
+MU_N 15000 >= 2
 GTRIGMATCH
 JETCLEAN LooseBad
-JET_N 25000 >= 0
+JET_N 20000 >= 1
 JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
@@ -312,7 +312,7 @@ SAVE
 SELECTION mumue_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N_OR_MU_N 10000 >= 3
+EL_N_OR_MU_N 15000 >= 3
 . mumue_basic
 SAVE
 
@@ -321,11 +321,11 @@ SAVE
 ### eee selections
 ########################
 SUB eee_basic
-LEP_N 10000 >= 3
-EL_N 10000 >= 3
+LEP_N 15000 >= 3
+EL_N 15000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
-JET_N 25000 >= 0
+JET_N 20000 >= 1
 JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
@@ -353,7 +353,7 @@ SAVE
 SELECTION eee_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N 10000 >= 3
+EL_N 15000 >= 3
 . eee_basic
 SAVE
 
@@ -362,11 +362,11 @@ SAVE
 ########################
 
 SUB mumumu_basic
-LEP_N 10000 >= 3
-MU_N 10000 >= 3
+LEP_N 15000 >= 3
+MU_N 15000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
-JET_N 25000 >= 0
+JET_N 20000 >= 1
 JET_N_BTAG DL1r:FixedCutBEff_77 >= 0
 EXAMPLEPLOTS
 NOBADMUON
@@ -394,7 +394,7 @@ SAVE
 SELECTION mumumu_particle
 PRIVTX
 PARTICLE_LEVEL
-MU_N 10000 >= 3
+MU_N 15000 >= 3
 . mumumu_basic
 SAVE
 

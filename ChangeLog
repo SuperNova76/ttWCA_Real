@@ -1,3 +1,7 @@
+28-04-21 Fabio Cardillo <fabio.cardillo@cern.ch>
+	* Updated to AnalysisBase-21.2.169
+	* Set default lepton pt cut to 15 GeV
+
 21-04-21 Fabio Cardillo <fabio.cardillo@cern.ch>
 	* Updated to AnalysisBase-21.2.168
 	* New b-tag CDI file

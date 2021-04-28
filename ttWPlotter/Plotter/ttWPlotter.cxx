@@ -211,7 +211,7 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
   gPad->RedrawAxis();
   
   //Draw legend
-  TLegend *leg = new TLegend(legNo ? 0.45 : 0.53, 0.57, 0.93, 0.91);
+  TLegend *leg = new TLegend(legNo ? 0.42 : 0.50, 0.57, 0.93, 0.91);
   leg->SetNColumns(2);
   leg->SetBorderSize(0);
   leg->SetTextFont(42);
@@ -221,12 +221,10 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
   leg->SetLineColor(0);
   if(legNo){
     if(!DataList.empty()) leg->AddEntry(DataList[0], Form(" Data (%i)",(int)NData), "pe");
-    leg->AddEntry(Bkg_Err, Form(" SM total (%.1f)", hBkg_Tot->Integral(-1,hBkg_Tot->GetNbinsX()+1)), "f");
     for(unsigned int i(1); i<=hBkg.size(); i++){int b(hBkg.size()-i); leg->AddEntry(hBkg[b],Form(" %s (%.1f)",(this->getLegendEntry(hBkg[b])).Data(), bkgComp[b]),"f");}
   }
   else{
     if(!DataList.empty()) leg->AddEntry(DataList[0], " Data", "pe");
-    leg->AddEntry(Bkg_Err, " SM total", "f");
     for(unsigned int i(1); i<=hBkg.size(); i++){int b(hBkg.size()-i); leg->AddEntry(hBkg[b],Form(" %s",(this->getLegendEntry(hBkg[b])).Data()), "f");}
   }
   leg->Draw("SAME");
@@ -280,7 +278,7 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
 
   if(compRatio){
     pad1->cd();
-    TLegend *rLeg = new TLegend(0.53, 0.49, 0.78, 0.56);
+    TLegend *rLeg = new TLegend(0.50, 0.49, 0.75, 0.56);
     rLeg->SetBorderSize(0);
     rLeg->SetTextFont(42);
     rLeg->SetTextSize(0.055);
@@ -293,7 +291,7 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
 
   if(sigName.Length()){
     pad1->cd();
-    TLegend *sigLeg = new TLegend(0.53, 0.49, 0.78, 0.56);
+    TLegend *sigLeg = new TLegend(0.50, 0.49, 0.75, 0.56);
     sigLeg->SetBorderSize(0);
     sigLeg->SetTextFont(42);
     sigLeg->SetTextSize(0.055);
@@ -707,21 +705,24 @@ bool ttWPlotter::setColor(TH1F* h, TString name){
   if(name.Contains("_tZ")){  h->SetLineColor(kBlack);    h->SetFillColor(kGreen-4);   return true;}
   if(name.Contains("_Other")){  h->SetLineColor(kBlack); h->SetFillColor(kMagenta-7); return true;}
   if(name.Contains("_ttH")) {  h->SetLineColor(kBlack);  h->SetFillColor(kBlue);      return true;}
-  if(name.Contains("_Fakes")){  h->SetLineColor(kBlack); h->SetFillColor(kCyan-7);    return true;} 
+  if(name.Contains("_Fakes_MM")){  h->SetLineColor(kBlack); h->SetFillColor(kCyan-7); return true;}
+  if(name.Contains("_Fakes_tt")){  h->SetLineColor(kBlack); h->SetFillColor(kCyan-7); return true;}
+  if(name.Contains("_Fakes_Z")){   h->SetLineColor(kBlack); h->SetFillColor(kCyan+3); return true;}
   return true;
 }
 
 TString ttWPlotter::getLegendEntry(TH1F* h){
   if(!h) return "";
   TString hname = h->GetName();
-  if(hname.Contains("_VV"))    return "WZ/ZZ+jets";
-  if(hname.Contains("_ttZ"))   return "t#bar{t}Z";
-  if(hname.Contains("_ttW"))   return "t#bar{t}W"; 
-  if(hname.Contains("_ttH"))   return "t#bar{t}H";
-  if(hname.Contains("_tZ"))    return "tZq";
+  if(hname.Contains("_VV"))    return "#it{WZ/ZZ}+jets";
+  if(hname.Contains("_ttZ"))   return "#it{t#bar{t}Z}";
+  if(hname.Contains("_ttW"))   return "#it{t#bar{t}W}";
+  if(hname.Contains("_ttH"))   return "#it{t#bar{t}H}";
+  if(hname.Contains("_tZ"))    return "#it{tZq}";
   if(hname.Contains("_Other")) return "Other";
-  if(hname.Contains("_Fakes") &&  doMMFakes ) return "Fakes (MM)";
-  if(hname.Contains("_Fakes") && !doMMFakes ) return "Fakes (MC)";
+  if(hname.Contains("_Fakes_MM") &&  doMMFakes ) return "Fakes (MM)";
+  if(hname.Contains("_Fakes_tt") && !doMMFakes ) return "Fakes (#it{t#bar{t}})";
+  if(hname.Contains("_Fakes_Z") &&  !doMMFakes ) return "Fakes (#it{Z}+jets)";
   return "";
 }
 
@@ -878,8 +879,8 @@ TString ttWPlotter::xLabel(TString name){
   if(name.Contains("JetEta2")) return "#it{#eta}(jet_{2})";
   if(name.Contains("JetEta3")) return "#it{#eta}(jet_{3})";
   if(name.Contains("mT"))      return "#it{m}_{T}^{ #it{W}} [GeV]";
-  if(name.Contains("Njets"))   return "#it{N}_{jets} (#it{p}_{T} > 25 GeV)";
-  if(name.Contains("Nbjets"))  return "#it{N}_{#it{b}-jets} (#it{p}_{T} > 25 GeV)";
+  if(name.Contains("Njets"))   return "#it{N}_{jets}";
+  if(name.Contains("Nbjets"))  return "#it{N}_{#it{b}-jets}";
   if(name.Contains("Nlep"))    return "#it{N}_{lep} (#it{e/#mu})";
   if(name.Contains("ZPt"))     return "#it{p}_{T}^{ #it{Z}} [GeV]";
   if(name.Contains("Zm"))      return "#it{m}_{#it{ll}} [GeV]";
@@ -895,8 +896,13 @@ void ttWPlotter::setMCTypes(std::map<TString, TString> &m){
   m["tz"]    = "tZ";
   m["other"] = "Other";
 
-  if(doMMFakes) m["fakes"] = "Fakes";
-  else          m["tt"]    = "Fakes";
+  if(doMMFakes){
+    m["fakes"] = "Fakes_MM";
+  }
+  else{
+    m["tt"]    =  "Fakes_tt";
+    m["zjets"] =  "Fakes_Z";
+  }
 
   return;
 }
