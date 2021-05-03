@@ -22,10 +22,12 @@ for line in open(opt.DSIDs):
 
     cmd = "{0} | grep {1}".format(cmd, opt.RSE)
     if len( commands.getoutput(cmd) ): 
-        rule_id = commands.getoutput(cmd).split()[0]
-        delete  = "rucio delete-rule {0}".format(rule_id)
-        print(delete)
+        rule_out = commands.getoutput(cmd).split()
+        for rule_ID in rule_out:
+            if len(rule_ID) == 32:
+                delete  = "rucio delete-rule {0}".format(rule_ID)
+                print(delete)
+                if opt.Delete: os.system(delete)
         print
-        if opt.Delete: os.system(delete)
     
 print("...done")
