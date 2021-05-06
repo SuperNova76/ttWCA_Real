@@ -274,13 +274,13 @@ bool passCuts(TString name, std::vector<double> lepPt, std::vector<double> lepCh
     pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && njet<4 && nbjet>=2 && !isZ;
 
   if(name == "SR1b_high")
-    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=4 && njet<7 && nbjet==1 && !isZ;
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=4 && nbjet==1 && !isZ;
 
   if(name == "SR2b_high")
-    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=4 && njet<7 && nbjet>=2 && !isZ;
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=4 && nbjet>=2 && !isZ;
 
   if(name == "CRttZ")
-    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && njet<7 && nbjet>=2 && isZ;
+    pass = lepPt[0]>lepPtCuts[0] && lepPt[1]>lepPtCuts[1] && lepPt[2]>lepPtCuts[2] && absSum(lepCharge)==1 && njet>=2 && nbjet>=2 && isZ;
 
   return pass;
 }
