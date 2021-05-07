@@ -160,19 +160,14 @@ Bool_t ttWSelector::Process(Long64_t entry){
   float w(1.);
   if(isMC && doWeight){ 
     w *= normWeight;
-    w *= weight_leptonSF * weight_globalLeptonTriggerSF * weight_bTagSF_DL1r_77 * weight_pileup * weight_jvt;
+    w *= (weight_leptonSF * weight_globalLeptonTriggerSF * weight_bTagSF_DL1r_77 * weight_pileup * weight_jvt);
     DEBUG(APP_NAME, Form("NormWeight = %.6f, lepSF=%.3f, triggerSF=%.3f, bTagSF=%.3f, prwSF=%.3f, jvtSF=%.3f \t total=%.3f", w, weight_leptonSF, weight_globalLeptonTriggerSF, weight_bTagSF_DL1r_77, weight_pileup, weight_jvt, w));
   }
  
   bool is3L_LLL = pt_lep0_pt>0 && pt_lep1_pt>0 && pt_lep2_pt>0 ;
   bool is3L_TTT = is3L_LLL && ( TMath::Abs(pt_lep0_isTight)==1 && TMath::Abs(pt_lep1_isTight)==1 && TMath::Abs(pt_lep2_isTight)==1);
-
-  bool fakeLep1 = isMC && isFake(pt_lep0_type, pt_lep0_iff);
-  bool fakeLep2 = isMC && isFake(pt_lep1_type, pt_lep1_iff);
-  bool fakeLep3 = isMC && isFake(pt_lep2_type, pt_lep2_iff);
   countLepTypes(pt_lep0_iff, pt_lep1_iff, pt_lep2_iff);
 
-  //bool isMCFake = noMCFakes ? (fakeLep1 || fakeLep2 || fakeLep3) : false;
   bool isMCFake = noMCFakes ? (isMC && isFakeEvent(pt_lep0_iff, pt_lep1_iff, pt_lep2_iff)) : false;
   bool is3L_PPP = is3L_TTT && !isMCFake;
 
@@ -191,10 +186,10 @@ Bool_t ttWSelector::Process(Long64_t entry){
   
   bool pass_SR1b_low  = pass3L && nJets>=2 && nJets<4 && nBTags==1 && sumQ==1 && !isZ;
   bool pass_SR2b_low  = pass3L && nJets>=2 && nJets<4 && nBTags>=2 && sumQ==1 && !isZ;
-  bool pass_SR1b_high = pass3L && nJets>=4 && nJets<7 && nBTags==1 && sumQ==1 && !isZ;
-  bool pass_SR2b_high = pass3L && nJets>=4 && nJets<7 && nBTags>=2 && sumQ==1 && !isZ;
+  bool pass_SR1b_high = pass3L && nJets>=4 && nBTags==1 && sumQ==1 && !isZ;
+  bool pass_SR2b_high = pass3L && nJets>=4 && nBTags>=2 && sumQ==1 && !isZ;
 
-  bool pass_CRttZ  = pass3L && nJets>=2 && nJets<7 && nBTags>=2 && sumQ==1 && isZ;
+  bool pass_CRttZ  = pass3L && nJets>=2 && nBTags>=2 && sumQ==1 && isZ;
 
   addCutflow(w, pass_SR1b_low,  "SR1b_low");
   addCutflow(w, pass_SR2b_low,  "SR2b_low");
