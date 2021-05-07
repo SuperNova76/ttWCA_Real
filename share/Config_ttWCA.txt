@@ -1,10 +1,11 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
-DynamicKeys Debug,JetCharge,IFFClassification
+DynamicKeys Debug,JetCharge,IFFClassification,PLVIsolation
 
 Debug False
 JetCharge False
 IFFClassification True
+PLVIsolation True
 
 #NEvents 1000
 
@@ -83,12 +84,9 @@ PerfStats No
 ### Systematics configuration
 Systematics Nominal
 JetUncertainties_NPModel CategoryReduction
-JetUncertainties_BunchSpacing 25ns
-LargeRJetUncertainties_NPModel CategoryReduction
-LargeRJESUncertaintyConfig Split23,Tau32WTA
 
 ### Electron configuration
-ElectronPt 15000
+ElectronPt 10000
 ElectronID TightLH
 ElectronIDLoose LooseAndBLayerLH
 ElectronIsolation PLVTight
@@ -105,13 +103,13 @@ UseElectronChargeIDSelection False
 #PhotonUseRadiativeZ False
 
 ### Muon configuration
-MuonPt 15000
+MuonPt 10000
 MuonQuality Medium
 MuonQualityLoose Medium
 MuonIsolation PLVTight
 MuonIsolationLoose None
-doExtraSmearing False
-do2StationsHighPt False
+MuonUse2stationHighPt False
+MuonDoExtraSmearingHighPt False
 
 ### Jet configuration
 JetPt 20000
@@ -145,7 +143,7 @@ UseAodMetaData True
 
 # Turn on fakes MM weights
 FakesMMWeightsIFF True
-FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D_PLV_noConv.root:3T:>=1F[T]
+FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D_PLV_noConv_1b.root:3T:>=1F[T]
 
 ### Boosted jet taggers configuration
 #BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
@@ -213,34 +211,34 @@ SUB EM_2015
 . BASIC
 . period_2015
 GTRIGDEC
-EL_N_OR_MU_N 15000 >= 1
+EL_N_OR_MU_N 10000 >= 1
 
 SUB EM_2016
 . BASIC
 . period_2016
 GTRIGDEC
-EL_N_OR_MU_N 15000 >= 1
+EL_N_OR_MU_N 10000 >= 1
 
 SUB EM_2017
 . BASIC
 . period_2017
 GTRIGDEC
-EL_N_OR_MU_N 15000 >= 1
+EL_N_OR_MU_N 10000 >= 1
 
 SUB EM_2018
 . BASIC
 . period_2018
 GTRIGDEC
-EL_N_OR_MU_N 15000 >= 1
+EL_N_OR_MU_N 10000 >= 1
 
 ########################
 ### eemu selections
 ########################
 
 SUB eemu_basic
-LEP_N 15000 >= 3
-EL_N 15000 >= 2
-MU_N 15000 >= 1
+LEP_N 10000 >= 3
+EL_N 10000 >= 2
+MU_N 10000 >= 1
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 20000 >= 1
@@ -271,7 +269,7 @@ SAVE
 SELECTION eemu_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N_OR_MU_N 15000 >= 3
+EL_N_OR_MU_N 10000 >= 3
 . eemu_basic
 SAVE
 
@@ -279,9 +277,9 @@ SAVE
 ### mumue selections
 ########################
 SUB mumue_basic
-LEP_N 15000 >= 3
-EL_N 15000 >= 1
-MU_N 15000 >= 2
+LEP_N 10000 >= 3
+EL_N 10000 >= 1
+MU_N 10000 >= 2
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 20000 >= 1
@@ -312,7 +310,7 @@ SAVE
 SELECTION mumue_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N_OR_MU_N 15000 >= 3
+EL_N_OR_MU_N 10000 >= 3
 . mumue_basic
 SAVE
 
@@ -321,8 +319,8 @@ SAVE
 ### eee selections
 ########################
 SUB eee_basic
-LEP_N 15000 >= 3
-EL_N 15000 >= 3
+LEP_N 10000 >= 3
+EL_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 20000 >= 1
@@ -353,7 +351,7 @@ SAVE
 SELECTION eee_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N 15000 >= 3
+EL_N 10000 >= 3
 . eee_basic
 SAVE
 
@@ -362,8 +360,8 @@ SAVE
 ########################
 
 SUB mumumu_basic
-LEP_N 15000 >= 3
-MU_N 15000 >= 3
+LEP_N 10000 >= 3
+MU_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 20000 >= 1
@@ -394,7 +392,6 @@ SAVE
 SELECTION mumumu_particle
 PRIVTX
 PARTICLE_LEVEL
-MU_N 15000 >= 3
+MU_N 10000 >= 3
 . mumumu_basic
 SAVE
-

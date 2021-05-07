@@ -39,6 +39,7 @@ namespace top{
       bool m_debug;
       bool m_jetCharge;
       bool m_IFFClass;
+      bool m_PLViso;
 
       std::shared_ptr<top::TopConfig> m_config;
 
@@ -55,8 +56,18 @@ namespace top{
       void clearOutputVars();
 
       std::vector<float> m_jetcharge;
+
       std::vector<float> m_mu_IFFtype;
       std::vector<float> m_el_IFFtype;
+
+      std::vector<int> m_mu_PLVLoose;
+      std::vector<int> m_el_PLVLoose;
+      std::vector<int> m_mu_PLVTight;
+      std::vector<int> m_el_PLVTight;
+      std::vector<int> m_mu_PLImprovedTight;
+      std::vector<int> m_el_PLImprovedTight;
+      std::vector<int> m_mu_PLImprovedVeryTight;
+      std::vector<int> m_el_PLImprovedVeryTight;
 
       asg::AnaToolHandle<CP::IClassificationTool> m_IFFTool;
       

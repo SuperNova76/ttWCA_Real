@@ -8,9 +8,10 @@ namespace top{
   ttWCA::ttWCA() : 
     m_debug(0),
     m_jetCharge(0),
-    m_IFFClass(0)
+    m_IFFClass(0),
+    m_PLViso(0)
   {}
-  
+
   void ttWCA::initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches){
     top::EventSaverFlatNtuple::initialize(config, file, extraBranches);
 
@@ -24,11 +25,25 @@ namespace top{
     m_jetCharge = (key=="True");
     key = configSettings->value("IFFClassification");
     m_IFFClass = (key=="True");
+    key = configSettings->value("PLVIsolation");
+    m_PLViso = (key=="True");
 
     for(auto sysTree : treeManagers()) {
       if(m_jetCharge) sysTree->makeOutputVariable(m_jetcharge,  "JetCharge");   
-      if(m_IFFClass)  sysTree->makeOutputVariable(m_mu_IFFtype, "mu_IFFclass");
-      if(m_IFFClass)  sysTree->makeOutputVariable(m_el_IFFtype, "el_IFFclass");
+      if(m_IFFClass){
+	sysTree->makeOutputVariable(m_mu_IFFtype, "mu_IFFclass");
+	sysTree->makeOutputVariable(m_el_IFFtype, "el_IFFclass");
+      }
+      if(m_PLViso){
+	sysTree->makeOutputVariable(m_mu_PLVLoose, "mu_PLVLoose");
+	sysTree->makeOutputVariable(m_el_PLVLoose, "el_PLVLoose");
+	sysTree->makeOutputVariable(m_mu_PLVTight, "mu_PLVTight");
+	sysTree->makeOutputVariable(m_el_PLVTight, "el_PLVTight");
+	sysTree->makeOutputVariable(m_mu_PLImprovedTight, "mu_PLImprovedTight");
+	sysTree->makeOutputVariable(m_el_PLImprovedTight, "el_PLImprovedTight");
+	sysTree->makeOutputVariable(m_mu_PLImprovedVeryTight, "mu_PLImprovedVeryTight");
+	sysTree->makeOutputVariable(m_el_PLImprovedVeryTight, "el_PLImprovedVeryTight");
+      }
     }
     if(m_IFFClass) initializeIFFTool("TruthClassificationTool");
 
@@ -76,6 +91,7 @@ namespace top{
       double jet_ch = (m_jetCharge && jet->btagging()->isAvailable<double>("JetVertexCharge_discriminant")) ? jet->btagging()->auxdataConst<double>("JetVertexCharge_discriminant") : -99;
 
       MSG_DEBUG(Form("  Jet: [pt=%.1f | eta=%.3f | phi=%.3f] \t isB(%s)=%i, JC=%.3f", jet->pt(), jet->eta(), jet->phi(), btagWP.c_str(), (int)jet->auxdataConst<char>(btagWP)==1, (float)jet_ch));
+
       m_jetcharge.push_back(jet_ch);
     }
   }
@@ -83,22 +99,42 @@ namespace top{
   void ttWCA::processMuons(const top::Event& event){
     for(const auto mu : event.m_muons){
 
+      int passPLVLoose  = (m_PLViso && mu->isAvailable<char>("AnalysisTop_Isol_PLVLoose")) ? mu->auxdataConst<char>("AnalysisTop_Isol_PLVLoose")==1 : -99;
+      int passPLVTight  = (m_PLViso && mu->isAvailable<char>("AnalysisTop_Isol_PLVTight")) ? mu->auxdataConst<char>("AnalysisTop_Isol_PLVTight")==1 : -99;
+      int passPLIVTight     = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedTight")==1 : -99;
+      int passPLIVVeryTight = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedVeryTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedVeryTight")==1 : -99;
+
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*mu, IFFType), "Unable the classifiy muon");
 
       MSG_DEBUG(Form("  Mu: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, IFFType=%i", mu->pt(), mu->eta(), mu->phi(), (int)mu->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? mu->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? mu->auxdataConst<int>("truthOrigin") : 0), (int)IFFType));
+
       m_mu_IFFtype.push_back(IFFType);
+      m_mu_PLVLoose.push_back(passPLVLoose);
+      m_mu_PLVTight.push_back(passPLVTight);
+      m_mu_PLImprovedTight.push_back(passPLIVTight);
+      m_mu_PLImprovedVeryTight.push_back(passPLIVVeryTight);
     }
   }
 
   void ttWCA::processElectrons(const top::Event& event){
     for(const auto el : event.m_electrons){
 
+      int passPLVLoose  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVLoose")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVLoose")==1 : -99;
+      int passPLVTight  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVTight")==1 : -99;
+      int passPLIVTight     = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedTight")==1 : -99;
+      int passPLIVVeryTight = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedVeryTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedVeryTight")==1 : -99;
+
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
 
       MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, IFFType=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), (int)IFFType));
+
       m_el_IFFtype.push_back(IFFType);
+      m_el_PLVLoose.push_back(passPLVLoose);
+      m_el_PLVTight.push_back(passPLVTight);
+      m_el_PLImprovedTight.push_back(passPLIVTight);
+      m_el_PLImprovedVeryTight.push_back(passPLIVVeryTight);
     }
   }
 
@@ -112,8 +148,13 @@ namespace top{
   
   void ttWCA::clearOutputVars(){
     m_jetcharge.clear();
-    m_mu_IFFtype.clear();
-    m_el_IFFtype.clear();
+    m_mu_IFFtype.clear(); m_el_IFFtype.clear();
+
+    m_mu_PLVLoose.clear(); m_el_PLVLoose.clear();
+    m_mu_PLVTight.clear(); m_el_PLVTight.clear();
+    m_mu_PLImprovedTight.clear();     m_el_PLImprovedTight.clear();
+    m_mu_PLImprovedVeryTight.clear(); m_el_PLImprovedVeryTight.clear();
+
     return;
   }
 }
