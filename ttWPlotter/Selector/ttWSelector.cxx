@@ -164,7 +164,13 @@ Bool_t ttWSelector::Process(Long64_t entry){
     DEBUG(APP_NAME, Form("NormWeight = %.6f, lepSF=%.3f, triggerSF=%.3f, bTagSF=%.3f, prwSF=%.3f, jvtSF=%.3f \t total=%.3f", w, weight_leptonSF, weight_globalLeptonTriggerSF, weight_bTagSF_DL1r_77, weight_pileup, weight_jvt, w));
   }
  
-  bool is3L_LLL = pt_lep0_pt>0 && pt_lep1_pt>0 && pt_lep2_pt>0 ;
+  //Only needed if custom isolation-selection is applied
+  bool pass_PLVLoose = pt_lep0_PLVLoose>0 && pt_lep1_PLVLoose>0 && pt_lep2_PLVLoose>0;
+  bool pass_PLVTight = pt_lep0_PLVTight>0 && pt_lep1_PLVTight>0 && pt_lep2_PLVTight>0;
+  bool pass_PLImprovedTight     = pt_lep0_PLImprovedTight>0 && pt_lep1_PLImprovedTight>0 && pt_lep2_PLImprovedTight>0;
+  bool pass_PLImprovedVeryTight = pt_lep0_PLImprovedVeryTight>0 && pt_lep1_PLImprovedVeryTight>0 && pt_lep2_PLImprovedVeryTight>0;
+
+  bool is3L_LLL = pt_lep0_pt>0 && pt_lep1_pt>0 && pt_lep2_pt>0;
   bool is3L_TTT = is3L_LLL && ( TMath::Abs(pt_lep0_isTight)==1 && TMath::Abs(pt_lep1_isTight)==1 && TMath::Abs(pt_lep2_isTight)==1);
   countLepTypes(pt_lep0_iff, pt_lep1_iff, pt_lep2_iff);
 

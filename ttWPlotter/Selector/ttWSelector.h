@@ -316,6 +316,18 @@ class ttWSelector : public TSelector {
   Double_t        weight_globalLeptonTriggerSF_MU_Trigger_SYST_UP;
   Double_t        tag_jet5_pt;
   Double_t        weight_leptonSF_MU_SF_Isol_STAT_DOWN;
+  Double_t        pt_lep0_PLVLoose;
+  Double_t        pt_lep1_PLVLoose;
+  Double_t        pt_lep2_PLVLoose;
+  Double_t        pt_lep0_PLVTight;
+  Double_t        pt_lep1_PLVTight;
+  Double_t        pt_lep2_PLVTight;
+  Double_t        pt_lep0_PLImprovedTight;
+  Double_t        pt_lep1_PLImprovedTight;
+  Double_t        pt_lep2_PLImprovedTight;
+  Double_t        pt_lep0_PLImprovedVeryTight;
+  Double_t        pt_lep1_PLImprovedVeryTight;
+  Double_t        pt_lep2_PLImprovedVeryTight;
 
   // List of branches
   TBranch        *b_pt_lep1_pt;   //!
@@ -571,7 +583,18 @@ class ttWSelector : public TSelector {
   TBranch        *b_weight_globalLeptonTriggerSF_MU_Trigger_SYST_UP;   //!
   TBranch        *b_tag_jet5_pt;   //!
   TBranch        *b_weight_leptonSF_MU_SF_Isol_STAT_DOWN;   //!
-
+  TBranch        *b_pt_lep0_PLVLoose; //!
+  TBranch        *b_pt_lep1_PLVLoose; //!
+  TBranch        *b_pt_lep2_PLVLoose; //!
+  TBranch        *b_pt_lep0_PLVTight; //!
+  TBranch        *b_pt_lep1_PLVTight; //!
+  TBranch        *b_pt_lep2_PLVTight; //!
+  TBranch        *b_pt_lep0_PLImprovedTight; //!
+  TBranch        *b_pt_lep1_PLImprovedTight; //!
+  TBranch        *b_pt_lep2_PLImprovedTight; //!
+  TBranch        *b_pt_lep0_PLImprovedVeryTight; //!
+  TBranch        *b_pt_lep1_PLImprovedVeryTight; //!
+  TBranch        *b_pt_lep2_PLImprovedVeryTight; //!
 
  ttWSelector(std::string name, TTree * /*tree*/ =0) : fChain(0) {
     std::cout << "Initialize selector " << name << std::endl;
@@ -887,6 +910,18 @@ void ttWSelector::Init(TTree *tree){
   fChain->SetBranchAddress("weight_globalLeptonTriggerSF_MU_Trigger_SYST_UP", &weight_globalLeptonTriggerSF_MU_Trigger_SYST_UP, &b_weight_globalLeptonTriggerSF_MU_Trigger_SYST_UP);
   fChain->SetBranchAddress("tag_jet5_pt", &tag_jet5_pt, &b_tag_jet5_pt);
   fChain->SetBranchAddress("weight_leptonSF_MU_SF_Isol_STAT_DOWN", &weight_leptonSF_MU_SF_Isol_STAT_DOWN, &b_weight_leptonSF_MU_SF_Isol_STAT_DOWN);
+  fChain->SetBranchAddress("pt_lep0_PLVLoose", &pt_lep0_PLVLoose, &b_pt_lep0_PLVLoose);
+  fChain->SetBranchAddress("pt_lep1_PLVLoose", &pt_lep1_PLVLoose, &b_pt_lep1_PLVLoose);
+  fChain->SetBranchAddress("pt_lep2_PLVLoose", &pt_lep2_PLVLoose, &b_pt_lep2_PLVLoose);
+  fChain->SetBranchAddress("pt_lep0_PLVTight", &pt_lep0_PLVTight, &b_pt_lep0_PLVTight);
+  fChain->SetBranchAddress("pt_lep1_PLVTight", &pt_lep1_PLVTight, &b_pt_lep1_PLVTight);
+  fChain->SetBranchAddress("pt_lep2_PLVTight", &pt_lep2_PLVTight, &b_pt_lep2_PLVTight);
+  fChain->SetBranchAddress("pt_lep0_PLImprovedTight", &pt_lep0_PLImprovedTight, &b_pt_lep0_PLImprovedTight);
+  fChain->SetBranchAddress("pt_lep1_PLImprovedTight", &pt_lep1_PLImprovedTight, &b_pt_lep1_PLImprovedTight);
+  fChain->SetBranchAddress("pt_lep2_PLImprovedTight", &pt_lep2_PLImprovedTight, &b_pt_lep2_PLImprovedTight);
+  fChain->SetBranchAddress("pt_lep0_PLImprovedVeryTight", &pt_lep0_PLImprovedVeryTight, &b_pt_lep0_PLImprovedVeryTight);
+  fChain->SetBranchAddress("pt_lep1_PLImprovedVeryTight", &pt_lep1_PLImprovedVeryTight, &b_pt_lep1_PLImprovedVeryTight);
+  fChain->SetBranchAddress("pt_lep2_PLImprovedVeryTight", &pt_lep2_PLImprovedVeryTight, &b_pt_lep2_PLImprovedVeryTight);
 }
 
 Bool_t ttWSelector::Notify(){
