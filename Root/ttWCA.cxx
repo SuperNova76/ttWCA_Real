@@ -9,6 +9,7 @@ namespace top{
     m_debug(0),
     m_jetCharge(0),
     m_IFFClass(0),
+    m_elID(0),
     m_PLViso(0)
   {}
 
@@ -25,6 +26,8 @@ namespace top{
     m_jetCharge = (key=="True");
     key = configSettings->value("IFFClassification");
     m_IFFClass = (key=="True");
+    key = configSettings->value("ElectronPassID");
+    m_elID = (key=="True");
     key = configSettings->value("PLVIsolation");
     m_PLViso = (key=="True");
 
@@ -33,6 +36,11 @@ namespace top{
       if(m_IFFClass){
 	sysTree->makeOutputVariable(m_mu_IFFtype, "mu_IFFclass");
 	sysTree->makeOutputVariable(m_el_IFFtype, "el_IFFclass");
+      }
+      if(m_elID){
+	sysTree->makeOutputVariable(m_el_ID_LooseAndBLayerLH, "el_ID_LooseAndBLayerLH");
+	sysTree->makeOutputVariable(m_el_ID_MediumLH,         "el_ID_MediumLH");
+	sysTree->makeOutputVariable(m_el_ID_TightLH,          "el_ID_TightLH");
       }
       if(m_PLViso){
 	sysTree->makeOutputVariable(m_mu_PLVLoose, "mu_PLVLoose");
@@ -110,6 +118,7 @@ namespace top{
       MSG_DEBUG(Form("  Mu: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, IFFType=%i", mu->pt(), mu->eta(), mu->phi(), (int)mu->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? mu->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? mu->auxdataConst<int>("truthOrigin") : 0), (int)IFFType));
 
       m_mu_IFFtype.push_back(IFFType);
+
       m_mu_PLVLoose.push_back(passPLVLoose);
       m_mu_PLVTight.push_back(passPLVTight);
       m_mu_PLImprovedTight.push_back(passPLIVTight);
@@ -119,6 +128,10 @@ namespace top{
 
   void ttWCA::processElectrons(const top::Event& event){
     for(const auto el : event.m_electrons){
+
+      int passLoose =  (m_elID && el->isAvailable<char>("DFCommonElectronsLHLooseBL")) ? el->auxdataConst<char>("DFCommonElectronsLHLooseBL")==1 : -99;
+      int passMedium = (m_elID && el->isAvailable<char>("DFCommonElectronsLHMedium"))  ? el->auxdataConst<char>("DFCommonElectronsLHMedium")==1 : -99;
+      int passTight =  (m_elID && el->isAvailable<char>("DFCommonElectronsLHTight"))   ? el->auxdataConst<char>("DFCommonElectronsLHTight")==1 : -99;
 
       int passPLVLoose  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVLoose")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVLoose")==1 : -99;
       int passPLVTight  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVTight")==1 : -99;
@@ -131,6 +144,11 @@ namespace top{
       MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, IFFType=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), (int)IFFType));
 
       m_el_IFFtype.push_back(IFFType);
+
+      m_el_ID_LooseAndBLayerLH.push_back(passLoose);
+      m_el_ID_MediumLH.push_back(passMedium);
+      m_el_ID_TightLH.push_back(passTight);
+
       m_el_PLVLoose.push_back(passPLVLoose);
       m_el_PLVTight.push_back(passPLVTight);
       m_el_PLImprovedTight.push_back(passPLIVTight);
@@ -149,6 +167,10 @@ namespace top{
   void ttWCA::clearOutputVars(){
     m_jetcharge.clear();
     m_mu_IFFtype.clear(); m_el_IFFtype.clear();
+
+    m_el_ID_LooseAndBLayerLH.clear();
+    m_el_ID_MediumLH.clear();
+    m_el_ID_TightLH.clear();
 
     m_mu_PLVLoose.clear(); m_el_PLVLoose.clear();
     m_mu_PLVTight.clear(); m_el_PLVTight.clear();

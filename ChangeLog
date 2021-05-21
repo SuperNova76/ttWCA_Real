@@ -1,3 +1,7 @@
+21-05-21 Fabio Cardillo <fabio.cardillo@cern.ch>
+	* Updated to AnalysisBase-21.2.172
+	* Added electron ID branches
+
 07-05-21 Fabio Cardillo <fabio.cardillo@cern.ch>
 	* Updated to AnalysisBase-21.2.171
 	* Added PLV and PLIV branches

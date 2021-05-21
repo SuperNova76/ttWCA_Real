@@ -1,10 +1,11 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
-DynamicKeys Debug,JetCharge,IFFClassification,PLVIsolation
+DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,PLVIsolation
 
 Debug False
 JetCharge False
 IFFClassification True
+ElectronPassID True
 PLVIsolation True
 
 #NEvents 1000

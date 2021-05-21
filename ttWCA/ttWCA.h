@@ -39,6 +39,7 @@ namespace top{
       bool m_debug;
       bool m_jetCharge;
       bool m_IFFClass;
+      bool m_elID;
       bool m_PLViso;
 
       std::shared_ptr<top::TopConfig> m_config;
@@ -60,6 +61,12 @@ namespace top{
       std::vector<float> m_mu_IFFtype;
       std::vector<float> m_el_IFFtype;
 
+      //Electron ID WP
+      std::vector<int> m_el_ID_LooseAndBLayerLH;
+      std::vector<int> m_el_ID_MediumLH;
+      std::vector<int> m_el_ID_TightLH;
+
+      //PLV iso WP
       std::vector<int> m_mu_PLVLoose;
       std::vector<int> m_el_PLVLoose;
       std::vector<int> m_mu_PLVTight;
