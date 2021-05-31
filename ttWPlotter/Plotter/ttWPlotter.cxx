@@ -222,10 +222,12 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
   if(legNo){
     if(!DataList.empty()) leg->AddEntry(DataList[0], Form(" Data (%i)",(int)NData), "pe");
     for(unsigned int i(1); i<=hBkg.size(); i++){int b(hBkg.size()-i); leg->AddEntry(hBkg[b],Form(" %s (%.1f)",(this->getLegendEntry(hBkg[b])).Data(), bkgComp[b]),"f");}
+    leg->AddEntry(Bkg_Err, " Uncertainty", "f");
   }
   else{
     if(!DataList.empty()) leg->AddEntry(DataList[0], " Data", "pe");
     for(unsigned int i(1); i<=hBkg.size(); i++){int b(hBkg.size()-i); leg->AddEntry(hBkg[b],Form(" %s",(this->getLegendEntry(hBkg[b])).Data()), "f");}
+    leg->AddEntry(Bkg_Err, " Uncertainty", "f");
   }
   leg->Draw("SAME");
 
@@ -721,8 +723,8 @@ TString ttWPlotter::getLegendEntry(TH1F* h){
   if(hname.Contains("_tZ"))    return "#it{tZq}";
   if(hname.Contains("_Other")) return "Other";
   if(hname.Contains("_Fakes_MM") &&  doMMFakes ) return "Fakes (MM)";
-  if(hname.Contains("_Fakes_tt") && !doMMFakes ) return "Fakes (#it{t#bar{t}})";
-  if(hname.Contains("_Fakes_Z") &&  !doMMFakes ) return "Fakes (#it{Z}+jets)";
+  if(hname.Contains("_Fakes_tt") && !doMMFakes ) return "#it{t#bar{t}}";
+  if(hname.Contains("_Fakes_Z") &&  !doMMFakes ) return "#it{Z}+jets";
   return "";
 }
 
