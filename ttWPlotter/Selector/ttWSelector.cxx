@@ -160,8 +160,8 @@ Bool_t ttWSelector::Process(Long64_t entry){
   float w(1.);
   if(isMC && doWeight){ 
     w *= normWeight;
-    w *= (weight_leptonSF * weight_globalLeptonTriggerSF * weight_bTagSF_DL1r_77 * weight_pileup * weight_jvt);
-    DEBUG(APP_NAME, Form("NormWeight = %.6f, lepSF=%.3f, triggerSF=%.3f, bTagSF=%.3f, prwSF=%.3f, jvtSF=%.3f \t total=%.3f", w, weight_leptonSF, weight_globalLeptonTriggerSF, weight_bTagSF_DL1r_77, weight_pileup, weight_jvt, w));
+    w *= (weight_leptonSF * weight_bTagSF_DL1r_77 * weight_pileup * weight_jvt);
+    DEBUG(APP_NAME, Form("NormWeight = %.6f, lepSF=%.3f, bTagSF=%.3f, prwSF=%.3f, jvtSF=%.3f \t total=%.3f", w, weight_leptonSF, weight_bTagSF_DL1r_77, weight_pileup, weight_jvt, w));
   }
  
   //Only needed if custom isolation-selection is applied
