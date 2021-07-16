@@ -144,7 +144,7 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
   if(LogY)pad1->SetLogy();
   pad1->Draw();
   
-  float yMin(0.01), yMax(hBkg_Tot->GetMaximum()*2.5);
+  float yMin(0.01), yMax(hBkg_Tot->GetMaximum()*2.3);
   if(LogY){ yMin=0.2; yMax=yMax*4000; }
   yMin = (YMin>=0) ? YMin : yMin;
   yMax = (YMax>=0) ? YMax : yMax;

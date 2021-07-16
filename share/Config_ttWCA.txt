@@ -1,11 +1,12 @@
 LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
-DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,PLVIsolation
+DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,ElectronConvVars,PLVIsolation
 
 Debug False
 JetCharge False
 IFFClassification True
 ElectronPassID True
+ElectronConvVars True
 PLVIsolation True
 
 #NEvents 1000
@@ -114,9 +115,9 @@ MuonDoExtraSmearingHighPt False
 
 ### Jet configuration
 JetPt 20000
-JetEta 4.5
+JetEta 2.5
 JVTWP Medium
-ForwardJVTWP Medium
+ForwardJVTWP None
 
 ### Tau configuration
 #TauPt 25000
