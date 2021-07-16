@@ -115,9 +115,9 @@ MuonDoExtraSmearingHighPt False
 
 ### Jet configuration
 JetPt 20000
-JetEta 2.5
+JetEta 4.5
 JVTWP Medium
-ForwardJVTWP None
+ForwardJVTWP Medium
 
 ### Tau configuration
 #TauPt 25000
