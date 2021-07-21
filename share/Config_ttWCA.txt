@@ -141,8 +141,9 @@ ApplyTightSFsInLooseTree True
 UseAodMetaData True
 #IsAFII False
 
-#Needed for tWZ DR1/2
-#NominalWeightNames " dyn=   0 muR=0.10000E+01 muF=0.10000E+01 "
+# MC generator weights
+MCGeneratorWeights False
+NominalWeightNames " nominal ","nominal","Default","Weight","1001"," muR=0.10000E+01 muF=0.10000E+01 ",""," "," dyn=   3 muR=0.10000E+01 muF=0.10000E+01 "," mur=1 muf=1 "," dyn=   0 muR=0.10000E+01 muF=0.10000E+01 "
 
 # Turn on fakes MM weights
 FakesMMWeightsIFF True
