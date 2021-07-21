@@ -11,6 +11,7 @@
 #include "xAODMissingET/MissingETContainer.h"
 #include "xAODBTagging/BTagging.h"
 #include "TruthClassification/TruthClassificationTool.h"
+#include "GammaORTools/VGammaORTool.h"
 
 #include "TFile.h"
 #include "TH1D.h"
@@ -40,7 +41,9 @@ namespace top{
       bool m_jetCharge;
       bool m_IFFClass;
       bool m_elID;
+      bool m_elConv;
       bool m_PLViso;
+      bool m_gammaJetOR;
 
       std::shared_ptr<top::TopConfig> m_config;
 
@@ -54,8 +57,11 @@ namespace top{
       void printTrigger(const top::Event& event);
 
       void initializeIFFTool(const std::string& toolName);
+      void initializeVGammaORTool(const std::string& toolName);
+
       void clearOutputVars();
 
+      //Variables for extra branches
       std::vector<float> m_jetcharge;
 
       std::vector<float> m_mu_IFFtype;
@@ -65,6 +71,10 @@ namespace top{
       std::vector<int> m_el_ID_LooseAndBLayerLH;
       std::vector<int> m_el_ID_MediumLH;
       std::vector<int> m_el_ID_TightLH;
+
+      //Electron converion-vars
+      std::vector<int>   m_el_addAmbiguity;
+      std::vector<int>   m_el_ambiguityType;
 
       //PLV iso WP
       std::vector<int> m_mu_PLVLoose;
@@ -76,7 +86,12 @@ namespace top{
       std::vector<int> m_mu_PLImprovedVeryTight;
       std::vector<int> m_el_PLImprovedVeryTight;
 
+      //GammaJets Overlap
+      bool m_isGammaJet;
+
+      //Tools
       asg::AnaToolHandle<CP::IClassificationTool> m_IFFTool;
+      asg::AnaToolHandle<IVGammaORTool> m_VGammaORTool;
       
       ClassDefOverride(top::ttWCA, 0);
   };

@@ -1,4 +1,4 @@
-export REL="21.2.172"
+export REL="21.2.178"
 export SOURCEDIR="uctanalysistop"
 
 if [ ! $ATLAS_LOCAL_ROOT ]; then

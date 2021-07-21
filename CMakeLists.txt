@@ -10,7 +10,8 @@ atlas_depends_on_subdirs( PUBLIC
                           TopAnalysis
                           JetAnalysisInterfaces
                           AsgTools
-			  TruthClassification )
+			  TruthClassification 
+                          GammaORTools )
 
 # This package uses ROOT:
 find_package( ROOT REQUIRED COMPONENTS Core Gpad Tree Hist RIO MathCore Graf )
@@ -32,6 +33,7 @@ atlas_add_library( ttWCA
                                   JetAnalysisInterfacesLib
                                   AsgTools
 				  TruthClassificationLib
+                                  GammaORToolsLib
                                   ${ROOT_LIBRARIES}
                    INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} )
 

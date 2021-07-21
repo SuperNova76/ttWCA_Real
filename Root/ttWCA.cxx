@@ -10,7 +10,9 @@ namespace top{
     m_jetCharge(0),
     m_IFFClass(0),
     m_elID(0),
-    m_PLViso(0)
+    m_elConv(0),
+    m_PLViso(0),
+    m_gammaJetOR(0)
   {}
 
   void ttWCA::initialize(std::shared_ptr<top::TopConfig> config, TFile* file, const std::vector<std::string>& extraBranches){
@@ -28,8 +30,12 @@ namespace top{
     m_IFFClass = (key=="True");
     key = configSettings->value("ElectronPassID");
     m_elID = (key=="True");
+    key = configSettings->value("ElectronConvVars");
+    m_elConv = (key=="True");
     key = configSettings->value("PLVIsolation");
     m_PLViso = (key=="True");
+    key = configSettings->value("GammaJetOR");
+    m_gammaJetOR = (key=="True");
 
     for(auto sysTree : treeManagers()) {
       if(m_jetCharge) sysTree->makeOutputVariable(m_jetcharge,  "JetCharge");   
@@ -42,6 +48,10 @@ namespace top{
 	sysTree->makeOutputVariable(m_el_ID_MediumLH,         "el_ID_MediumLH");
 	sysTree->makeOutputVariable(m_el_ID_TightLH,          "el_ID_TightLH");
       }
+      if(m_elConv){
+	sysTree->makeOutputVariable(m_el_addAmbiguity,  "el_addAmbiguity");
+	sysTree->makeOutputVariable(m_el_ambiguityType, "el_ambiguityType");
+     }
       if(m_PLViso){
 	sysTree->makeOutputVariable(m_mu_PLVLoose, "mu_PLVLoose");
 	sysTree->makeOutputVariable(m_el_PLVLoose, "el_PLVLoose");
@@ -52,8 +62,11 @@ namespace top{
 	sysTree->makeOutputVariable(m_mu_PLImprovedVeryTight, "mu_PLImprovedVeryTight");
 	sysTree->makeOutputVariable(m_el_PLImprovedVeryTight, "el_PLImprovedVeryTight");
       }
+      if(m_gammaJetOR) sysTree->makeOutputVariable(m_isGammaJet, "isGammaJetOverlap");
     }
-    if(m_IFFClass) initializeIFFTool("TruthClassificationTool");
+
+    if(m_IFFClass)   initializeIFFTool("TruthClassificationTool");
+    if(m_gammaJetOR) initializeVGammaORTool("VGammaORTool");
 
     MSG_INFO("Initialized");
     return;
@@ -63,8 +76,10 @@ namespace top{
     clearOutputVars();
     if(!event.m_saveEvent) return;
 
-    MSG_DEBUG(Form("EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f", 
-		   (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met()));
+    if(m_gammaJetOR && top::isSimulation(event)) top::check(m_VGammaORTool->inOverlap(m_isGammaJet), "Unable to apply gamma-jets OR");
+
+    MSG_DEBUG(Form("EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f, GammaJet=%i",
+		   (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met(), (int)m_isGammaJet));
 
     processMuons(event);
     processElectrons(event);
@@ -89,6 +104,16 @@ namespace top{
     top::check(m_IFFTool.setProperty("OutputLevel",  m_debug ? MSG::DEBUG : MSG::FATAL), "Unable to set property: OutputLevel");
     top::check(m_IFFTool.initialize(),                                                   "Unable to initialize TruthClassificationTool");
     MSG_INFO(Form("Intialized %s", m_IFFTool.name().c_str()));
+    return;
+  }
+
+  void ttWCA::initializeVGammaORTool(const std::string& toolName){
+    MSG_INFO(Form("Initializing %s",toolName.c_str()));
+    m_VGammaORTool.setTypeAndName("VGammaORTool/"+toolName);
+
+    top::check(m_VGammaORTool.setProperty("photon_pT_cuts", std::vector<float>({7000.})), "Unable to set property: photon_pT_cuts") ;
+    top::check(m_VGammaORTool.initialize(),                                               "Unable to initialize VGammaORTool");
+    MSG_INFO(Form("Intialized %s", m_VGammaORTool.name().c_str()));
     return;
   }
   
@@ -129,9 +154,12 @@ namespace top{
   void ttWCA::processElectrons(const top::Event& event){
     for(const auto el : event.m_electrons){
 
-      int passLoose =  (m_elID && el->isAvailable<char>("DFCommonElectronsLHLooseBL")) ? el->auxdataConst<char>("DFCommonElectronsLHLooseBL")==1 : -99;
+      int passLoose  = (m_elID && el->isAvailable<char>("DFCommonElectronsLHLooseBL")) ? el->auxdataConst<char>("DFCommonElectronsLHLooseBL")==1 : -99;
       int passMedium = (m_elID && el->isAvailable<char>("DFCommonElectronsLHMedium"))  ? el->auxdataConst<char>("DFCommonElectronsLHMedium")==1 : -99;
-      int passTight =  (m_elID && el->isAvailable<char>("DFCommonElectronsLHTight"))   ? el->auxdataConst<char>("DFCommonElectronsLHTight")==1 : -99;
+      int passTight  = (m_elID && el->isAvailable<char>("DFCommonElectronsLHTight"))   ? el->auxdataConst<char>("DFCommonElectronsLHTight")==1 : -99;
+
+      int ambType = (m_elConv && el->isAvailable<unsigned char>("ambiguityType")) ? el->auxdataConst<unsigned char>("ambiguityType") : -99;
+      int addAmb  = (m_elConv && el->isAvailable<int>("DFCommonAddAmbiguity")) ? el->auxdataConst<int>("DFCommonAddAmbiguity") : -99;
 
       int passPLVLoose  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVLoose")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVLoose")==1 : -99;
       int passPLVTight  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVTight")==1 : -99;
@@ -141,13 +169,16 @@ namespace top{
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
 
-      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, IFFType=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), (int)IFFType));
+      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, ambType=%i, addAmb=%i, IFFType=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), ambType, addAmb, (int)IFFType));
 
       m_el_IFFtype.push_back(IFFType);
 
       m_el_ID_LooseAndBLayerLH.push_back(passLoose);
       m_el_ID_MediumLH.push_back(passMedium);
       m_el_ID_TightLH.push_back(passTight);
+
+      m_el_addAmbiguity.push_back(addAmb);
+      m_el_ambiguityType.push_back(ambType);
 
       m_el_PLVLoose.push_back(passPLVLoose);
       m_el_PLVTight.push_back(passPLVTight);
@@ -166,17 +197,23 @@ namespace top{
   
   void ttWCA::clearOutputVars(){
     m_jetcharge.clear();
-    m_mu_IFFtype.clear(); m_el_IFFtype.clear();
+
+    m_mu_IFFtype.clear();
+    m_el_IFFtype.clear();
 
     m_el_ID_LooseAndBLayerLH.clear();
     m_el_ID_MediumLH.clear();
     m_el_ID_TightLH.clear();
+
+    m_el_addAmbiguity.clear();
+    m_el_ambiguityType.clear();
 
     m_mu_PLVLoose.clear(); m_el_PLVLoose.clear();
     m_mu_PLVTight.clear(); m_el_PLVTight.clear();
     m_mu_PLImprovedTight.clear();     m_el_PLImprovedTight.clear();
     m_mu_PLImprovedVeryTight.clear(); m_el_PLImprovedVeryTight.clear();
 
+    m_isGammaJet = 0;
     return;
   }
 }
