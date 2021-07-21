@@ -1,10 +1,10 @@
 # ttWCA package
 
-**Responsible:** fabio.cardillo@cern.ch
+**Contact:** fabio.cardillo@cern.ch (or atlas-phys-top-ttw-ca@cern.ch)
 
 [![pipeline status](https://gitlab.cern.ch/fcardill/ttWCA/badges/master/pipeline.svg)](https:://gitlab.cern.ch/fcardill/ttWCA/commits/master)
 
-Proper documentation needs to be added 
+Package for the production of group Ntuples for the ttW charge-asymmetry analysis. Most of the output is defined by the [EventSaverFlatNtuple](https://gitlab.cern.ch/atlas/athena/-/tree/21.2/PhysicsAnalysis/TopPhys/xAOD/TopAnalysis/Root) class in AnalysisTop. In addition, some extra branches are added for the defintion of the ttW-CA control and signal regions and for obtaining the data-driven fake lepton estimates via the matrix-method. The current version of the framework is based on AnalysisBase [21.2.178](https://twiki.cern.ch/twiki/bin/view/AtlasProtected/AnalysisBaseReleaseNotes21_2).
 
 1. [Compilation and cleaning ](#1-compilation-and-cleaning)
 2. [Running](#2-running)
