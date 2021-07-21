@@ -2,7 +2,7 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
 DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,ElectronConvVars,PLVIsolation,GammaJetOR
 
-Debug True
+Debug False
 JetCharge False
 IFFClassification True
 ElectronPassID True
@@ -10,7 +10,7 @@ ElectronConvVars True
 PLVIsolation True
 GammaJetOR True
 
-NEvents 1000
+#NEvents 1000
 
 ### Good Run List
 GRLDir  GoodRunsLists
