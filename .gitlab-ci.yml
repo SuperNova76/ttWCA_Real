@@ -11,7 +11,7 @@ variables:
   RUN_DIR: run
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
-  SAMPLE_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/mc16_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.deriv.DAOD_TOPQ1.e5070_s3126_r10724_p4346/DAOD_TOPQ1.23523673._000080.pool.root.1
+  SAMPLE_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/mc16_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.deriv.DAOD_TOPQ1.e5070_s3126_r10724_p4514/DAOD_TOPQ1.25526247._000113.pool.root.1
   NTUP_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/Ntup_data/data.root
   
 .analysis_image: &image
