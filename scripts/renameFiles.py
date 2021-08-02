@@ -59,6 +59,7 @@ def main():
     if not (len(mc16a) == len(mc16d) == len(mc16e)): error("Inconsistent sizes of mc16a/d/e sample lists")
     info("Found {0} mc16a/d/e files".format(len(mc16a)))
 
+    DSIDs = 0
     for dsid in processes():
         name = processes()[dsid]
         if not len(dsid) or not len(name): continue
@@ -75,12 +76,13 @@ def main():
         cmd_mc16d = "cp {0} {1}/{2}/{3}/{3}{4}".format(filenames[1], outdir, "2017_mc16d", name, options.Type)
         cmd_mc16e = "cp {0} {1}/{2}/{3}/{3}{4}".format(filenames[2], outdir, "2018_mc16e", name, options.Type)
         cmd_mc16  = [cmd_mc16a, cmd_mc16d, cmd_mc16e]
+        DSIDs = DSIDs + 1
 
         for cmd in cmd_mc16:
             print(cmd)
             if options.Copy: os.system(cmd)
 
-    print("..done")
+    print("Copied files for {0} DSIDs".format(DSIDs))
 
 def datalist():
     dat = {"data2015": "2016_mc16a", 
