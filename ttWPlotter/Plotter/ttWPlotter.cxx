@@ -736,8 +736,8 @@ TGraphAsymmErrors* ttWPlotter::errorGraph(TH1F *h){
 
     g->SetPointEXhigh(i, h->GetBinWidth(i)/2.);
     g->SetPointEXlow(i,  h->GetBinWidth(i)/2.);
-    g->SetPointEYhigh(i, h->GetBinError(i)/2.);
-    g->SetPointEYlow(i,  h->GetBinError(i)/2.);
+    g->SetPointEYhigh(i, h->GetBinError(i));
+    g->SetPointEYlow(i,  h->GetBinError(i));
   }
   g->SetLineWidth(0);
   g->SetLineColor(kGray+1);
@@ -757,8 +757,8 @@ std::vector<TGraphAsymmErrors*> ttWPlotter::ratioErrorGraph(TH1F *h1, TH1F *h2){
     ge->SetPointEXlow(i,  h1->GetBinWidth(i)/2.);
 
     float rErr = h1->GetBinContent(i)>0. ? h1->GetBinError(i)/h1->GetBinContent(i) : 0.;
-    ge->SetPointEYhigh(i, rErr/2.);
-    ge->SetPointEYlow(i,  rErr/2.);
+    ge->SetPointEYhigh(i, rErr);
+    ge->SetPointEYlow(i,  rErr);
   }
   ge->SetLineColor(kGray+1);
   ge->SetFillColor( ge->GetLineColor() );
@@ -774,8 +774,8 @@ std::vector<TGraphAsymmErrors*> ttWPlotter::ratioErrorGraph(TH1F *h1, TH1F *h2){
 
     float rErr = h2->GetBinContent(i)>0. ? h2->GetBinError(i)/h2->GetBinContent(i) : 0.;
 
-    float rErrSysUp  = TMath::Power(ge->GetErrorYhigh(i),2) - TMath::Power(rErr/2.,2);
-    float rErrSysLow = TMath::Power(ge->GetErrorYlow(i), 2) - TMath::Power(rErr/2.,2);
+    float rErrSysUp  = TMath::Power(ge->GetErrorYhigh(i),2) - TMath::Power(rErr,2);
+    float rErrSysLow = TMath::Power(ge->GetErrorYlow(i), 2) - TMath::Power(rErr,2);
     if(rErrSysUp<0.)  rErrSysUp  = 0.0001;
     if(rErrSysLow<0.) rErrSysLow = 0.0001;
 
