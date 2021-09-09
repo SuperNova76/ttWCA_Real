@@ -68,8 +68,8 @@ run_utils:
   dependencies: [build]
   script:
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
-  - realpath ${BUILD_DIR}/${AnalysisBase_PLATFORM}
-  - ls ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/
+  - realpath ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/ttWCA/
+  - ls ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/ttWCA/
   - cd utils
   - runMMTool $NTUP_NAME Config.conf
 
