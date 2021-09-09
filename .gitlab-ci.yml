@@ -68,9 +68,9 @@ run_utils:
   dependencies: [build]
   script:
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
-  - cd utils
   - realpath ${BUILD_DIR}/${AnalysisBase_PLATFORM}
   - ls ${BUILD_DIR}/${AnalysisBase_PLATFORM}
+  - cd utils
   - runMMTool $NTUP_NAME Config.conf
 
 load_plotter:
