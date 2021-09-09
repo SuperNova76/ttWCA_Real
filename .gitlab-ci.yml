@@ -59,8 +59,8 @@ run_xaod:
   - cd $RUN_DIR
   - echo $SAMPLE_NAME
   - echo $SAMPLE_NAME > input.txt
-  - sed -i '10iNEvents 500' ../${PACKAGE_NAME}/share/Config_ttWCA.txt
-  - top-xaod ../${PACKAGE_NAME}/share/Config_ttWCA.txt input.txt
+  - sed -i '10iNEvents 500' share/Config_ttWCA.txt
+  - top-xaod share/Config_ttWCA.txt input.txt
 
 run_utils:
   <<: *image
