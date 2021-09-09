@@ -36,7 +36,7 @@ build:
     - lsetup cmake
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
-    - cmake ../
+    - cmake ${CI_PROJECT_DIR}
     - cmake --build ./
     - source */setup.sh
   artifacts:
