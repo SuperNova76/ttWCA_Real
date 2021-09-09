@@ -8,6 +8,7 @@ variables:
   GIT_SSL_NO_VERIFY: "true"
   PACKAGE_NAME: ttWCA
   BUILD_DIR: build
+  SOURCE_DIR: source
   RUN_DIR: run
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
@@ -23,6 +24,7 @@ variables:
     - ls
     - echo "Project Directory ${CI_PROJECT_DIR}"
     - echo "Build Directory   ${BUILD_DIR}"
+    - echo "source Directory  ${SOURCE_DIR}"
     - echo "Run Directory     ${RUN_DIR}"
     - source /home/atlas/release_setup.sh
     - echo $SERVICE_PASS | kinit $CERN_USER
@@ -34,12 +36,11 @@ build:
     - set +e
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - lsetup cmake git
-    - mkdir source
-    - mkdir build
-    - cd source 
+    - mkdir ${BUILD_DIR} ${SOURCE_DIR}
+    - cd ${SOURCE_DIR}
     - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
-    - cd ../build
-    - acmSetup "--sourcearea=../source AnalysisBase,21.2.178"
+    - cd ../${BUILD_DIR}
+    - acmSetup "--sourcearea=../${SOURCE_DIR} AnalysisBase,21.2.178"
     - cd ..
     - acm compile
   artifacts:
@@ -53,7 +54,6 @@ run_xaod:
   stage: run
   dependencies: [build]
   script:
-  - pwd
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - mkdir $RUN_DIR
   - cd $RUN_DIR
@@ -67,10 +67,8 @@ run_utils:
   stage: test
   dependencies: [build]
   script:
-  - mv $BUILD_DIR ../
-  - cd ../
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
-  - cd ${PACKAGE_NAME}/utils
+  - cd utils
   - runMMTool $NTUP_NAME Config.conf
 
 load_plotter:
@@ -78,10 +76,8 @@ load_plotter:
   stage: test
   dependencies: [build]
   script:
-  - mv $BUILD_DIR ../
-  - cd ../
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
-  - cd ${PACKAGE_NAME}/ttWPlotter
+  - cd ttWPlotter
   - python -c "import ROOT; ROOT.gROOT.LoadMacro('Selector/ttWSelector.cxx++');"
   - python -c "import ROOT; ROOT.gROOT.LoadMacro('Plotter/ttWPlotter.cxx++');"
   - python reader.py --help
