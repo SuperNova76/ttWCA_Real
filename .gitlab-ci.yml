@@ -53,6 +53,7 @@ run_xaod:
   stage: run
   dependencies: [build]
   script:
+  - pwd
   - mv $BUILD_DIR ../
   - cd ../
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
