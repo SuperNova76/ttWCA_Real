@@ -255,9 +255,9 @@ void ttWPlotter::plot(TString name, int bins, float xMin, float xMax, TString ti
  
   //Set data error
   for(int i(1); i<=hRatio->GetNbinsX()+1; i++) hRatio->SetBinError(i, 0.001);
-  if(!DataList.empty()){ 
-    for(int i(1); i<=hRatio->GetNbinsX()+1; i++) hRatio->SetBinError(i, TMath::Sqrt(1./DataList[0]->GetBinContent(i)) ); 
-  }  
+  if(!DataList.empty()){
+    for(int i(1); i<=hRatio->GetNbinsX()+1; i++) hRatio->SetBinError(i, DataList[0]->GetBinError(i)/hBkg_Tot->GetBinContent(i) );
+  }
   hRatio->Draw("PEX0 AXIS");
   hRatio->Draw("PEX0 AXIG SAME");
 
