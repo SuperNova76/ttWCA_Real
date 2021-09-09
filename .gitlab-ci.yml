@@ -69,7 +69,7 @@ run_utils:
   script:
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - realpath ${BUILD_DIR}/${AnalysisBase_PLATFORM}
-  - ls ${BUILD_DIR}/${AnalysisBase_PLATFORM}
+  - ls ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/
   - cd utils
   - runMMTool $NTUP_NAME Config.conf
 
