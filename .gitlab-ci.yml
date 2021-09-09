@@ -54,8 +54,6 @@ run_xaod:
   dependencies: [build]
   script:
   - pwd
-  - mv $BUILD_DIR ../
-  - cd ../
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - mkdir $RUN_DIR
   - cd $RUN_DIR
