@@ -68,7 +68,8 @@ run_utils:
   dependencies: [build]
   script:
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
-  - realpath ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/ttWCA/Efficiency2D_PLV_noConv_1b.root
+  - realpath ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/ttWCA/
+  - ls ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/ttWCA/
   - ls ${BUILD_DIR}/${AnalysisBase_PLATFORM}/data/ttWCA/Efficiency2D_PLV_noConv_1b.root
   - cd utils
   - runMMTool $NTUP_NAME Config.conf
