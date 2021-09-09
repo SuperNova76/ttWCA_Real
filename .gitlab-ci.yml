@@ -31,19 +31,14 @@ build:
   <<: *image
   stage: build
   script:
-    - cd ../
     - set +e
-    - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
     - lsetup cmake
-    - asetup "AnalysisBase,21.2.178,here"
     - mkdir $BUILD_DIR
     - cd $BUILD_DIR
-    - cmake  ../
+    - cmake ../
     - cmake --build ./
     - source */setup.sh
-    - cd ../
-    - mv $BUILD_DIR $PACKAGE_NAME
   artifacts:
     paths:
       - $BUILD_DIR
