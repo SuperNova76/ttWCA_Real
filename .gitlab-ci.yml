@@ -33,12 +33,15 @@ build:
   script:
     - set +e
     - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
-    - lsetup cmake
-    - mkdir $BUILD_DIR
-    - cd $BUILD_DIR
-    - cmake ${CI_PROJECT_DIR}/../
-    - cmake --build ./
-    - source */setup.sh
+    - lsetup cmake git
+    - mkdir source
+    - mkdir build
+    - cd source 
+    - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
+    - cd ../build
+    - acmSetup "--sourcearea=../source AnalysisBase,21.2.178"
+    - cd ..
+    - acm compile
   artifacts:
     paths:
       - $BUILD_DIR
