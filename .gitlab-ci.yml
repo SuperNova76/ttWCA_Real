@@ -6,12 +6,10 @@ stages:
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   GIT_SSL_NO_VERIFY: "true"
-  PACKAGE_NAME: ttWCA
   BUILD_DIR: build
   SOURCE_DIR: source
   RUN_DIR: run
   ATLAS_LOCAL_ROOT_BASE: /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
-  ACMSOURCEDIR: ${CI_PROJECT_DIR}/${PACKAGE_NAME}
   SAMPLE_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/mc16_13TeV.410218.aMcAtNloPythia8EvtGen_MEN30NLO_A14N23LO_ttee.deriv.DAOD_TOPQ1.e5070_s3126_r10724_p4514/DAOD_TOPQ1.25526247._000113.pool.root.1
   NTUP_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/Ntup_data/data.root
   
@@ -57,7 +55,6 @@ run_xaod:
   - source ${BUILD_DIR}/${AnalysisBase_PLATFORM}/setup.sh
   - mkdir $RUN_DIR
   - cd $RUN_DIR
-  - echo $SAMPLE_NAME
   - echo $SAMPLE_NAME > input.txt
   - sed -i '10iNEvents 500' ../share/Config_ttWCA.txt
   - top-xaod ../share/Config_ttWCA.txt input.txt
