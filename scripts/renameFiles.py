@@ -192,7 +192,10 @@ def processes():
             "366151": "tautaugamma_LO_pty_15_35",
             "366152": "tautaugamma_LO_pty_35_70",
             "366153": "tautaugamma_LO_pty_70_140",
-            "366154": "tautaugamma_LO_pty_140_E_CMS" }
+            "366154": "tautaugamma_LO_pty_140_E_CMS",
+            "361106": "Zee_PhPy8",
+            "361107": "Zmm_PhPy8",
+            "361108": "Ztt_PhPy8"}
     return proc
 
 def findFile(files, key):
