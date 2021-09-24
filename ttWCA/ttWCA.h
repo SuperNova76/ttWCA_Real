@@ -75,6 +75,7 @@ namespace top{
       //Electron converion-vars
       std::vector<int>   m_el_addAmbiguity;
       std::vector<int>   m_el_ambiguityType;
+      std::vector<float> m_el_convRadiusTruth;
 
       //PLV iso WP
       std::vector<int> m_mu_PLVLoose;

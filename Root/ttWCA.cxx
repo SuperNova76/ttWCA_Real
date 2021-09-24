@@ -3,6 +3,7 @@
 #include "TopEventSelectionTools/TreeManager.h"
 #include "TopConfiguration/ConfigurationSettings.h"
 #include "TopParticleLevel/TruthTools.h"
+#include "xAODEgamma/EgammaTruthxAODHelpers.h"
 
 namespace top{
   ttWCA::ttWCA() : 
@@ -49,8 +50,9 @@ namespace top{
 	sysTree->makeOutputVariable(m_el_ID_TightLH,          "el_ID_TightLH");
       }
       if(m_elConv){
-	sysTree->makeOutputVariable(m_el_addAmbiguity,  "el_addAmbiguity");
-	sysTree->makeOutputVariable(m_el_ambiguityType, "el_ambiguityType");
+	sysTree->makeOutputVariable(m_el_addAmbiguity,    "el_addAmbiguity");
+	sysTree->makeOutputVariable(m_el_ambiguityType,   "el_ambiguityType");
+	sysTree->makeOutputVariable(m_el_convRadiusTruth, "el_convRadiusTruth");
      }
       if(m_PLViso){
 	sysTree->makeOutputVariable(m_mu_PLVLoose, "mu_PLVLoose");
@@ -158,8 +160,9 @@ namespace top{
       int passMedium = (m_elID && el->isAvailable<char>("DFCommonElectronsLHMedium"))  ? el->auxdataConst<char>("DFCommonElectronsLHMedium")==1 : -99;
       int passTight  = (m_elID && el->isAvailable<char>("DFCommonElectronsLHTight"))   ? el->auxdataConst<char>("DFCommonElectronsLHTight")==1 : -99;
 
-      int ambType = (m_elConv && el->isAvailable<unsigned char>("ambiguityType")) ? el->auxdataConst<unsigned char>("ambiguityType") : -99;
-      int addAmb  = (m_elConv && el->isAvailable<int>("DFCommonAddAmbiguity")) ? el->auxdataConst<int>("DFCommonAddAmbiguity") : -99;
+      int   ambType   = (m_elConv && el->isAvailable<unsigned char>("ambiguityType")) ? el->auxdataConst<unsigned char>("ambiguityType") : -99;
+      int   addAmb    = (m_elConv && el->isAvailable<int>("DFCommonAddAmbiguity")) ? el->auxdataConst<int>("DFCommonAddAmbiguity") : -99;
+      float convRadMC = (m_elConv && el->isAvailable<float>("DFCommonProdTrueRadius") && top::isSimulation(event)) ? el->auxdataConst<float>("DFCommonProdTrueRadius") : -99.;
 
       int passPLVLoose  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVLoose")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVLoose")==1 : -99;
       int passPLVTight  = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLVTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLVTight")==1 : -99;
@@ -169,7 +172,7 @@ namespace top{
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
 
-      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, ambType=%i, addAmb=%i, IFFType=%i", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), ambType, addAmb, (int)IFFType));
+      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, ambType=%i, addAmb=%i, IFFType=%i, rConv(truth)=%.3f", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), ambType, addAmb, (int)IFFType, convRadMC));
 
       m_el_IFFtype.push_back(IFFType);
 
@@ -179,6 +182,7 @@ namespace top{
 
       m_el_addAmbiguity.push_back(addAmb);
       m_el_ambiguityType.push_back(ambType);
+      m_el_convRadiusTruth.push_back(convRadMC);
 
       m_el_PLVLoose.push_back(passPLVLoose);
       m_el_PLVTight.push_back(passPLVTight);
@@ -207,6 +211,7 @@ namespace top{
 
     m_el_addAmbiguity.clear();
     m_el_ambiguityType.clear();
+    m_el_convRadiusTruth.clear();
 
     m_mu_PLVLoose.clear(); m_el_PLVLoose.clear();
     m_mu_PLVTight.clear(); m_el_PLVTight.clear();
