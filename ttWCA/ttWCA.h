@@ -5,11 +5,14 @@
 #include "TopAnalysis/EventSaverFlatNtuple.h"
 #include "TopEvent/EventTools.h"
 #include "TopConfiguration/TopConfig.h"
+#include "TopEvent/Event.h"
 #include "TopParticleLevel/ParticleLevelEvent.h"
 #include "xAODTruth/TruthParticleContainer.h"
 #include "xAODJet/JetContainer.h"
 #include "xAODMissingET/MissingETContainer.h"
 #include "xAODBTagging/BTagging.h"
+#include "xAODEgamma/EgammaTruthxAODHelpers.h"
+#include "MCTruthClassifier/MCTruthClassifier.h"
 #include "TruthClassification/TruthClassificationTool.h"
 #include "GammaORTools/VGammaORTool.h"
 
@@ -18,7 +21,7 @@
 #include "TH2D.h"
 #include "TTree.h"
 #include "TString.h"
-
+#include "TLorentzVector.h"
 #include <iostream>
 
 using namespace std;
@@ -56,6 +59,7 @@ namespace top{
 
       void printTrigger(const top::Event& event);
 
+      void initializeMCTruthClassifier(const std::string& toolName);
       void initializeIFFTool(const std::string& toolName);
       void initializeVGammaORTool(const std::string& toolName);
 
@@ -88,12 +92,14 @@ namespace top{
       std::vector<int> m_el_PLImprovedVeryTight;
 
       //GammaJets Overlap
-      bool m_isGammaJet;
+      bool m_isGammaJetEvent;
+      bool m_isGammaJetTLV;
 
       //Tools
+      MCTruthClassifier* m_MCTruthClassifier;
       asg::AnaToolHandle<CP::IClassificationTool> m_IFFTool;
       asg::AnaToolHandle<IVGammaORTool> m_VGammaORTool;
-      
+
       ClassDefOverride(top::ttWCA, 0);
   };
 }

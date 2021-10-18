@@ -69,13 +69,21 @@ JetGhostTrackDecoName None
 
 ### Truth configuration
 TruthCollectionName TruthParticles
+TruthMuonCollectionName TruthMuons
+TruthElectronCollectionName TruthElectrons
+TruthPhotonCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthDressedWZJets
 TruthLargeRJetCollectionName None #AntiKt10TruthTrimmedPtFrac5SmallR20Jets
 TopPartonHistory ttbar
 TopPartonLevel True
-TopParticleLevel False
+TopParticleLevel True
 TruthBlockInfo False
 PDFInfo True
+
+TruthPhotonPt 5000.
+TruthMuonPt 5000.
+TruthElectronPt 5000.
+TruthPhotonIsolation None
 
 ### Object loader/ output configuration
 ObjectSelectionName top::ObjectLoaderStandardCuts
@@ -95,15 +103,6 @@ ElectronIDLoose LooseAndBLayerLH
 ElectronIsolation PLVTight
 ElectronIsolationLoose None
 UseElectronChargeIDSelection False
-
-### Photon configuration
-#PhotonPt 25000
-#PhotonEta 2.5
-#PhotonID Tight
-#PhotonIDLoose Loose
-#PhotonIsolation FixedCutTight
-#PhotonIsolationLoose FixedCutLoose
-#PhotonUseRadiativeZ False
 
 ### Muon configuration
 MuonPt 10000
@@ -142,7 +141,7 @@ UseAodMetaData True
 #IsAFII False
 
 # MC generator weights
-MCGeneratorWeights False
+MCGeneratorWeights True
 NominalWeightNames " nominal ","nominal","Default","Weight","1001"," muR=0.10000E+01 muF=0.10000E+01 ",""," "," dyn=   3 muR=0.10000E+01 muF=0.10000E+01 "," mur=1 muf=1 "," dyn=   0 muR=0.10000E+01 muF=0.10000E+01 "," dyn=  10 muR=0.10000E+01 muF=0.10000E+01 "
 
 # Turn on fakes MM weights
