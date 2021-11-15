@@ -304,10 +304,13 @@ int main(int argc, char* argv[]){
 
   TTree* inTree = (TTree*)inFile->Get(treeName.c_str());
   if(!inTree) ERROR("Input tree not found! Exiting");
- 
+
   top::check(setConfigValues(config), "Cannot set config values");
   if(SRNames.empty()) ERROR("No SR specified");
-  
+
+  if(debug) gErrorIgnoreLevel = kError;
+  else gErrorIgnoreLevel = kFatal;
+
   std::vector<std::string> SRs = tokenize(SRNames);
   const unsigned int NSR = SRs.size();
   INFO( Form("Running %i regions [%s]", NSR, SRNames.c_str()) );

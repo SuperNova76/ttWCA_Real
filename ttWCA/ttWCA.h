@@ -47,6 +47,7 @@ namespace top{
       bool m_elConv;
       bool m_PLViso;
       bool m_gammaJetOR;
+      bool m_lepSF;
 
       std::shared_ptr<top::TopConfig> m_config;
 
@@ -91,12 +92,19 @@ namespace top{
       std::vector<int> m_mu_PLImprovedVeryTight;
       std::vector<int> m_el_PLImprovedVeryTight;
 
+      //Individual lepton SF
+      std::vector<float> m_mu_SF_loose;
+      std::vector<float> m_mu_SF_tight;
+      std::vector<float> m_el_SF_loose;
+      std::vector<float> m_el_SF_tight;
+
       //GammaJets Overlap
       bool m_isGammaJetEvent;
       bool m_isGammaJetTLV;
 
       //Tools
       MCTruthClassifier* m_MCTruthClassifier;
+      top::ScaleFactorRetriever* m_topSFR;
       asg::AnaToolHandle<CP::IClassificationTool> m_IFFTool;
       asg::AnaToolHandle<IVGammaORTool> m_VGammaORTool;
 

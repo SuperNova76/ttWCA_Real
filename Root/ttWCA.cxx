@@ -14,6 +14,7 @@ namespace top{
     m_elConv(0),
     m_PLViso(0),
     m_gammaJetOR(0),
+    m_lepSF(0),
     m_MCTruthClassifier(0)
   {}
 
@@ -22,6 +23,7 @@ namespace top{
 
     m_config = config;
     top::ConfigurationSettings* configSettings = top::ConfigurationSettings::get();
+    m_topSFR = EventSaverFlatNtuple::scaleFactorRetriever();
     
     std::string key;
     key = configSettings->value("Debug");
@@ -38,6 +40,8 @@ namespace top{
     m_PLViso = (key=="True");
     key = configSettings->value("GammaJetOR");
     m_gammaJetOR = (key=="True");
+    key = configSettings->value("LeptonSF");
+    m_lepSF = (key=="True");
 
     for(auto sysTree : treeManagers()) {
       if(m_jetCharge) sysTree->makeOutputVariable(m_jetcharge,  "JetCharge");   
@@ -69,7 +73,12 @@ namespace top{
 	sysTree->makeOutputVariable(m_isGammaJetEvent, "isGammaJetOverlapEvent");
 	sysTree->makeOutputVariable(m_isGammaJetTLV,   "isGammaJetOverlapTLV");
       }
-
+      if(m_lepSF){
+	sysTree->makeOutputVariable(m_mu_SF_loose, "mu_SF_loose");
+	sysTree->makeOutputVariable(m_mu_SF_tight, "mu_SF_tight");
+	sysTree->makeOutputVariable(m_el_SF_loose, "el_SF_loose");
+	sysTree->makeOutputVariable(m_el_SF_tight, "el_SF_tight");
+      }
     }
 
     initializeMCTruthClassifier("MCTruthClassifier");
@@ -84,7 +93,7 @@ namespace top{
     clearOutputVars();
     if(!event.m_saveEvent) return;
 
-    MSG_DEBUG(Form("EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f",
+    MSG_INFO(Form("saveEvent()\t EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f",
 		   (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met()));
 
     if(m_gammaJetOR && top::isSimulation(event)){
@@ -132,7 +141,7 @@ namespace top{
       phTLV->push_back(ph->p4());
       phOrg->push_back(origin);
     }
-    MSG_DEBUG(Form("EventNumer %i \t size(lep-truth TLV)=%i size(ph-truth TLV)=%i", (int)plEvent.m_info->eventNumber(), (int)lepTLV->size(), (int)phTLV->size()));
+    MSG_INFO(Form("savePLEvent()\t EventNumer %i \t size(lep-truth TLV)=%i size(ph-truth TLV)=%i", (int)plEvent.m_info->eventNumber(), (int)lepTLV->size(), (int)phTLV->size()));
 
     bool isOverlap(false);
     if(m_gammaJetOR) top::check(m_VGammaORTool->inOverlap(isOverlap, lepTLV, phTLV, lepOrg, phOrg), "Unable to apply gamma-jets OR");
@@ -200,10 +209,13 @@ namespace top{
       int passPLIVTight     = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedTight")==1 : -99;
       int passPLIVVeryTight = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedVeryTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedVeryTight")==1 : -99;
 
+      float SF_loose = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*mu, IFFType), "Unable the classifiy muon");
 
-      MSG_DEBUG(Form("  Mu: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, IFFType=%i", mu->pt(), mu->eta(), mu->phi(), (int)mu->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? mu->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? mu->auxdataConst<int>("truthOrigin") : 0), (int)IFFType));
+      MSG_DEBUG(Form("  Mu: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, IFFType=%i, SF(l)=%.3f, SF(t)=%.3f", mu->pt(), mu->eta(), mu->phi(), (int)mu->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? mu->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? mu->auxdataConst<int>("truthOrigin") : 0), (int)IFFType, SF_loose, SF_tight));
 
       m_mu_IFFtype.push_back(IFFType);
 
@@ -211,6 +223,9 @@ namespace top{
       m_mu_PLVTight.push_back(passPLVTight);
       m_mu_PLImprovedTight.push_back(passPLIVTight);
       m_mu_PLImprovedVeryTight.push_back(passPLIVVeryTight);
+
+      m_mu_SF_loose.push_back(SF_loose);
+      m_mu_SF_tight.push_back(SF_tight);
     }
   }
 
@@ -231,10 +246,13 @@ namespace top{
       int passPLIVTight     = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedTight")==1 : -99;
       int passPLIVVeryTight = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedVeryTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedVeryTight")==1 : -99;
 
+      float SF_loose = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
 
-      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, ambType=%i, addAmb=%i, IFFType=%i, rConv(truth)=%.3f", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), ambType, addAmb, (int)IFFType, convRadMC));
+      MSG_DEBUG(Form("  El: [pt=%.1f | eta=%.3f | phi=%.3f] \t isTight=%i, type=%i, origin=%i, ambType=%i, addAmb=%i, IFFType=%i, rConv(truth)=%.3f, SF(l)=%.3f, SF(t)=%.3f", el->pt(), el->eta(), el->phi(), (int)el->auxdataConst<char>("passPreORSelection")==1, int(top::isSimulation(event) ? el->auxdataConst<int>("truthType") : 0), int(top::isSimulation(event) ? el->auxdataConst<int>("truthOrigin") : 0), ambType, addAmb, (int)IFFType, convRadMC, SF_loose, SF_tight));
 
       m_el_IFFtype.push_back(IFFType);
 
@@ -250,6 +268,9 @@ namespace top{
       m_el_PLVTight.push_back(passPLVTight);
       m_el_PLImprovedTight.push_back(passPLIVTight);
       m_el_PLImprovedVeryTight.push_back(passPLIVVeryTight);
+
+      m_el_SF_loose.push_back(SF_loose);
+      m_el_SF_tight.push_back(SF_tight);
     }
   }
 
@@ -279,6 +300,9 @@ namespace top{
     m_mu_PLVTight.clear(); m_el_PLVTight.clear();
     m_mu_PLImprovedTight.clear();     m_el_PLImprovedTight.clear();
     m_mu_PLImprovedVeryTight.clear(); m_el_PLImprovedVeryTight.clear();
+
+    m_mu_SF_loose.clear(); m_mu_SF_tight.clear();
+    m_el_SF_loose.clear(); m_el_SF_tight.clear();
 
     m_isGammaJetEvent = 0;
     m_isGammaJetTLV   = 0;
