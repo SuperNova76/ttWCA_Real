@@ -45,7 +45,7 @@ namespace top{
 
     for(auto sysTree : treeManagers()) {
       if(m_jetCharge) sysTree->makeOutputVariable(m_jetcharge,  "JetCharge");   
-      if(m_IFFClass){
+      if(m_IFFClass && m_config->isMC()){
 	sysTree->makeOutputVariable(m_mu_IFFtype, "mu_IFFclass");
 	sysTree->makeOutputVariable(m_el_IFFtype, "el_IFFclass");
       }
@@ -58,7 +58,7 @@ namespace top{
 	sysTree->makeOutputVariable(m_el_addAmbiguity,    "el_addAmbiguity");
 	sysTree->makeOutputVariable(m_el_ambiguityType,   "el_ambiguityType");
 	sysTree->makeOutputVariable(m_el_convRadiusTruth, "el_convRadiusTruth");
-     }
+      }
       if(m_PLViso){
 	sysTree->makeOutputVariable(m_mu_PLVLoose, "mu_PLVLoose");
 	sysTree->makeOutputVariable(m_el_PLVLoose, "el_PLVLoose");
@@ -69,15 +69,59 @@ namespace top{
 	sysTree->makeOutputVariable(m_mu_PLImprovedVeryTight, "mu_PLImprovedVeryTight");
 	sysTree->makeOutputVariable(m_el_PLImprovedVeryTight, "el_PLImprovedVeryTight");
       }
-      if(m_gammaJetOR){
+      if(m_gammaJetOR && m_config->isMC()){
 	sysTree->makeOutputVariable(m_isGammaJetEvent, "isGammaJetOverlapEvent");
 	sysTree->makeOutputVariable(m_isGammaJetTLV,   "isGammaJetOverlapTLV");
       }
-      if(m_lepSF){
-	sysTree->makeOutputVariable(m_mu_SF_loose, "mu_SF_loose");
-	sysTree->makeOutputVariable(m_mu_SF_tight, "mu_SF_tight");
+      if(m_lepSF && m_config->isMC()){
 	sysTree->makeOutputVariable(m_el_SF_loose, "el_SF_loose");
 	sysTree->makeOutputVariable(m_el_SF_tight, "el_SF_tight");
+	sysTree->makeOutputVariable(m_mu_SF_loose, "mu_SF_loose");
+        sysTree->makeOutputVariable(m_mu_SF_tight, "mu_SF_tight");
+
+	if(sysTree->name()=="nominal_Loose"){
+	  sysTree->makeOutputVariable(m_el_SF_loose_Reco_UP,   "el_SF_loose_Reco_UP");
+	  sysTree->makeOutputVariable(m_el_SF_tight_Reco_UP,   "el_SF_tight_Reco_UP");
+	  sysTree->makeOutputVariable(m_el_SF_loose_Reco_DOWN, "el_SF_loose_Reco_DOWN");
+	  sysTree->makeOutputVariable(m_el_SF_tight_Reco_DOWN, "el_SF_tight_Reco_DOWN");
+
+	  sysTree->makeOutputVariable(m_el_SF_loose_ID_UP,   "el_SF_loose_ID_UP");
+	  sysTree->makeOutputVariable(m_el_SF_tight_ID_UP,   "el_SF_tight_ID_UP");
+	  sysTree->makeOutputVariable(m_el_SF_loose_ID_DOWN, "el_SF_loose_ID_DOWN");
+	  sysTree->makeOutputVariable(m_el_SF_tight_ID_DOWN, "el_SF_tight_ID_DOWN");
+
+	  sysTree->makeOutputVariable(m_el_SF_loose_Isol_UP,   "el_SF_loose_Isol_UP");
+	  sysTree->makeOutputVariable(m_el_SF_tight_Isol_UP,   "el_SF_tight_Isol_UP");
+	  sysTree->makeOutputVariable(m_el_SF_loose_Isol_DOWN, "el_SF_loose_Isol_DOWN");
+	  sysTree->makeOutputVariable(m_el_SF_tight_Isol_DOWN, "el_SF_tight_Isol_DOWN");
+
+	  sysTree->makeOutputVariable(m_mu_SF_loose_ID_SYST_UP,   "mu_SF_loose_ID_SYST_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_ID_SYST_UP,   "mu_SF_tight_ID_SYST_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_ID_STAT_UP,   "mu_SF_loose_ID_STAT_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_ID_STAT_UP,   "mu_SF_tight_ID_STAT_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_ID_SYST_DOWN, "mu_SF_loose_ID_SYST_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_ID_SYST_DOWN, "mu_SF_tight_ID_SYST_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_ID_STAT_DOWN, "mu_SF_loose_ID_STAT_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_ID_STAT_DOWN, "mu_SF_tight_ID_STAT_DOWN");
+
+	  sysTree->makeOutputVariable(m_mu_SF_loose_Isol_SYST_UP,   "mu_SF_loose_Isol_SYST_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_Isol_SYST_UP,   "mu_SF_tight_Isol_SYST_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_Isol_STAT_UP,   "mu_SF_loose_Isol_STAT_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_Isol_STAT_UP,   "mu_SF_tight_Isol_STAT_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_Isol_SYST_DOWN, "mu_SF_loose_Isol_SYST_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_Isol_SYST_DOWN, "mu_SF_tight_Isol_SYST_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_Isol_STAT_DOWN, "mu_SF_loose_Isol_STAT_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_Isol_STAT_DOWN, "mu_SF_tight_Isol_STAT_DOWN");
+
+	  sysTree->makeOutputVariable(m_mu_SF_loose_TTVA_SYST_UP,   "mu_SF_loose_TTVA_SYST_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_TTVA_SYST_UP,   "mu_SF_tight_TTVA_SYST_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_TTVA_STAT_UP,   "mu_SF_loose_TTVA_STAT_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_TTVA_STAT_UP,   "mu_SF_tight_TTVA_STAT_UP");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_TTVA_SYST_DOWN, "mu_SF_loose_TTVA_SYST_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_TTVA_SYST_DOWN, "mu_SF_tight_TTVA_SYST_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_loose_TTVA_STAT_DOWN, "mu_SF_loose_TTVA_STAT_DOWN");
+	  sysTree->makeOutputVariable(m_mu_SF_tight_TTVA_STAT_DOWN, "mu_SF_tight_TTVA_STAT_DOWN");
+	}
       }
     }
 
@@ -93,7 +137,7 @@ namespace top{
     clearOutputVars();
     if(!event.m_saveEvent) return;
 
-    MSG_INFO(Form("saveEvent()\t EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f",
+    MSG_DEBUG(Form("saveEvent()\t EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f",
 		   (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met()));
 
     if(m_gammaJetOR && top::isSimulation(event)){
@@ -141,7 +185,7 @@ namespace top{
       phTLV->push_back(ph->p4());
       phOrg->push_back(origin);
     }
-    MSG_INFO(Form("savePLEvent()\t EventNumer %i \t size(lep-truth TLV)=%i size(ph-truth TLV)=%i", (int)plEvent.m_info->eventNumber(), (int)lepTLV->size(), (int)phTLV->size()));
+    MSG_DEBUG(Form("savePLEvent()\t EventNumer %i \t size(lep-truth TLV)=%i size(ph-truth TLV)=%i", (int)plEvent.m_info->eventNumber(), (int)lepTLV->size(), (int)phTLV->size()));
 
     bool isOverlap(false);
     if(m_gammaJetOR) top::check(m_VGammaORTool->inOverlap(isOverlap, lepTLV, phTLV, lepOrg, phOrg), "Unable to apply gamma-jets OR");
@@ -202,6 +246,10 @@ namespace top{
 
   void ttWCA::processMuons(const top::Event& event){
     MSG_DEBUG(Form("N(muons) = %i", (int)event.m_muons.size()));
+
+    bool addLepSF_nom = m_lepSF && top::isSimulation(event);
+    bool addLepSF_sys = m_lepSF && top::isSimulation(event) && (event.m_hashValue == m_config->nominalHashValue());
+
     for(const auto mu : event.m_muons){
 
       int passPLVLoose  = (m_PLViso && mu->isAvailable<char>("AnalysisTop_Isol_PLVLoose")) ? mu->auxdataConst<char>("AnalysisTop_Isol_PLVLoose")==1 : -99;
@@ -209,8 +257,36 @@ namespace top{
       int passPLIVTight     = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedTight")==1 : -99;
       int passPLIVVeryTight = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedVeryTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedVeryTight")==1 : -99;
 
-      float SF_loose = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
-      float SF_tight = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_loose = addLepSF_nom ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight = addLepSF_nom ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+
+      float SF_loose_ID_SYST_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_SYST_UP, 1)   * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_ID_SYST_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_SYST_UP, 0)   * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_loose_ID_STAT_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_STAT_UP, 1)   * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_ID_STAT_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_STAT_UP, 0)   * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_loose_ID_SYST_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_SYST_DOWN, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_ID_SYST_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_SYST_DOWN, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+
+      float SF_loose_ID_STAT_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_STAT_DOWN, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_ID_STAT_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::MU_SF_ID_STAT_DOWN, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+
+      float SF_loose_Isol_SYST_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_SYST_UP, 1)   * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_Isol_SYST_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_SYST_UP, 0)   * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_loose_Isol_STAT_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_STAT_UP, 1)   * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_Isol_STAT_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_STAT_UP, 0)   * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_loose_Isol_SYST_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_SYST_DOWN, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_Isol_SYST_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_SYST_DOWN, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_loose_Isol_STAT_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_STAT_DOWN, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+      float SF_tight_Isol_STAT_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::MU_SF_Isol_STAT_DOWN, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
+
+      float SF_loose_TTVA_SYST_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_SYST_UP)) : 1.;
+      float SF_tight_TTVA_SYST_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_SYST_UP)) : 1.;
+      float SF_loose_TTVA_STAT_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_STAT_UP)) : 1.;
+      float SF_tight_TTVA_STAT_UP   = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_STAT_UP)) : 1.;
+      float SF_loose_TTVA_SYST_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_SYST_DOWN)) : 1.;
+      float SF_tight_TTVA_SYST_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_SYST_DOWN)) : 1.;
+      float SF_loose_TTVA_STAT_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_STAT_DOWN)) : 1.;
+      float SF_tight_TTVA_STAT_DOWN = addLepSF_sys ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::MU_SF_TTVA_STAT_DOWN)) : 1.;
 
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*mu, IFFType), "Unable the classifiy muon");
@@ -226,11 +302,42 @@ namespace top{
 
       m_mu_SF_loose.push_back(SF_loose);
       m_mu_SF_tight.push_back(SF_tight);
+
+      m_mu_SF_loose_ID_SYST_UP.push_back(SF_loose_ID_SYST_UP);
+      m_mu_SF_tight_ID_SYST_UP.push_back(SF_tight_ID_SYST_UP);
+      m_mu_SF_loose_ID_STAT_UP.push_back(SF_loose_ID_STAT_UP);
+      m_mu_SF_tight_ID_STAT_UP.push_back(SF_tight_ID_STAT_UP);
+      m_mu_SF_loose_ID_SYST_DOWN.push_back(SF_loose_ID_SYST_DOWN);
+      m_mu_SF_tight_ID_SYST_DOWN.push_back(SF_tight_ID_SYST_DOWN);
+      m_mu_SF_loose_ID_STAT_DOWN.push_back(SF_loose_ID_STAT_DOWN);
+      m_mu_SF_tight_ID_STAT_DOWN.push_back(SF_tight_ID_STAT_DOWN);
+
+      m_mu_SF_loose_Isol_SYST_UP.push_back(SF_loose_Isol_SYST_UP);
+      m_mu_SF_tight_Isol_SYST_UP.push_back(SF_tight_Isol_SYST_UP);
+      m_mu_SF_loose_Isol_STAT_UP.push_back(SF_loose_Isol_STAT_UP);
+      m_mu_SF_tight_Isol_STAT_UP.push_back(SF_tight_Isol_STAT_UP);
+      m_mu_SF_loose_Isol_SYST_DOWN.push_back(SF_loose_Isol_SYST_DOWN);
+      m_mu_SF_tight_Isol_SYST_DOWN.push_back(SF_tight_Isol_SYST_DOWN);
+      m_mu_SF_loose_Isol_STAT_DOWN.push_back(SF_loose_Isol_STAT_DOWN);
+      m_mu_SF_tight_Isol_STAT_DOWN.push_back(SF_tight_Isol_STAT_DOWN);
+
+      m_mu_SF_loose_TTVA_SYST_UP.push_back(SF_loose_TTVA_SYST_UP);
+      m_mu_SF_tight_TTVA_SYST_UP.push_back(SF_tight_TTVA_SYST_UP);
+      m_mu_SF_loose_TTVA_STAT_UP.push_back(SF_loose_TTVA_STAT_UP);
+      m_mu_SF_tight_TTVA_STAT_UP.push_back(SF_tight_TTVA_STAT_UP);
+      m_mu_SF_loose_TTVA_SYST_DOWN.push_back(SF_loose_TTVA_SYST_DOWN);
+      m_mu_SF_tight_TTVA_SYST_DOWN.push_back(SF_tight_TTVA_SYST_DOWN);
+      m_mu_SF_loose_TTVA_STAT_DOWN.push_back(SF_loose_TTVA_STAT_DOWN);
+      m_mu_SF_tight_TTVA_STAT_DOWN.push_back(SF_tight_TTVA_STAT_DOWN);
     }
   }
 
   void ttWCA::processElectrons(const top::Event& event){
     MSG_DEBUG(Form("N(electrons) = %i", (int)event.m_electrons.size()));
+
+    bool addLepSF_nom = m_lepSF && top::isSimulation(event);
+    bool addLepSF_sys = m_lepSF && top::isSimulation(event) && (event.m_hashValue == m_config->nominalHashValue());
+
     for(const auto el : event.m_electrons){
 
       int passLoose  = (m_elID && el->isAvailable<char>("DFCommonElectronsLHLooseBL")) ? el->auxdataConst<char>("DFCommonElectronsLHLooseBL")==1 : -99;
@@ -246,8 +353,23 @@ namespace top{
       int passPLIVTight     = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedTight")==1 : -99;
       int passPLIVVeryTight = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedVeryTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedVeryTight")==1 : -99;
 
-      float SF_loose = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
-      float SF_tight = (m_lepSF && top::isSimulation(event)) ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose = addLepSF_nom ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight = addLepSF_nom ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+
+      float SF_loose_Reco_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_UP, 1)   * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_Reco_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_UP, 0)   * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose_Reco_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_DOWN, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_Reco_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_DOWN, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+
+      float SF_loose_ID_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_UP, 1)   * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_ID_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_UP, 0)   * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose_ID_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_DOWN, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_ID_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_DOWN, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+
+      float SF_loose_Isol_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_UP, 1)) : 1.;
+      float SF_tight_Isol_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_UP, 0)) : 1.;
+      float SF_loose_Isol_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_DOWN, 1)) : 1.;
+      float SF_tight_Isol_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_DOWN, 0)) : 1.;
 
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
@@ -271,6 +393,21 @@ namespace top{
 
       m_el_SF_loose.push_back(SF_loose);
       m_el_SF_tight.push_back(SF_tight);
+
+      m_el_SF_loose_Reco_UP.push_back(SF_loose_Reco_UP);
+      m_el_SF_tight_Reco_UP.push_back(SF_tight_Reco_UP);
+      m_el_SF_loose_Reco_DOWN.push_back(SF_loose_Reco_DOWN);
+      m_el_SF_tight_Reco_DOWN.push_back(SF_tight_Reco_DOWN);
+
+      m_el_SF_loose_ID_UP.push_back(SF_loose_ID_UP);
+      m_el_SF_tight_ID_UP.push_back(SF_tight_ID_UP);
+      m_el_SF_loose_ID_DOWN.push_back(SF_loose_ID_DOWN);
+      m_el_SF_tight_ID_DOWN.push_back(SF_tight_ID_DOWN);
+
+      m_el_SF_loose_Isol_UP.push_back(SF_loose_Isol_UP);
+      m_el_SF_tight_Isol_UP.push_back(SF_tight_Isol_UP);
+      m_el_SF_loose_Isol_DOWN.push_back(SF_loose_Isol_DOWN);
+      m_el_SF_tight_Isol_DOWN.push_back(SF_tight_Isol_DOWN);
     }
   }
 
@@ -301,8 +438,35 @@ namespace top{
     m_mu_PLImprovedTight.clear();     m_el_PLImprovedTight.clear();
     m_mu_PLImprovedVeryTight.clear(); m_el_PLImprovedVeryTight.clear();
 
+
     m_mu_SF_loose.clear(); m_mu_SF_tight.clear();
+
+    m_mu_SF_loose_ID_SYST_UP.clear();   m_mu_SF_tight_ID_SYST_UP.clear();
+    m_mu_SF_loose_ID_STAT_UP.clear();   m_mu_SF_tight_ID_STAT_UP.clear();
+    m_mu_SF_loose_ID_SYST_DOWN.clear(); m_mu_SF_tight_ID_SYST_DOWN.clear();
+    m_mu_SF_loose_ID_STAT_DOWN.clear(); m_mu_SF_tight_ID_STAT_DOWN.clear();
+
+    m_mu_SF_loose_Isol_SYST_UP.clear();   m_mu_SF_tight_Isol_SYST_UP.clear();
+    m_mu_SF_loose_Isol_STAT_UP.clear();   m_mu_SF_tight_Isol_STAT_UP.clear();
+    m_mu_SF_loose_Isol_SYST_DOWN.clear(); m_mu_SF_tight_Isol_SYST_DOWN.clear();
+    m_mu_SF_loose_Isol_STAT_DOWN.clear(); m_mu_SF_tight_Isol_STAT_DOWN.clear();
+
+    m_mu_SF_loose_TTVA_SYST_UP.clear();   m_mu_SF_tight_TTVA_SYST_UP.clear();
+    m_mu_SF_loose_TTVA_STAT_UP.clear();   m_mu_SF_tight_TTVA_STAT_UP.clear();
+    m_mu_SF_loose_TTVA_SYST_DOWN.clear(); m_mu_SF_tight_TTVA_SYST_DOWN.clear();
+    m_mu_SF_loose_TTVA_STAT_DOWN.clear(); m_mu_SF_tight_TTVA_STAT_DOWN.clear();
+
+
     m_el_SF_loose.clear(); m_el_SF_tight.clear();
+
+    m_el_SF_loose_Reco_UP.clear();   m_el_SF_tight_Reco_UP.clear();
+    m_el_SF_loose_Reco_DOWN.clear(); m_el_SF_tight_Reco_DOWN.clear();
+
+    m_el_SF_loose_ID_UP.clear();   m_el_SF_tight_ID_UP.clear();
+    m_el_SF_loose_ID_DOWN.clear(); m_el_SF_tight_ID_DOWN.clear();
+
+    m_el_SF_loose_Isol_UP.clear();   m_el_SF_tight_Isol_UP.clear();
+    m_el_SF_loose_Isol_DOWN.clear(); m_el_SF_tight_Isol_DOWN.clear();
 
     m_isGammaJetEvent = 0;
     m_isGammaJetTLV   = 0;

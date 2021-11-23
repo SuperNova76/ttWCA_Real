@@ -2,6 +2,9 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
 DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,ElectronConvVars,PLVIsolation,GammaJetOR,LeptonSF
 
+FilterBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,jet_truth*
+FilterTrees particleLevel
+
 Debug False
 JetCharge False
 IFFClassification True
@@ -11,7 +14,7 @@ PLVIsolation True
 GammaJetOR True
 LeptonSF True
 
-#NEvents 1000
+NEvents 1000
 
 ### Good Run List
 GRLDir  GoodRunsLists
@@ -96,6 +99,7 @@ PerfStats No
 ### Systematics configuration
 Systematics Nominal
 JetUncertainties_NPModel CategoryReduction
+JetJERSmearingModel Full
 
 ### Electron configuration
 ElectronPt 10000
@@ -116,7 +120,7 @@ MuonDoExtraSmearingHighPt False
 
 ### Jet configuration
 JetPt 20000
-JetEta 4.5
+JetEta 2.5
 JVTWP Medium
 ForwardJVTWP Medium
 
