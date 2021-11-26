@@ -254,8 +254,8 @@ namespace top{
 
       int passPLVLoose  = (m_PLViso && mu->isAvailable<char>("AnalysisTop_Isol_PLVLoose")) ? mu->auxdataConst<char>("AnalysisTop_Isol_PLVLoose")==1 : -99;
       int passPLVTight  = (m_PLViso && mu->isAvailable<char>("AnalysisTop_Isol_PLVTight")) ? mu->auxdataConst<char>("AnalysisTop_Isol_PLVTight")==1 : -99;
-      int passPLIVTight     = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedTight")==1 : -99;
-      int passPLIVVeryTight = (m_PLViso && mu->isAvailable<char>("AnalysisTop_PLImprovedVeryTight")) ? mu->auxdataConst<char>("AnalysisTop_PLImprovedVeryTight")==1 : -99;
+      int passPLIVTight     = (m_PLViso && mu->isAvailable<char>("AnalysisTop_Isol_PLImprovedTight")) ? mu->auxdataConst<char>("AnalysisTop_Isol_PLImprovedTight")==1 : -99;
+      int passPLIVVeryTight = (m_PLViso && mu->isAvailable<char>("AnalysisTop_Isol_PLImprovedTight")) ? mu->auxdataConst<char>("AnalysisTop_Isol_PLImprovedTight")==1 : -99;
 
       float SF_loose = addLepSF_nom ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 1) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
       float SF_tight = addLepSF_nom ? (m_topSFR->muonSF_ID(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_Isol(*mu, top::topSFSyst::nominal, 0) * m_topSFR->muonSF_TTVA(*mu, top::topSFSyst::nominal)) : 1.;
