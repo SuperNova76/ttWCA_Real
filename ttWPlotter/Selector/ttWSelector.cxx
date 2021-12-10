@@ -391,9 +391,8 @@ bool ttWSelector::isFake(float type, float IFFClass){
 }
 
 void ttWSelector::countLepTypes(float class_lep1, float class_lep2, float class_lep3){
-  for(std::map<std::string,int>::iterator i=lepTypes.begin(); i!=lepTypes.end(); ++i){
-    if( i->first == IFFEventType(class_lep1, class_lep2, class_lep3) ) i->second ++;
-  }
+  std::string IFFClass = IFFEventType(class_lep1, class_lep2, class_lep3);
+  for(std::map<std::string,int>::iterator i=lepTypes.begin(); i!=lepTypes.end(); ++i){ if( i->first == IFFClass ) i->second ++; }
 }
 
 std::string ttWSelector::IFFEventType(float class_lep1, float class_lep2, float class_lep3){
