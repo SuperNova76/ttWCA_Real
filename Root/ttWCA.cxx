@@ -71,7 +71,6 @@ namespace top{
       }
       if(m_gammaJetOR && m_config->isMC()){
 	sysTree->makeOutputVariable(m_isGammaJetEvent, "isGammaJetOverlapEvent");
-	sysTree->makeOutputVariable(m_isGammaJetTLV,   "isGammaJetOverlapTLV");
       }
       if(m_lepSF && m_config->isMC()){
 	sysTree->makeOutputVariable(m_el_SF_loose, "el_SF_loose");
@@ -140,11 +139,8 @@ namespace top{
     MSG_DEBUG(Form("saveEvent()\t EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f",
 		   (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met()));
 
-    if(m_gammaJetOR && top::isSimulation(event)){
-      top::check(m_VGammaORTool->inOverlap(m_isGammaJetEvent), "Unable to apply gamma-jets OR");
-      m_isGammaJetTLV = event.m_info->isAvailable<bool>("GammaJetOverlapTLV") ? event.m_info->auxdata<bool>("GammaJetOverlapTLV") : 0;
-    }
-    MSG_DEBUG(Form("EventNumer %i \t GammaJetEvent=%i GammaJetTLV=%i", (int)event.m_info->eventNumber(), (int)m_isGammaJetEvent, (int)m_isGammaJetTLV));
+    if(m_gammaJetOR && top::isSimulation(event)) top::check(m_VGammaORTool->inOverlap(m_isGammaJetEvent), "Unable to apply gamma-jets OR");
+    MSG_DEBUG(Form("EventNumer %i \t GammaJetEvent=%i", (int)event.m_info->eventNumber(), (int)m_isGammaJetEvent));
 
     processMuons(event);
     processElectrons(event);
@@ -157,42 +153,45 @@ namespace top{
     return;
   }
   
-  void ttWCA::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent){     
+  void ttWCA::saveParticleLevelEvent(const top::ParticleLevelEvent& plEvent){
+    
+    bool PLTLV(false);
+    if(PLTLV){
+      std::vector<TLorentzVector> *lepTLV = new std::vector<TLorentzVector>(0);
+      std::vector<TLorentzVector> *phTLV  = new std::vector<TLorentzVector>(0);
+      std::vector<int> *lepOrg = new std::vector<int>(0);
+      std::vector<int>  *phOrg = new std::vector<int>(0);
 
-    std::vector<TLorentzVector> *lepTLV = new std::vector<TLorentzVector>(0);
-    std::vector<TLorentzVector> *phTLV  = new std::vector<TLorentzVector>(0);
-    std::vector<int> *lepOrg = new std::vector<int>(0);
-    std::vector<int>  *phOrg = new std::vector<int>(0);
+      MSG_DEBUG(Form("N(muons-truth) = %i", (int)plEvent.m_muons->size()));
+      for(const auto *mu : *plEvent.m_muons){
+	int origin = (m_MCTruthClassifier->particleTruthClassifier(mu)).second;
+	MSG_DEBUG(Form("  Mu(truth): [pt=%.1f | eta=%.3f | phi=%.3f] \t pdgId=%i, origin=%i", mu->pt(), mu->eta(), mu->phi(), mu->pdgId(), origin));
+	lepTLV->push_back(mu->p4());
+	lepOrg->push_back(origin);
+      }
+      MSG_DEBUG(Form("N(electrons-truth) = %i", (int)plEvent.m_electrons->size()));
+      for(const auto *el : *plEvent.m_electrons){
+	int origin = (m_MCTruthClassifier->particleTruthClassifier(el)).second;
+	MSG_DEBUG(Form("  El(truth): [pt=%.1f | eta=%.3f | phi=%.3f] \t pdgId=%i, origin=%i", el->pt(), el->eta(), el->phi(), el->pdgId(), origin));
+	lepTLV->push_back(el->p4());
+	lepOrg->push_back(origin);;
+      }
+      MSG_DEBUG(Form("N(photons-truth) = %i", (int)plEvent.m_photons->size()));
+      for(const auto *ph : *plEvent.m_photons){
+	int origin = (m_MCTruthClassifier->particleTruthClassifier(ph)).second;
+	MSG_DEBUG(Form("  Ph(truth): [pt=%.1f | eta=%.3f | phi=%.3f] \t pdgId=%i, origin=%i", ph->pt(), ph->eta(), ph->phi(), ph->pdgId(), origin));
+	phTLV->push_back(ph->p4());
+	phOrg->push_back(origin);
+      }
+      MSG_DEBUG(Form("savePLEvent()\t EventNumer %i \t size(lep-truth TLV)=%i size(ph-truth TLV)=%i", (int)plEvent.m_info->eventNumber(), (int)lepTLV->size(), (int)phTLV->size()));
 
-    MSG_DEBUG(Form("N(muons-truth) = %i", (int)plEvent.m_muons->size()));
-    for(const auto *mu : *plEvent.m_muons){
-      int origin = (m_MCTruthClassifier->particleTruthClassifier(mu)).second;
-      MSG_DEBUG(Form("  Mu(truth): [pt=%.1f | eta=%.3f | phi=%.3f] \t pdgId=%i, origin=%i", mu->pt(), mu->eta(), mu->phi(), mu->pdgId(), origin));
-      lepTLV->push_back(mu->p4());
-      lepOrg->push_back(origin);
+      bool isOverlap(false);
+      if(m_gammaJetOR) top::check(m_VGammaORTool->inOverlap(isOverlap, lepTLV, phTLV, lepOrg, phOrg), "Unable to apply gamma-jets OR");
+      plEvent.m_info->auxdecor<bool>("GammaJetOverlapTLV") = isOverlap;
+
+      phTLV=0; lepTLV=0; lepOrg=0; phOrg=0;
+      delete phTLV; delete lepTLV; delete lepOrg; delete phOrg;
     }
-    MSG_DEBUG(Form("N(electrons-truth) = %i", (int)plEvent.m_electrons->size()));
-    for(const auto *el : *plEvent.m_electrons){
-      int origin = (m_MCTruthClassifier->particleTruthClassifier(el)).second;
-      MSG_DEBUG(Form("  El(truth): [pt=%.1f | eta=%.3f | phi=%.3f] \t pdgId=%i, origin=%i", el->pt(), el->eta(), el->phi(), el->pdgId(), origin));
-      lepTLV->push_back(el->p4());
-      lepOrg->push_back(origin);;
-    }
-    MSG_DEBUG(Form("N(photons-truth) = %i", (int)plEvent.m_photons->size()));
-    for(const auto *ph : *plEvent.m_photons){
-      int origin = (m_MCTruthClassifier->particleTruthClassifier(ph)).second;
-      MSG_DEBUG(Form("  Ph(truth): [pt=%.1f | eta=%.3f | phi=%.3f] \t pdgId=%i, origin=%i", ph->pt(), ph->eta(), ph->phi(), ph->pdgId(), origin));
-      phTLV->push_back(ph->p4());
-      phOrg->push_back(origin);
-    }
-    MSG_DEBUG(Form("savePLEvent()\t EventNumer %i \t size(lep-truth TLV)=%i size(ph-truth TLV)=%i", (int)plEvent.m_info->eventNumber(), (int)lepTLV->size(), (int)phTLV->size()));
-
-    bool isOverlap(false);
-    if(m_gammaJetOR) top::check(m_VGammaORTool->inOverlap(isOverlap, lepTLV, phTLV, lepOrg, phOrg), "Unable to apply gamma-jets OR");
-    plEvent.m_info->auxdecor<bool>("GammaJetOverlapTLV") = isOverlap;
-
-    phTLV=0; lepTLV=0; lepOrg=0; phOrg=0;
-    delete phTLV; delete lepTLV; delete lepOrg; delete phOrg;
 
     top::EventSaverFlatNtuple::saveParticleLevelEvent(plEvent);
     MSG_DEBUG("End ttWCA::saveParticleLevelEvent()");
@@ -223,10 +222,10 @@ namespace top{
     MSG_INFO(Form("Initializing %s",toolName.c_str()));
     m_VGammaORTool.setTypeAndName("VGammaORTool/"+toolName);
 
-    top::check(m_VGammaORTool.setProperty("n_leptons", 2),                                      "Unable to set property: n_leptons");
-    top::check(m_VGammaORTool.setProperty("photon_pT_cuts", std::vector<float>({7000.})),       "Unable to set property: photon_pT_cuts");
-    top::check(m_VGammaORTool.setProperty("OutputLevel",    m_debug ? MSG::DEBUG : MSG::FATAL), "Unable to set property: OutputLevel");
-    top::check(m_VGammaORTool.initialize(),                                                     "Unable to initialize VGammaORTool");
+    top::check(m_VGammaORTool.setProperty("n_leptons", 2),                                "Unable to set property: n_leptons");
+    top::check(m_VGammaORTool.setProperty("photon_pT_cuts", std::vector<float>({7000.})), "Unable to set property: photon_pT_cuts");
+    top::check(m_VGammaORTool.setProperty("OutputLevel",    MSG::FATAL),                  "Unable to set property: OutputLevel");
+    top::check(m_VGammaORTool.initialize(),                                               "Unable to initialize VGammaORTool");
     MSG_INFO(Form("Intialized %s", m_VGammaORTool.name().c_str()));
     return;
   }
@@ -469,7 +468,6 @@ namespace top{
     m_el_SF_loose_Isol_DOWN.clear(); m_el_SF_tight_Isol_DOWN.clear();
 
     m_isGammaJetEvent = 0;
-    m_isGammaJetTLV   = 0;
 
     return;
   }

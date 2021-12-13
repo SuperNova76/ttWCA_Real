@@ -143,7 +143,6 @@ namespace top{
 
     //GammaJets Overlap
     bool m_isGammaJetEvent;
-    bool m_isGammaJetTLV;
 
     //Tools
     MCTruthClassifier* m_MCTruthClassifier;

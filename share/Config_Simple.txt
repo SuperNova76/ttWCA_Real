@@ -2,8 +2,7 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
 DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,ElectronConvVars,PLVIsolation,GammaJetOR,LeptonSF
 
-FilterBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,jet_truth*
-FilterTrees particleLevel
+FilterBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,jet_truth*,jet_DL1r_*
 
 Debug False
 JetCharge False
@@ -79,14 +78,14 @@ TruthPhotonCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthDressedWZJets
 TruthLargeRJetCollectionName None #AntiKt10TruthTrimmedPtFrac5SmallR20Jets
 TopPartonHistory ttbar
-TopPartonLevel True
-TopParticleLevel True
+TopPartonLevel False
+TopParticleLevel False
 TruthBlockInfo False
 PDFInfo True
 
-TruthPhotonPt 1.
-TruthMuonPt 1.
-TruthElectronPt 1.
+TruthPhotonPt 10000
+TruthMuonPt 10000
+TruthElectronPt 10000
 TruthPhotonIsolation None
 
 ### Object loader/ output configuration
@@ -105,7 +104,7 @@ JetJERSmearingModel Full
 ElectronPt 10000
 ElectronID TightLH
 ElectronIDLoose TightLH
-ElectronIsolation PLVTight
+ElectronIsolation PLImprovedTight
 ElectronIsolationLoose None
 UseElectronChargeIDSelection False
 
@@ -113,14 +112,14 @@ UseElectronChargeIDSelection False
 MuonPt 10000
 MuonQuality Medium
 MuonQualityLoose Medium
-MuonIsolation PLVTight
+MuonIsolation PLImprovedTight
 MuonIsolationLoose None
 MuonUse2stationHighPt True
 MuonDoExtraSmearingHighPt False
 
 ### Jet configuration
 JetPt 20000
-JetEta 2.5
+JetEta 4.5
 JVTWP Medium
 ForwardJVTWP Medium
 
@@ -142,8 +141,8 @@ DoLoose Both
 ApplyTightSFsInLooseTree True
 
 # Turn on MetaData to pull IsAFII from metadata
-UseAodMetaData True
-#IsAFII False
+UseAodMetaData False
+IsAFII False
 
 # MC generator weights
 MCGeneratorWeights True
@@ -151,7 +150,7 @@ NominalWeightNames " nominal ","nominal","Default","Weight","1001"," muR=0.10000
 
 # Turn on fakes MM weights
 FakesMMWeightsIFF True
-FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D_PLV_noConv_1b.root:3T:>=1F[T]
+FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D_PLIV_noConv_1b.root:3T:>=1F[T]
 
 ### Boosted jet taggers configuration
 #BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
@@ -204,7 +203,7 @@ SELECTION lll
 . lll_basic
 SAVE
 
-SELECTION eemu_particle
+SELECTION lll_particle
 PRIVTX
 PARTICLE_LEVEL
 SAVE
