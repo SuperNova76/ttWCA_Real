@@ -58,6 +58,8 @@ namespace top{
 	sysTree->makeOutputVariable(m_el_addAmbiguity,    "el_addAmbiguity");
 	sysTree->makeOutputVariable(m_el_ambiguityType,   "el_ambiguityType");
 	sysTree->makeOutputVariable(m_el_convRadiusTruth, "el_convRadiusTruth");
+	sysTree->makeOutputVariable(m_el_mTrkTrk_PV,      "el_mTrkTrk_PV");
+	sysTree->makeOutputVariable(m_el_mTrkTrk_CV,      "el_mTrkTrk_CV");
       }
       if(m_PLViso){
 	sysTree->makeOutputVariable(m_mu_PLVLoose, "mu_PLVLoose");
@@ -407,6 +409,12 @@ namespace top{
       m_el_SF_tight_Isol_UP.push_back(SF_tight_Isol_UP);
       m_el_SF_loose_Isol_DOWN.push_back(SF_loose_Isol_DOWN);
       m_el_SF_tight_Isol_DOWN.push_back(SF_tight_Isol_DOWN);
+
+      if(m_elConv){
+	std::pair<float,float> el_mTrkTrk = getElectronMTrkTrk(el);
+	m_el_mTrkTrk_PV.push_back(el_mTrkTrk.first);
+	m_el_mTrkTrk_CV.push_back(el_mTrkTrk.second);
+      }
     }
   }
 
@@ -417,7 +425,69 @@ namespace top{
       }
     }
   }
-  
+
+  std::pair<float,float> ttWCA::getElectronMTrkTrk(const xAOD::Electron* el){
+    float mTrkTrk_PV(-99), mTrkTrk_CV(-99);
+    int nTPSi(0), nTPSiNoIBL(0);
+    double detaMin(99);
+
+    const xAOD::TrackParticleContainer *trackCont(0);
+    top::check( evtStore()->retrieve(trackCont, "InDetTrackParticles"), "Failed to retrieve InDetTrackParticles");
+    if(!trackCont) return std::make_pair(mTrkTrk_PV, mTrkTrk_CV);
+
+    const xAOD::TrackParticle *closestSiTrack(0);
+    const xAOD::TrackParticle *bestmatchedGSFElTrack = el->trackParticle(0);
+    const xAOD::TrackParticle *bestmatchedElTrack    = xAOD::EgammaHelpers::getOriginalTrackParticleFromGSF(bestmatchedGSFElTrack);
+
+    for(auto track : *trackCont){
+      double dR  = bestmatchedElTrack->p4().DeltaR(track->p4());
+      double dz0 = TMath::Abs(bestmatchedElTrack->z0() - track->z0()) * sin(bestmatchedElTrack->theta());
+
+      if( (dR<0.3) && (dz0<0.5) ){
+	bool hasSi(false);
+	uint8_t nBL(0), nIL(0), nNIL(0), nPix(0), nSCT(0), nPshared(0), nSshared(0), eBL(1), eIL(1), eNIL(1);
+
+	track->summaryValue(nPix, xAOD::numberOfPixelHits);
+	track->summaryValue(nBL,  xAOD::numberOfBLayerHits);
+	track->summaryValue(nIL,  xAOD::numberOfInnermostPixelLayerHits);
+	track->summaryValue(nNIL, xAOD::numberOfNextToInnermostPixelLayerHits);
+	track->summaryValue(nSCT, xAOD::numberOfSCTHits);
+	track->summaryValue(eBL,  xAOD::expectBLayerHit);
+	track->summaryValue(eIL,  xAOD::expectInnermostPixelLayerHit);
+	track->summaryValue(eNIL, xAOD::expectNextToInnermostPixelLayerHit);
+	track->summaryValue(nPshared, xAOD::numberOfPixelSharedHits);
+	track->summaryValue(nSshared, xAOD::numberOfSCTSharedHits);
+
+	if(xAOD::EgammaHelpers::numberOfSiHits(track) >= 7){
+	  hasSi = true; nTPSi++;
+	  if( (nIL==0 && eIL>0) || (eIL==0 && eNIL>0 && nNIL==0) ){
+	    nTPSiNoIBL++;
+	  }
+	}
+	double deta = TMath::Abs(track->eta() - bestmatchedElTrack->eta());
+	if(deta < detaMin && hasSi && ((bestmatchedElTrack->charge() * track->charge()) < 0) ){
+	  closestSiTrack = track; detaMin = deta;
+	}
+      }
+    }
+    if(closestSiTrack){
+      TLorentzVector p0(0,0,0,0), p1(0,0,0,0);
+      p0.SetPtEtaPhiM(bestmatchedElTrack->pt(), bestmatchedElTrack->eta(), bestmatchedElTrack->phi(), 0.511);
+      p1.SetPtEtaPhiM(closestSiTrack->pt(), closestSiTrack->eta(), closestSiTrack->phi(), 0.511);
+      mTrkTrk_PV = (p0 + p1).M();
+
+      p0.SetPtEtaPhiM(bestmatchedElTrack->pt(), bestmatchedElTrack->eta(), 0, 0.511);
+      p1.SetPtEtaPhiM(closestSiTrack->pt(), closestSiTrack->eta(), 0, 0.511);
+      mTrkTrk_CV = (p0 + p1).M();
+
+      MSG_DEBUG(Form("  El: [pt=%.1f] --> closest Si-track: [pt=%.1f | eta=%.3f | phi=%.3f]\t m(trktrk)PV=%.1f, m(trktrk)CV=%.1f", el->pt(), closestSiTrack->pt(), closestSiTrack->eta(), closestSiTrack->phi(), mTrkTrk_PV, mTrkTrk_CV));
+    }
+    else{
+      MSG_DEBUG(Form("No Si-track close to el[pt=%.1f] found",el->pt()));
+    }
+    return std::make_pair(mTrkTrk_PV, mTrkTrk_CV);
+  }
+
   void ttWCA::clearOutputVars(){
     m_jetcharge.clear();
 
@@ -466,6 +536,8 @@ namespace top{
 
     m_el_SF_loose_Isol_UP.clear();   m_el_SF_tight_Isol_UP.clear();
     m_el_SF_loose_Isol_DOWN.clear(); m_el_SF_tight_Isol_DOWN.clear();
+
+    m_el_mTrkTrk_PV.clear(); m_el_mTrkTrk_CV.clear();
 
     m_isGammaJetEvent = 0;
 

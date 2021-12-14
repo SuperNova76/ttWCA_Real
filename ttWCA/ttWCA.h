@@ -11,6 +11,7 @@
 #include "xAODJet/JetContainer.h"
 #include "xAODMissingET/MissingETContainer.h"
 #include "xAODBTagging/BTagging.h"
+#include "xAODEgamma/EgammaxAODHelpers.h"
 #include "xAODEgamma/EgammaTruthxAODHelpers.h"
 #include "MCTruthClassifier/MCTruthClassifier.h"
 #include "TruthClassification/TruthClassificationTool.h"
@@ -64,6 +65,8 @@ namespace top{
     void initializeIFFTool(const std::string& toolName);
     void initializeVGammaORTool(const std::string& toolName);
 
+    std::pair<float,float> getElectronMTrkTrk(const xAOD::Electron* el);
+
     void clearOutputVars();
 
     //Variables for extra branches
@@ -81,6 +84,8 @@ namespace top{
     std::vector<int>   m_el_addAmbiguity;
     std::vector<int>   m_el_ambiguityType;
     std::vector<float> m_el_convRadiusTruth;
+    std::vector<float> m_el_mTrkTrk_PV;
+    std::vector<float> m_el_mTrkTrk_CV;
 
     //PLV iso WP
     std::vector<int> m_mu_PLVLoose;
