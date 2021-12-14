@@ -2,7 +2,8 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
 DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,ElectronConvVars,PLVIsolation,GammaJetOR,LeptonSF
 
-FilterNominalLooseBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,jet_truth*,jet_DL1r_*
+FilterNominalBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,*_true_IFFclass,jet_truth*,jet_DL1r_*
+FilterNominalLooseBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,*_true_IFFclass,jet_truth*,jet_DL1r_*
 
 Debug False
 JetCharge False
@@ -78,8 +79,8 @@ TruthPhotonCollectionName TruthParticles
 TruthJetCollectionName AntiKt4TruthDressedWZJets
 TruthLargeRJetCollectionName None #AntiKt10TruthTrimmedPtFrac5SmallR20Jets
 TopPartonHistory ttbar
-TopPartonLevel False
-TopParticleLevel False
+TopPartonLevel True
+TopParticleLevel True
 TruthBlockInfo False
 PDFInfo True
 
