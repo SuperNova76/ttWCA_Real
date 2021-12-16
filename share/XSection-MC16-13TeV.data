@@ -475,6 +475,12 @@
 361107	 1901.2000 1.026   pythia8
 361108	 1901.2000 1.026   pythia8
 
+# Sherpa 2.2.11 Zgamma
+
+700398	 105.04	   0.939914	sherpa2210
+700399	 105.08	   0.939914	sherpa2210
+700400	 107.72	   0.939914	sherpa2210
+
 ################################################################################################################   0
 # Sherpa 2.1 W + jets
 # NLO xsec from Sherpa
@@ -2668,6 +2674,9 @@
 # more tWZ samples - ANALYSISTO-817
 412118  0.016082  1.0  amcatnlopythia8
 412119  0.014697  1.0  amcatnlopythia8
+
+# tWZ, Z->nunu - ANALYSISTO-1158
+500285  0.02923  1.0  amcatnlopythia8
 
 #tWgamma samples - ANALYSISTO-816
 412120 0.24553  1.0 pythia8
@@ -5675,7 +5684,7 @@
 800882 5.4214e-21 1.0 pythia8
 
 ## Adding WWY Sherpa 2.2.11 sample, ANALYSISTO-1141
-700204 0.44137 1.0 sherpa
+700204 0.44137 1.0 sherpa2210
 
 ##Adding H+Wh samples, ANALYSISTO-1142
 504555 0.1586 1.0 amcatnlopythia8
@@ -5728,45 +5737,45 @@
 800937 12.21  1 pythia8
 
 ##Adding Sherpa 2.2.11 V+jets samples, ANALYSISTO-1143
-700319	14126.0 1 sherpa         
-700318	7680.0  1 sherpa 
-700317	21805.0 1 sherpa 
-700316	21745.0 1 sherpa 
-700315	447.04  1 sherpa
-700314	932.53  1 sherpa
-700313	1013.2  1 sherpa
-700312	275.33  1 sherpa
-700311	2222.8  1 sherpa
-700310	2220.9  1 sherpa
+700319	14126.0 1 sherpa2210         
+700318	7680.0  1 sherpa2210 
+700317	21805.0 1 sherpa2210 
+700316	21745.0 1 sherpa2210 
+700315	447.04  1 sherpa2210
+700314	932.53  1 sherpa2210
+700313	1013.2  1 sherpa2210
+700312	275.33  1 sherpa2210
+700311	2222.8  1 sherpa2210
+700310	2220.9  1 sherpa2210
 
 ## Adding 4tops samples, ANALYSISTO-1148
 507701 0.0068199 1 pythia8
 507700 0.015919  1 pythia8
 507699 0.010467  1 pythia8
 
-##Adding HH-ML samples, ANALYSISTO-1149
-600853  0.000365  1.0 pythia8 
-600854  0.000431  1.0 pythia8 
-600855  0.000106  1.0 pythia8
-600856  0.000287  1.0 pythia8
-600857  0.000017  1.0 pythia8
-600858  0.000109  1.0 pythia8
-600862  0.000472  1.0 pythia8
-600863  0.0000998 1.0 pythia8
-600888  0.007573  1.0 pythia8
-600889  0.008907  1.0 pythia8
-600890  0.002081  1.0 pythia8
-600891  0.005587  1.0 pythia8
-600892  0.000308  1.0 pythia8
-600893  0.002009  1.0 pythia8
-600897  0.010223  1.0 pythia8
-600898  0.002159  1.0 herwigpp713
-600763  0.007646  1.0 herwigpp713
-600764  0.008730  1.0 herwigpp713
-600765  0.002076  1.0 herwigpp713
-600766  0.005409  1.0 herwigpp713
-600767  0.000300  1.0 herwigpp713
-600768  0.001895  1.0 herwigpp713
+##Adding HH-ML samples, ANALYSISTO-1149 and update few lines from ANALYSISTO-1163
+600853  0.000365   1.0 pythia8 
+600854  0.000431   1.0 pythia8 
+600855  0.000106   1.0 pythia8
+600856  0.000287   1.0 pythia8
+600857  0.000017   1.0 pythia8
+600858  0.000109   1.0 pythia8
+600862  0.0000048  1.0 pythia8
+600863  0.00001401 1.0 pythia8
+600888  0.007573   1.0 pythia8
+600889  0.008907   1.0 pythia8
+600890  0.002081   1.0 pythia8
+600891  0.005587   1.0 pythia8
+600892  0.000308   1.0 pythia8
+600893  0.002009   1.0 pythia8
+600897  0.000105   1.0 pythia8
+600898  0.000303   1.0 herwigpp713
+600763  0.007646   1.0 herwigpp713
+600764  0.008730   1.0 herwigpp713
+600765  0.002076   1.0 herwigpp713
+600766  0.005409   1.0 herwigpp713
+600767  0.000300   1.0 herwigpp713
+600768  0.001895   1.0 herwigpp713
 
 ## Adding new tZq EFT samples, ANALYSISTO-1153
 508985 0.0282 1.0 pythia8
@@ -5809,3 +5818,120 @@
 508680 0.024916 1.0 pythia8
 508681 0.017971 1.0 pythia8
 508682 0.0026172 1.0 pythia8
+501695 0.0015646 1.0 pythia8
+501696 0.0011767 1.0 pythia8
+501697 0.00089007 1.0 pythia8
+501698 0.0006772 1.0 pythia8
+501699 0.00057466 1.0 pythia8
+501700 0.00044243 1.0 pythia8
+501701 0.00034252 1.0 pythia8
+501702 0.00026596 1.0 pythia8
+501703 0.00020773 1.0 pythia8
+501704 0.00016295 1.0 pythia8
+501705 0.00012833 1.0 pythia8
+501706 0.00010143 1.0 pythia8
+501707 6.4203e-05 1.0 pythia8
+501708 4.15e-05 1.0 pythia8
+501709 2.7186e-05 1.0 pythia8
+508870 0.00020819 1.0 pythia8
+508871 0.00015039 1.0 pythia8
+508872 0.00010943 1.0 pythia8
+508873 8.0329e-05 1.0 pythia8
+508874 5.9333e-05 1.0 pythia8
+508875 4.4228e-05 1.0 pythia8
+508876 3.3253e-05 1.0 pythia8
+508877 2.5269e-05 1.0 pythia8
+508878 1.9406e-05 1.0 pythia8
+508879 1.5e-05 1.0 pythia8
+508880 1.173e-05 1.0 pythia8
+508881 9.2897e-06 1.0 pythia8
+508882 5.9893e-06 1.0 pythia8
+508883 4.0286e-06 1.0 pythia8
+508884 2.8186e-06 1.0 pythia8
+
+
+## Adding W'->tb samples, ANALYSISTO-1160
+#W'->tb,right-handed,hadronic, g' = 2g_W 
+508947 5.069       1.28    pythia8
+508948 1.3057      1.30    pythia8
+508949 0.40585     1.31    pythia8
+508950 0.1441      1.32    pythia8
+508951 0.057536    1.32    pythia8
+508952 0.025799    1.31    pythia8
+508953 0.013027    1.30    pythia8
+508954 0.0073591   1.28    pythia8
+508955 0.0045505   1.27    pythia8
+508956 0.0030235   1.25    pythia8
+
+#W'->tb,left-handed,hadronic, g' = 2g_W
+508937 3.8751      1.28   pythia8
+508938 1.019       1.29   pythia8
+508939 0.32528     1.30   pythia8
+508940 0.11976     1.31   pythia8
+508941 0.04978     1.31   pythia8
+508942 0.023309    1.30   pythia8
+508943 0.012216    1.28   pythia8
+508944 0.0070867   1.27   pythia8
+508945 0.0044567   1.26   pythia8
+508946 0.0029874   1.25   pythia8
+
+#W'->tb right-handed,leptonic, g' = 2g_W
+508969 152.56      1.33   pythia8
+508970 13.671      1.28   pythia8
+508971 2.5341      1.28   pythia8
+508972 0.65263     1.30   pythia8
+508973 0.20286     1.31   pythia8
+508974 0.07199     1.32   pythia8
+508975 0.028721    1.32   pythia8
+508976 0.012898    1.31   pythia8
+508977 0.0065175   1.30   pythia8
+508978 0.0036781   1.28   pythia8
+508987 0.0022758   1.27   pythia8
+508988 0.0015106   1.25   pythia8
+
+# W'->tb left-handed,leptonic, g' = 2g_W
+508957 112.94      1.32   pythia8
+508958 10.299      1.27   pythia8
+508959 1.9374      1.28   pythia8
+508960 0.50903     1.29   pythia8
+508961 0.16255     1.30   pythia8
+508962 0.059761    1.31   pythia8
+508963 0.024839    1.31   pythia8
+508964 0.011641    1.30   pythia8
+508965 0.0061063   1.28   pythia8
+508966 0.0035389   1.27   pythia8
+508967 0.0022285   1.26   pythia8
+508968 0.0014932   1.25   pythia8
+
+## Adding Sherpa 2.2.11 Ztoll, ANALYSISTO-1161
+
+##Adding MG5+Pythia8 dileptonic ttbar sample, ANALYSISTO-1162
+509020 47.5 1.83863 pythia8
+
+##Adding HH-ML samples, ANALYSISTO-1163  
+502959  0.000019242 1.0 pythia8  
+502960  0.000022973 1.0 pythia8
+502961  0.000005123 1.0 pythia8
+502962  0.000014030 1.0 pythia8
+502963  0.000000763 1.0 pythia8
+502964  0.000004808 1.0 pythia8
+508674  0.000000775 1.0 pythia8 
+508675  0.000000267 1.0 pythia8
+
+##Adding lllvgamma sample Sherpa 2.2.11, ANALYSISTO-1159
+700356 0.0921 1.0 sherpa2210 
+
+##Adding CLFV production channel EFT samples, ANALYSISTO-1164 
+508843 2.1301   1.0 pythia8           
+508844 0.32414  1.0 pythia8
+508845 0.11665  1.0 pythia8    
+508846 0.01764  1.0 pythia8
+508847 0.099732 1.0 pythia8
+508848 0.014943 1.0 pythia8
+508849 0.11655  1.0 pythia8 
+508850 0.11699  1.0 pythia8
+508851 0.11662  1.0 pythia8  
+508852 0.01767  1.0 pythia8 
+508683 0.017635 1.0 pythia8
+508684 0.017668 1.0 pythia8
+ 

@@ -40,8 +40,8 @@ PRWActualMu_AF GoodRunsLists/data18_13TeV/20190318/physics_25ns_Triggerno17e33pr
 PRWLumiCalcFiles GoodRunsLists/data18_13TeV/20190318/ilumicalc_histograms_None_348885-364292_OflLumi-13TeV-010.root
 
 #setup of TDP file
-#TDPPath $WorkDir_DIR/data/ttWCA/XSection-MC16-13TeV.data
-TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
+TDPPath $WorkDir_DIR/data/ttWCA/XSection-MC16-13TeV.data
+#TDPPath dev/AnalysisTop/TopDataPreparation/XSection-MC16-13TeV.data
 
 #setup of BTag CDI
 #BTagCDIPath xAODBTaggingEfficiency/13TeV/2020-21-13TeV-MC16-CDI-2021-04-16_v1.root
