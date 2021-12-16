@@ -146,7 +146,7 @@ UseAodMetaData False
 IsAFII False
 
 # MC generator weights
-MCGeneratorWeights True
+MCGeneratorWeights Nominal
 NominalWeightNames " nominal ","nominal","Default","Weight","1001"," muR=0.10000E+01 muF=0.10000E+01 ",""," "," dyn=   3 muR=0.10000E+01 muF=0.10000E+01 "," mur=1 muf=1 "," dyn=   0 muR=0.10000E+01 muF=0.10000E+01 "," dyn=  10 muR=0.10000E+01 muF=0.10000E+01 "
 
 # Turn on fakes MM weights
