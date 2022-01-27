@@ -475,12 +475,6 @@
 361107	 1901.2000 1.026   pythia8
 361108	 1901.2000 1.026   pythia8
 
-# Sherpa 2.2.11 Zgamma
-
-700398	 105.04	   0.939914	sherpa2210
-700399	 105.08	   0.939914	sherpa2210
-700400	 107.72	   0.939914	sherpa2210
-
 ################################################################################################################   0
 # Sherpa 2.1 W + jets
 # NLO xsec from Sherpa
@@ -5781,10 +5775,10 @@
 508985 0.0282 1.0 pythia8
 508986 0.0282 1.0 pythia8
 
-## Adding W+3jets aMC@NLO FxFx samples, ANALYSISTO-1154
-508982   166.71    0.9939   amcatnlopythia8
-508983   3453.99   0.9816   amcatnlopythia8
-508984   19209.74  0.9656   amcatnlopythia8 
+## Adding W+3jets aMC@NLO FxFx samples, ANALYSISTO-1154 (Updated 10/1/22)
+508982   166.71    0.9028   amcatnlopythia8
+508983   3453.99   0.8916   amcatnlopythia8
+508984   19209.74  0.8771   amcatnlopythia8 
 
 ## Adding tW DR powheg+herwig7 samples, ANALYSISTO-1156
 600727 37.946 0.945 herwigpp713
@@ -5935,3 +5929,156 @@
 508683 0.017635 1.0 pythia8
 508684 0.017668 1.0 pythia8
  
+# ZGamma samples, sherpa2.2.11 but should be okay to use 2.2.10 MC/MC SFs
+700398 105.04 0.939914 sherpa2210
+700399 105.08 0.939914 sherpa2210
+700400 107.72 0.939914 sherpa2210
+
+## Adding HH-ML samples, ANALYSISTO-1169
+600762 0.000005 1.0 herwigpp
+600773 0.000104 1.0 herwigpp
+
+### Adding samples requested in ANALYSISTO-1170
+## Sherpa 2.2.11 nunugamma
+700401 59.046 1.0 sherpa2210
+
+## FxFx eegamma
+345775 20.922 1.0 amcatnlopythia8
+345776 10.156 8.7213E-01 amcatnlopythia8
+345777 10.182 1.1523E-01 amcatnlopythia8
+345778 10.181 1.2902E-02 amcatnlopythia8
+
+## FxFx mumugamma
+345779 20.989 1.0 amcatnlopythia8
+345780 10.178 8.7011E-01 amcatnlopythia8
+345781 10.189 1.1702E-01 amcatnlopythia8
+345782 10.188 1.2946E-02 amcatnlopythia8
+
+## FxFx nunugamma
+345784 0.21694 1.0 amcatnlopythia8
+
+## Powheg Pythia8 ttW
+600793 0.016468 1.0 pythia8
+600794 0.032747 1.0 pythia8
+600795 0.1864 1.0 pythia8
+600796 0.37202 1.0 pythia8
+
+## Sherpa 2.2.11 taunu/enu + gammagamma
+700404 374.2 1.0 sherpa2210
+700403 374.22 1.0 sherpa2210
+700402 374.02 1.0 sherpa2210
+
+### Z' TC2 IV to ttbar samples - ANALYSISTO-1171
+508853 49.33405 1.0 pythia8 # 400GeV
+508854 28.16794 1.0 pythia8 # 500GeV
+508855 7.513190 1.0 pythia8 # 750GeV
+508856 2.596699 1.0 pythia8 #1000GeV
+508857 1.058664 1.0 pythia8 #1250GeV
+508858 0.480485 1.0 pythia8 #1500GeV
+508859 0.234740 1.0 pythia8 #1750GeV
+508860 0.120954 1.0 pythia8 #2000GeV
+508861 0.035840 1.0 pythia8 #2500GeV
+508862 0.011710 1.0 pythia8 #3000GeV
+508863 0.0038255 1.0 pythia8 #3500GeV
+508864 0.0014932 1.0 pythia8 #4000GeV
+508865 0.000487814 1.0 pythia8 #4500GeV
+508866 0.00023221 1.0 pythia8 #5000GeV
+508867 0.00000758608 1.0 pythia8 #6000GeV
+
+### W+3jets FxFx + SMT filter - ANALYSISTO-1172
+501718   75.842   0.9053   amcatnlopythia8
+501719   77.332   0.8980   amcatnlopythia8 
+
+### W*->tb 4FS - ANALYSISTO-1173
+509029 0.06233 1.0 pythia8 # 700 GeV
+509030 0.02338 1.0 pythia8 # 900 GeV
+
+### 2HDM SStop - ANALYSISTO-1175
+601009 0.00030375 1.0 pythia8 # 200 GeV
+601010 0.00017091 1.0 pythia8 # 300 GeV
+601011 0.00010401 1.0 pythia8 # 400 GeV
+601012 0.000067342 1.0 pythia8 # 500 GeV
+601013 0.000045716 1.0 pythia8 # 600 GeV
+601014 0.000032322 1.0 pythia8 # 700 GeV
+601015 0.000023600 1.0 pythia8 # 800 GeV
+601016 0.000017680 1.0 pythia8 # 900 GeV
+601017 0.000013541 1.0 pythia8 # 1000 GeV
+
+### Vector LQ - ANALYSISTO-1178
+## U1 LQ model with gluon couplings
+509873 94.359 1.0 pythia8 # 300 GeV
+509874 17.861 1.0 pythia8 # 400 GeV
+509875 4.5571 1.0 pythia8 # 500 GeV
+509876 1.4092 1.0 pythia8 # 600 GeV
+509877 0.49781 1.0 pythia8 # 700 GeV
+509878 0.19396 1.0 pythia8 # 800 GeV
+509879 0.081445 1.0 pythia8 # 900 GeV
+509880 0.036295 1.0 pythia8 # 1000 GeV
+509881 0.016912 1.0 pythia8 # 1100 GeV
+509882 0.0082075 1.0 pythia8 # 1200 GeV
+509883 0.0041125 1.0 pythia8 # 1300 GeV
+509884 0.00212 1.0 pythia8 # 1400 GeV
+509885 0.001536 1.0 pythia8 # 1450 GeV
+509886 0.0011178 1.0 pythia8 # 1500 GeV
+509887 0.00081746 1.0 pythia8 # 1550 GeV
+509888 0.0006007 1.0 pythia8 # 1600 GeV
+509889 0.00044447 1.0 pythia8 # 1650 GeV
+509890 0.00032933 1.0 pythia8 # 1700 GeV
+509891 0.00024557 1.0 pythia8 # 1750 GeV
+509892 0.00018363 1.0 pythia8 # 1800 GeV
+509893 0.00013793 1.0 pythia8 # 1850 GeV
+509894 0.00010403 1.0 pythia8 # 1900 GeV
+509895 0.000078647 1.0 pythia8 # 1950 GeV
+509896 0.000059837 1.0 pythia8 # 2000 GeV
+509897 0.000045567 1.0 pythia8 # 2050 GeV
+509898 0.000034824 1.0 pythia8 # 2100 GeV
+509899 0.00002673 1.0 pythia8 # 2150 GeV
+509900 0.000020577 1.0 pythia8 # 2200 GeV
+509901 0.000015897 1.0 pythia8 # 2250 GeV
+509902 0.000012313 1.0 pythia8 # 2300 GeV
+509903 0.0000074767 1.0 pythia8 # 2400 GeV
+509904 0.0000045937 1.0 pythia8 # 2500 GeV
+
+## Minimal U1 LQ model
+509905 341.14 1.0 pythia8 # 300 GeV
+509906 69.175 1.0 pythia8 # 400 GeV
+509907 18.566 1.0 pythia8 # 500 GeV
+509908 5.9634 1.0 pythia8 # 600 GeV
+509909 2.1708 1.0 pythia8 # 700 GeV
+509910 0.86736 1.0 pythia8 # 800 GeV
+509911 0.37147 1.0 pythia8 # 900 GeV
+509912 0.16843 1.0 pythia8 # 1000 GeV
+509913 0.079632 1.0 pythia8 # 1100 GeV
+509914 0.039136 1.0 pythia8 # 1200 GeV
+509915 0.019816 1.0 pythia8 # 1300 GeV
+509916 0.010312 1.0 pythia8 # 1400 GeV
+509917 0.0074966 1.0 pythia8 # 1450 GeV
+509918 0.005483 1.0 pythia8 # 1500 GeV
+509919 0.0040236 1.0 pythia8 # 1550 GeV
+509920 0.0029717 1.0 pythia8 # 1600 GeV
+509921 0.0022013 1.0 pythia8 # 1650 GeV
+509922 0.0016371 1.0 pythia8 # 1700 GeV
+509923 0.001223 1.0 pythia8 # 1750 GeV
+509924 0.00091794 1.0 pythia8 # 1800 GeV
+509925 0.00069057 1.0 pythia8 # 1850 GeV
+509926 0.0005213 1.0 pythia8 # 1900 GeV
+509927 0.000395 1.0 pythia8 # 1950 GeV
+509928 0.0002999 1.0 pythia8 # 2000 GeV
+509929 0.00022913 1.0 pythia8 # 2050 GeV
+509930 0.00017494 1.0 pythia8 # 2100 GeV
+509931 0.00013424 1.0 pythia8 # 2150 GeV
+509932 0.0001035 1.0 pythia8 # 2200 GeV
+509933 0.0000798 1.0 pythia8 # 2250 GeV
+509934 0.000061801 1.0 pythia8 # 2300 GeV
+509935 0.000037404 1.0 pythia8 # 2400 GeV
+509936 0.000022857 1.0 pythia8 # 2500 GeV
+
+### ggZH with H->WW->lvlv - ANALYSISTO-1180
+345446 0.0057575 1.0 pythia8 # Z->ll
+346524 0.05744 1.0 pythia8 # Z inclusive
+
+### SS top EFT samples - ANALYSISTO-1181
+502922 0.097298 1.0 pythia8
+502923 0.050910 1.0 pythia8
+502924 0.039561 1.0 pythia8
+502925 0.0091742 1.0 pythia8
