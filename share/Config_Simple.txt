@@ -99,7 +99,7 @@ PerfStats No
 ### Systematics configuration
 Systematics Nominal
 JetUncertainties_NPModel CategoryReduction
-JetJERSmearingModel Full
+JetJERSmearingModel Full_PseudoData
 
 ### Electron configuration
 ElectronPt 10000
@@ -157,7 +157,7 @@ FakesMMConfigIFF $WorkDir_DIR/data/ttWCA/Efficiency2D_PLIV_noConv_1b.root:3T:>=1
 #BoostedJetTagging JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive50 JSSWTopTaggerDNN:DNNTaggerTopQuarkInclusive80 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained50 JSSWTopTaggerDNN:DNNTaggerTopQuarkContained80
 
 ### B-tagging configuration
-BTaggingCaloJetWP DL1r:FixedCutBEff_77 DL1r:Continuous
+BTaggingCaloJetWP DL1r:FixedCutBEff_77
 BTagVariableSaveList DL1r_discriminant
 
 # Example of how to remove systematics from b-tag EV

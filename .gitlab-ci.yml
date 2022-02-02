@@ -14,7 +14,7 @@ variables:
   NTUP_NAME: root://eosuser.cern.ch///eos/user/f/fcardill/CI_Top/Ntup_data/data.root
   
 .analysis_image: &image
-  image: atlas/analysisbase:21.2.198
+  image: atlas/analysisbase:21.2.201
   tags:
     - cvmfs
   before_script:
@@ -38,7 +38,7 @@ build:
     - cd ${SOURCE_DIR}
     - git clone https://:@gitlab.cern.ch:8443/fcardill/ttWCA.git
     - cd ../${BUILD_DIR}
-    - acmSetup "--sourcearea=../${SOURCE_DIR} AnalysisBase,21.2.198"
+    - acmSetup "--sourcearea=../${SOURCE_DIR} AnalysisBase,21.2.201"
     - cd ..
     - acm compile
   artifacts:
