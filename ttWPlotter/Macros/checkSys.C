@@ -5,23 +5,23 @@
   TString FileName   = "/lhome/ific/c/cardillo/ttW-CA/Ntuples/run/out_ttW.root";
   TString SampleName = "#it{t#bar{t}W}";
   
-  TString VarName    = "met_met";
-  bool    vectorType = false;
-  int     vectorPos  = 1;
-  TString xAxisName  = "E_{T}^{miss}[GeV]";
+  TString VarName    = "el_pt";
+  bool    vectorType = true;
+  int     vectorPos  = 0;
+  TString xAxisName  = "el-pt [GeV]";
   
   int bins = 8;
   
-  float xMin = 0,    xMax = 700.;
+  float xMin = 0,    xMax = 200.;
   float rMin = 0.95, rMax = 1.05;
 
   bool print = false;
   bool inMeV = true;
-  bool debug = false;
+  bool debug = true;
 
   const char* key_nom     = "nominal_Loose";
-  const char* key_sysUp   = "MET_SoftTrk_Scale__1up_Loose";
-  const char* key_sysDown = "MET_SoftTrk_Scale__1down_Loose";
+  const char* key_sysUp   = "EG_SCALE_ALL__1up_Loose";
+  const char* key_sysDown = "EG_SCALE_ALL__1down_Loose";
 
   TFile *f = new TFile(FileName);
   std::cout << Form("Looking at file: %s",FileName.Data()) << std::endl;
@@ -52,6 +52,11 @@
     t_sysDown->SetBranchAddress(VarName.Data(), &sysDown);
   }
 
+  ULong64_t evn_nom(0), evn_up(0), evn_down(0);
+  t_nom->SetBranchAddress("eventNumber", &evn_nom);
+  t_sysUp->SetBranchAddress("eventNumber", &evn_up);
+  t_sysDown->SetBranchAddress("eventNumber", &evn_down);
+
   for (Long64_t entry(0); entry < t_nom->GetEntries(); entry++){
     float x(0), xUP(0), xDOWN(0);
     t_nom->GetEntry(entry);
@@ -70,6 +75,7 @@
       xDOWN = sysDown/sf;
     }
 
+    if(debug) std::cout << Form("Entry %i \t evN(nom)=%i, evN(up)=%i, evN(down)=%i", (int)entry, (int)evn_nom, (int)evn_up, (int)evn_down) << std::endl;
     if(debug) std::cout << Form("Entry %i \t Nom=%.3f, Up=%.3f, Down=%.3f", (int)entry, x, xUP, xDOWN) << std::endl;
     h_nom->Fill(x);
     h_sysUp->Fill(xUP);

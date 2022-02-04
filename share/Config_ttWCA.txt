@@ -2,19 +2,20 @@ LibraryNames libTopEventSelectionTools libTopEventReconstructionTools libttWCA
 
 DynamicKeys Debug,JetCharge,IFFClassification,ElectronPassID,ElectronConvVars,PLVIsolation,GammaJetOR,LeptonSF
 
-FilterNominalBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,*_true_IFFclass,jet_truth*,jet_DL1r_*
-FilterNominalLooseBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,*_true_IFFclass,jet_truth*,jet_DL1r_*
+FilterTrees *_AF2_*
+FilterNominalBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,*_true_IFFclass,jet_truth*,jet_DL1r_*,el_true_isCharge*,el_trigMatch_*,mu_trigMatch_*
+FilterNominalLooseBranches weight_leptonSF_*,weight_indiv_SF_*,weight_oldTriggerSF*,*_particle,*_true_isPrompt,*_true_IFFclass,jet_truth*,jet_DL1r_*,el_true_isCharge*,el_trigMatch_*,mu_trigMatch_*
 
 Debug False
 JetCharge False
 IFFClassification True
-ElectronPassID True
+ElectronPassID False
 ElectronConvVars True
-PLVIsolation True
+PLVIsolation False
 GammaJetOR True
 LeptonSF True
 
-#NEvents 1000
+NEvents 1000
 
 ### Good Run List
 GRLDir  GoodRunsLists
