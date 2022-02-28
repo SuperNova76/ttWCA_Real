@@ -100,10 +100,15 @@ mc16_13TeV:mc16_13TeV.700355.Sh_2211_tttt_muQHT2.deriv.DAOD_HIGG8D1.e8351_s3126_
 #
 mc16_13TeV:mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_HIGG8D1.e6337_s3126_r10201_p4308
 #
-# ttbar (Herwig)
+# ttbar (Herwig 7.1)
 #
-#mc16_13TeV:mc16_13TeV.411233.PowhegHerwig7EvtGen_tt_hdamp258p75_713_SingleLep.deriv.DAOD_HIGG8D1.e7580_s3126_r10201_p4416
-#mc16_13TeV:mc16_13TeV.411234.PowhegHerwig7EvtGen_tt_hdamp258p75_713_dil.deriv.DAOD_HIGG8D1.e7580_s3126_r10201_p4416
+mc16_13TeV:mc16_13TeV.411233.PowhegHerwig7EvtGen_tt_hdamp258p75_713_SingleLep.deriv.DAOD_HIGG8D1.e7580_s3126_r10201_p4416
+mc16_13TeV:mc16_13TeV.411234.PowhegHerwig7EvtGen_tt_hdamp258p75_713_dil.deriv.DAOD_HIGG8D1.e7580_s3126_r10201_p4416
+#
+# ttbar (Herwig 7.2)
+#
+mc16_13TeV:mc16_13TeV.600666.PhH7EG_H7UE_tt_hdamp258p75_721_singlelep.deriv.DAOD_HIGG8D1.e8312_s3126_r10201_p4416
+mc16_13TeV:mc16_13TeV.600667.PhH7EG_H7UE_tt_hdamp258p75_721_dil.deriv.DAOD_HIGG8D1.e8312_s3126_r10201_p4416
 #
 # ttbar (Sherpa)
 #
@@ -161,9 +166,9 @@ mc16_13TeV:mc16_13TeV.364215.Sherpa_221_NN30NNLO_Ztt_Mll10_40_MAXHTPTV280_E_CMS_
 #
 # V+gamma (Sh. 2.2.11)
 #
-#mc16_13TeV:mc16_13TeV.700398.Sh_2211_mumugamma.deriv.DAOD_HIGG8D1.e8338_s3126_r10201_p4416
-#mc16_13TeV:mc16_13TeV.700399.Sh_2211_eegamma.deriv.DAOD_HIGG8D1.e8338_s3126_r10201_p4416
-#mc16_13TeV:mc16_13TeV.700400.Sh_2211_tautaugamma.deriv.DAOD_HIGG8D1.e8338_s3126_r10201_p4416
+mc16_13TeV:mc16_13TeV.700398.Sh_2211_mumugamma.deriv.DAOD_HIGG8D1.e8338_s3126_r10201_p4590
+mc16_13TeV:mc16_13TeV.700399.Sh_2211_eegamma.deriv.DAOD_HIGG8D1.e8338_s3126_r10201_p4590
+mc16_13TeV:mc16_13TeV.700400.Sh_2211_tautaugamma.deriv.DAOD_HIGG8D1.e8338_s3126_r10201_p4590
 #
 # Z+jets (Powheg)
 #
