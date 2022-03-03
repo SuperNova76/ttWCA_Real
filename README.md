@@ -30,7 +30,7 @@ source/ttWCA/scripts/clean.sh
 cd run
 top-xaod ../source/ttWCA/share/Config_ttWCA.txt infiles.txt
 ```
-With `infiles.txt` a list of locally existing DAOD_TOPQ1 or DAOD_HIGG8D1 files.
+With `infiles.txt` a list of locally existing [DAOD_TOPQ1](https://twiki.cern.ch/twiki/bin/view/AtlasProtected/TopDerivations#The_TOPQ_derivation_formats) or [DAOD_HIGG8D1](https://twiki.cern.ch/twiki/bin/view/AtlasProtected/HSG8DerivationFramework) files.
 
 
 + To submit jobs to the grid:
