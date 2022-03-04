@@ -88,6 +88,7 @@ PDFInfo True
 TruthPhotonPt 10000
 TruthMuonPt 10000
 TruthElectronPt 10000
+TruthJetPt 20000
 TruthPhotonIsolation None
 
 ### Object loader/ output configuration
@@ -278,8 +279,8 @@ SAVE
 SELECTION eemu_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N_OR_MU_N 10000 >= 3
-. eemu_basic
+#EL_N_OR_MU_N 10000 >= 3
+#. eemu_basic
 SAVE
 
 ########################
@@ -319,10 +320,9 @@ SAVE
 SELECTION mumue_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N_OR_MU_N 10000 >= 3
-. mumue_basic
+#EL_N_OR_MU_N 10000 >= 3
+#. mumue_basic
 SAVE
-
 
 ########################
 ### eee selections
@@ -360,8 +360,8 @@ SAVE
 SELECTION eee_particle
 PRIVTX
 PARTICLE_LEVEL
-EL_N 10000 >= 3
-. eee_basic
+#EL_N 10000 >= 3
+#. eee_basic
 SAVE
 
 ########################
@@ -401,6 +401,6 @@ SAVE
 SELECTION mumumu_particle
 PRIVTX
 PARTICLE_LEVEL
-MU_N 10000 >= 3
-. mumumu_basic
+#MU_N 10000 >= 3
+#. mumumu_basic
 SAVE
