@@ -88,7 +88,7 @@ PDFInfo True
 TruthPhotonPt 10000
 TruthMuonPt 10000
 TruthElectronPt 10000
-TruthJetPt 20000
+TruthJetPt 15000
 TruthPhotonIsolation None
 
 ### Object loader/ output configuration
