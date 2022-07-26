@@ -44,6 +44,8 @@ namespace top{
     m_lepSF = (key=="True");
 
     for(auto sysTree : treeManagers()) {
+      if(m_config->isMC())
+	sysTree->makeOutputVariable(m_mc_genWeights,"mc_genWeights");
       if(m_jetCharge) sysTree->makeOutputVariable(m_jetcharge,  "JetCharge");   
       if(m_IFFClass && m_config->isMC()){
 	sysTree->makeOutputVariable(m_mu_IFFtype, "mu_IFFclass");
@@ -137,6 +139,7 @@ namespace top{
   void ttWCA::saveEvent(const top::Event& event){
     clearOutputVars();
     if(!event.m_saveEvent) return;
+    if(m_config->isMC()) m_mc_genWeights = event.m_info->mcEventWeights();
 
     MSG_DEBUG(Form("saveEvent()\t EventNumer %i RunNumber %i \t Njets: %i, Nmu: %i Nel: %i, EtMiss: %.1f",
 		   (int)event.m_info->eventNumber(), (int)event.m_info->runNumber(), (int)event.m_jets.size(), (int)event.m_muons.size(), (int)event.m_electrons.size(), event.m_met->met()));
@@ -489,6 +492,7 @@ namespace top{
   }
 
   void ttWCA::clearOutputVars(){
+    m_mc_genWeights.clear();
     m_jetcharge.clear();
 
     m_mu_IFFtype.clear();

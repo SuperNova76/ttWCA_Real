@@ -70,6 +70,7 @@ namespace top{
     void clearOutputVars();
 
     //Variables for extra branches
+    std::vector<float> m_mc_genWeights;
     std::vector<float> m_jetcharge;
 
     std::vector<float> m_mu_IFFtype;
