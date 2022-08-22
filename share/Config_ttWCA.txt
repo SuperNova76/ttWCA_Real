@@ -247,7 +247,6 @@ EL_N_OR_MU_N 10000 >= 1
 ########################
 
 SUB eemu_basic
-LEP_N 10000 >= 3
 EL_N 10000 >= 2
 MU_N 10000 >= 1
 GTRIGMATCH
@@ -288,7 +287,6 @@ SAVE
 ### mumue selections
 ########################
 SUB mumue_basic
-LEP_N 10000 >= 3
 EL_N 10000 >= 1
 MU_N 10000 >= 2
 GTRIGMATCH
@@ -329,7 +327,6 @@ SAVE
 ### eee selections
 ########################
 SUB eee_basic
-LEP_N 10000 >= 3
 EL_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
@@ -370,7 +367,6 @@ SAVE
 ########################
 
 SUB mumumu_basic
-LEP_N 10000 >= 3
 MU_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad

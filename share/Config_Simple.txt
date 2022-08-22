@@ -194,7 +194,7 @@ EL_N_OR_MU_N 10000 >= 1
 ### lll selections
 ########################
 SUB lll_basic
-LEP_N 10000 >= 3
+EL_N_OR_MU_N 10000 >= 3
 GTRIGMATCH
 JETCLEAN LooseBad
 JET_N 20000 >= 1
