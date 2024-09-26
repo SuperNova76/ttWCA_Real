@@ -357,23 +357,23 @@ namespace top{
       int passPLIVTight     = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedTight")==1 : -99;
       int passPLIVVeryTight = (m_PLViso && el->isAvailable<char>("AnalysisTop_Isol_PLImprovedVeryTight")) ? el->auxdataConst<char>("AnalysisTop_Isol_PLImprovedVeryTight")==1 : -99;
 
-      float SF_loose = addLepSF_nom ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
-      float SF_tight = addLepSF_nom ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose = addLepSF_nom ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight = addLepSF_nom ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
 
-      float SF_loose_Reco_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_UP, 1)   * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
-      float SF_tight_Reco_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_UP, 0)   * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
-      float SF_loose_Reco_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_DOWN, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
-      float SF_tight_Reco_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_DOWN, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose_Reco_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_UP)   * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_Reco_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_UP)   * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose_Reco_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_DOWN) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_Reco_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::EL_SF_Reco_DOWN) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
 
-      float SF_loose_ID_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_UP, 1)   * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
-      float SF_tight_ID_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_UP, 0)   * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
-      float SF_loose_ID_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_DOWN, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
-      float SF_tight_ID_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_DOWN, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose_ID_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_UP, 1)   * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_ID_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_UP, 0)   * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
+      float SF_loose_ID_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_DOWN, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 1)) : 1.;
+      float SF_tight_ID_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::EL_SF_ID_DOWN, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::nominal, 0)) : 1.;
 
-      float SF_loose_Isol_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_UP, 1)) : 1.;
-      float SF_tight_Isol_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_UP, 0)) : 1.;
-      float SF_loose_Isol_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_DOWN, 1)) : 1.;
-      float SF_tight_Isol_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_DOWN, 0)) : 1.;
+      float SF_loose_Isol_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_UP, 1)) : 1.;
+      float SF_tight_Isol_UP   = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_UP, 0)) : 1.;
+      float SF_loose_Isol_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 1) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_DOWN, 1)) : 1.;
+      float SF_tight_Isol_DOWN = addLepSF_sys ? (m_topSFR->electronSF_Reco(*el, top::topSFSyst::nominal) * m_topSFR->electronSF_ID(*el, top::topSFSyst::nominal, 0) * m_topSFR->electronSF_Isol(*el, top::topSFSyst::EL_SF_Isol_DOWN, 0)) : 1.;
 
       unsigned int IFFType(99);
       if(m_IFFClass && top::isSimulation(event)) top::check(m_IFFTool->classify(*el, IFFType), "Unable the classifiy electron");
